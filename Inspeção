@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa do Espelho – Trocador de Calor (Simulação)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --point-size: 8px; /* Aumentado de 6px para 8px */
+  --grid-gap: 1px; /* Reduzido de 2px para 1px */
+  --grid-padding: 6px;
+
+  --muted: #4b5563;
+  --accent: #06b6d4;
+
+  --color-E-empty: #808080; /* bolinha visível vazia */
+  --color-T: #a855f7;       /* roxo */
+  --color-U: #10b981;       /* verde */
+  --color-M: #eab308;       /* amarelo */
+  --color-X: #000000;       /* preto para estado X */
+
+  --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
+}
+
+* { box-sizing: border-box; }
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Inter, system-ui, Arial;
+  background: #ffffff;
+  color: #000000;
+}
+
+.app { max-width: 1400px; margin: 28px auto; padding: 20px; height: calc(100vh - 56px); display: flex; flex-direction: column; }
+header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+h1 { font-size: 20px; margin: 0; }
+p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+
+.section { flex: 1; display: flex; flex-direction: column; margin-bottom: 40px; }
+.section-header { font-size: 18px; margin-bottom: 12px; }
+
+.grid-container-area { position: relative; display: flex; flex-direction: column; gap: 15px; flex: 1; }
+.grid-and-numbers { position: relative; display: flex; max-height: 600px; max-width: 100%; }
+.grid-wrapper { position: relative; flex: 1; overflow: auto; max-height: 100%; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(77, var(--point-size));
+  gap: var(--grid-gap);
+  padding: var(--grid-padding);
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.12);
+  width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
+  height: var(--grid-height);
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Linhas divisórias vermelhas centralizadas */
+.grid::before, .grid::after {
+  content: '';
+  position: absolute;
+  z-index: 10;
+  background-color: red;
+  pointer-events: none;
+}
+.grid::before {
+  left: calc(38.5 * var(--point-size) + 38 * var(--grid-gap) + var(--grid-padding));
+  width: 2px;
+  height: var(--grid-height);
+  top: 0;
+}
+.grid::after {
+  top: calc(23 * var(--point-size) + 22.5 * var(--grid-gap) + var(--grid-padding));
+  height: 2px;
+  width: 100%;
+  left: 0;
+}
+
+.grid-cell { width: var(--point-size); height: var(--point-size); display: flex; align-items: center; justify-content: center; }
+.point { width: var(--point-size); height: var(--point-size); border-radius: 50%; background-color: var(--color-E-empty); transition: background-color 0.2s; flex-shrink: 0; box-shadow: 0 0 2px rgba(0,0,0,0.25); position: relative; }
+.point-E { cursor: pointer; }
+.point-E[data-state="T"] { background-color: var(--color-T); }
+.point-E[data-state="U"] { background-color: var(--color-U); }
+.point-E[data-state="M"] { background-color: var(--color-M); }
+.point-E[data-state="X"] { background-color: var(--color-X); }
+.point-E[data-state="X"]::after {
+  content: 'X';
+  position: absolute;
+  color: white;
+  font-size: calc(var(--point-size) * 0.8);
+  line-height: var(--point-size);
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Totais */
+.totals { background: #f7f7f7; border-radius: 12px; padding: 16px; width: 300px; min-width: 250px; border: 1px solid rgba(0,0,0,0.08); }
+.totals h3 { font-size: 16px; margin: 0 0 10px; }
+.total-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
+.total-item .label { display: flex; align-items: center; gap: 6px; }
+.total-item .dot { width: 10px; height: 10px; border-radius: 50%; }
+.total-item .dot.empty { background-color: var(--color-E-empty); }
+.total-item .dot.T { background-color: var(--color-T); }
+.total-item .dot.U { background-color: var(--color-U); }
+.total-item .dot.M { background-color: var(--color-M); }
+.total-item .dot.X { background-color: var(--color-X); }
+.editable-label { display: inline-block; cursor: pointer; min-width: 50px; padding: 1px 4px; border-radius: 4px; line-height: 1.2; }
+.editable-label:hover { background: rgba(0,0,0,0.06); }
+.editable-label:focus { outline: 2px solid var(--accent); background: rgba(6,182,212,0.12); }
+
+/* Botões */
+.controls { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0; }
+button { background: #f3f4f6; border: 1px solid rgba(0,0,0,0.1); color: #111827; padding: 8px 12px; border-radius: 10px; cursor: pointer; }
+button.primary { background: linear-gradient(90deg, var(--accent), #0891b2); color: #021226; border: 0; }
+button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
+
+/* Números das linhas ajustados */
+.row-numbers {
+  position: absolute;
+  left: calc(var(--grid-padding) - 20px); /* Ajustado para ficar coladinho */
+  top: var(--grid-padding);
+  display: flex;
+  flex-direction: column;
+  font-size: 10px;
+  color: var(--muted);
+  pointer-events: none;
+}
+.row-numbers span {
+  height: calc(var(--point-size) + var(--grid-gap));
+  line-height: calc(var(--point-size) + var(--grid-gap));
+  text-align: right;
+  padding-right: 4px; /* Espaço fino entre número e bolinha */
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div>
+      <h1>Mapa do Espelho – Trocador de Calor</h1>
+      <p class="lead">Todas as bolinhas são editáveis (clicáveis). Totais simplificados.</p>
+    </div>
+    <div class="controls">
+      <button id="saveAll" class="primary">Salvar Tudo</button>
+      <button id="loadAll" class="ghost">Carregar</button>
+      <button id="clearAll" class="ghost">Limpar</button>
+    </div>
+  </header>
+
+  <div class="section">
+    <div class="section-header">Lado Frio</div>
+    <div class="grid-container-area">
+      <div class="grid-and-numbers">
+        <div class="row-numbers" id="rowNumbers1"></div>
+        <div class="grid-wrapper" id="wrapperMap1">
+          <div class="grid" id="gridMap1"></div>
+        </div>
+      </div>
+      <div class="totals" id="totalsContainer1">
+        <h3>Totais Gerais</h3>
+        <div id="totals1"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">Lado Quente</div>
+    <div class="grid-container-area">
+      <div class="grid-and-numbers">
+        <div class="row-numbers" id="rowNumbers2"></div>
+        <div class="grid-wrapper" id="wrapperMap2">
+          <div class="grid" id="gridMap2"></div>
+        </div>
+      </div>
+      <div class="totals" id="totalsContainer2">
+        <h3>Totais Gerais</h3>
+        <div id="totals2"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const GRID_COLUMNS = 77;
+const stateKeys = ['T','U','M','X'];
+const states = ['', 'T','U','M','X'];
+
+const defaultLabels = {
+  '': 'Vazio',
+  'T': 'Est. Emp.',
+  'U': 'Usinagem',
+  'M': 'Mat. Removido',
+  'X': 'Marcado'
+};
+let currentLabels1 = { ...defaultLabels };
+let currentLabels2 = { ...defaultLabels };
+
+/* MAP_TEMPLATE completo (45 linhas × 77 colunas) sem coluna de números */
+const MAP_TEMPLATE = `
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNENNNENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNENNNNNNNNNNNNNNNNNENNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNENNNENNNENNNENNNENNNENNNENNNENNNENNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNENENNNENNNENNNENNNENENNNENNNENNNENNNENENNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNENENENENENENENENENENENENENENENENENENENENENENENNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNENENENENENENENENENENENENENENENENENENENENENENENENNNNNNNNNNNNNNN
+NNNNNNNNNNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENNNNNNNNNNNN
+NNNNNNNNNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNNNNNNNNN
+NNNNNNNNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNNNNNNNN
+NNNNNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNNNNN
+NNNNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNNNN
+NNNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNNN
+NNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNN
+NNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNN
+NNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNN
+NNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNN
+NNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENN
+NENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENEN
+NNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENN
+NENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENEN
+ENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENE
+NENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENEN
+ENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENE
+NDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNENENDNDNDNDNDNDNDNDNDNDNENDNDNDN
+DNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNENDNDNDNDNDNDNDNDNDNDNDNDNDNDND
+NDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNENDNDNDNDNDNDNDNDNDNDNDNDNDNDNDN
+NNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNN
+NDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNENDNDNDNDNDNDNDNDNDNDNDNDNDNDN
+NNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNN
+NNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNN
+NNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNENDNDNDNDNDNDNDNDNDNDNNNN
+NNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNN
+NNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNN
+NNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNN
+NNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNN
+NNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNN
+NNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNN
+NNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNN
+NNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNN
+NNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNDNNNDNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+`.trim();
+
+function setupRowNumbers(mapId){
+  const rowNumbersDiv = document.getElementById(`rowNumbers${mapId}`);
+  rowNumbersDiv.innerHTML = '';
+  for (let i = 1; i <= 45; i++) {
+    const span = document.createElement('span');
+    span.textContent = i;
+    rowNumbersDiv.appendChild(span);
+  }
+}
+
+function createGrid(mapId){
+  const mapLines = MAP_TEMPLATE.split('\n').map(l => l.trim());
+  const grid = document.getElementById(`gridMap${mapId}`);
+  grid.innerHTML = '';
+  let pointIndex = 0;
+
+  mapLines.forEach((line, rowIndex) => {
+    if (line.length !== GRID_COLUMNS) {
+      console.warn(`Mapa ${mapId}, Linha ${rowIndex + 1} tem ${line.length} colunas, esperado ${GRID_COLUMNS}.`);
+    }
+    for (let col = 0; col < GRID_COLUMNS; col++) {
+      const char = line[col] || 'N';
+      const cell = document.createElement('div');
+      cell.classList.add('grid-cell');
+
+      if (char === 'N') { grid.appendChild(cell); continue; }
+
+      const point = document.createElement('div');
+      point.classList.add('point');
+
+      if (['D', 'E', 'T', 'U', 'M'].includes(char)) {
+        point.classList.add('point-E');
+        const initialState = (rowIndex >= 23 && (char === 'D' || char === 'E')) ? 'X' : (char === 'D' || char === 'E') ? '' : char;
+        point.dataset.initial = initialState;
+        point.dataset.state = initialState;
+        point.dataset.index = pointIndex++;
+        point.dataset.mapId = mapId;
+        point.addEventListener('click', () => cycleState(point));
+      }
+
+      cell.appendChild(point);
+      grid.appendChild(cell);
+    }
+  });
+
+  updateTotals(mapId);
+}
+
+function cycleState(point) {
+  const mapId = point.dataset.mapId;
+  const currentState = point.dataset.state || '';
+  const currentIndex = states.indexOf(currentState);
+  const nextIndex = (currentIndex + 1) % states.length;
+  point.dataset.state = states[nextIndex];
+  updateTotals(mapId);
+}
+
+function updateTotals(mapId) {
+  const pointsE = document.querySelectorAll(`#gridMap${mapId} .point-E`);
+  const counts = { '': 0, 'T': 0, 'U': 0, 'M': 0, 'X': 0 };
+  pointsE.forEach(p => {
+    const s = p.dataset.state || '';
+    counts[s] = (counts[s] || 0) + 1;
+  });
+
+  const currentLabels = mapId === '1' ? currentLabels1 : currentLabels2;
+  const totalsDiv = document.getElementById(`totals${mapId}`);
+  totalsDiv.innerHTML = `
+    <div class="total-item">
+      <div class="label">
+        <div class="dot empty"></div>
+        <span class="editable-label label-text-" contenteditable="true" data-key="" data-map-id="${mapId}">${currentLabels['']}</span>
+      </div>
+      <span>${counts['']}</span>
+    </div>
+    <div class="total-item">
+      <div class="label">
+        <div class="dot T"></div>
+        <span class="editable-label label-text-T" contenteditable="true" data-key="T" data-map-id="${mapId}">${currentLabels['T']}</span>
+      </div>
+      <span>${counts['T']}</span>
+    </div>
+    <div class="total-item">
+      <div class="label">
+        <div class="dot U"></div>
+        <span class="editable-label label-text-U" contenteditable="true" data-key="U" data-map-id="${mapId}">${currentLabels['U']}</span>
+      </div>
+      <span>${counts['U']}</span>
+    </div>
+    <div class="total-item">
+      <div class="label">
+        <div class="dot M"></div>
+        <span class="editable-label label-text-M" contenteditable="true" data-key="M" data-map-id="${mapId}">${currentLabels['M']}</span>
+      </div>
+      <span>${counts['M']}</span>
+    </div>
+    <div class="total-item">
+      <div class="label">
+        <div class="dot X"></div>
+        <span class="editable-label label-text-X" contenteditable="true" data-key="X" data-map-id="${mapId}">${currentLabels['X']}</span>
+      </div>
+      <span>${counts['X']}</span>
+    </div>
+    <div class="total-item" style="font-weight: bold;">
+      <div class="label">Total de Pontos Visíveis</div>
+      <span>${pointsE.length}</span>
+    </div>
+  `;
+
+  document.querySelectorAll(`#totals${mapId} .editable-label`).forEach(label => {
+    label.addEventListener('blur', () => {
+      const key = label.dataset.key;
+      const mapId = label.dataset.mapId;
+      const labels = mapId === '1' ? currentLabels1 : currentLabels2;
+      const text = label.textContent.trim();
+      if (text === '') {
+        label.textContent = labels[key] || defaultLabels[key];
+      } else {
+        labels[key] = text;
+      }
+    });
+    label.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        label.blur();
+      }
+    });
+  });
+}
+
+function saveData() {
+  const points1 = document.querySelectorAll('#gridMap1 .point-E');
+  const points2 = document.querySelectorAll('#gridMap2 .point-E');
+  const data1 = Array.from(points1).map(p => p.dataset.state);
+  const data2 = Array.from(points2).map(p => p.dataset.state);
+  localStorage.setItem('gridDataMap77x45_map1', JSON.stringify(data1));
+  localStorage.setItem('gridDataMap77x45_map2', JSON.stringify(data2));
+  localStorage.setItem('gridLabels1', JSON.stringify(currentLabels1));
+  localStorage.setItem('gridLabels2', JSON.stringify(currentLabels2));
+  alert('Dados salvos!');
+}
+
+function loadData() {
+  const data1 = JSON.parse(localStorage.getItem('gridDataMap77x45_map1'));
+  const data2 = JSON.parse(localStorage.getItem('gridDataMap77x45_map2'));
+  const savedLabels1 = JSON.parse(localStorage.getItem('gridLabels1'));
+  const savedLabels2 = JSON.parse(localStorage.getItem('gridLabels2'));
+  if (savedLabels1) currentLabels1 = { ...defaultLabels, ...savedLabels1 };
+  if (savedLabels2) currentLabels2 = { ...defaultLabels, ...savedLabels2 };
+
+  const points1 = document.querySelectorAll('#gridMap1 .point-E');
+  const points2 = document.querySelectorAll('#gridMap2 .point-E');
+  if (data1 && points1.length === data1.length) {
+    points1.forEach((p, i) => { p.dataset.state = data1[i] || ''; });
+  } else {
+    points1.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
+  }
+  if (data2 && points2.length === data2.length) {
+    points2.forEach((p, i) => { p.dataset.state = data2[i] || ''; });
+  } else {
+    points2.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
+  }
+  updateTotals('1');
+  updateTotals('2');
+}
+
+function clearData() {
+  if (confirm('Tem certeza que deseja limpar todos os dados?')) {
+    localStorage.removeItem('gridDataMap77x45_map1');
+    localStorage.removeItem('gridDataMap77x45_map2');
+    localStorage.removeItem('gridLabels1');
+    localStorage.removeItem('gridLabels2');
+    currentLabels1 = { ...defaultLabels };
+    currentLabels2 = { ...defaultLabels };
+    const points1 = document.querySelectorAll('#gridMap1 .point-E');
+    const points2 = document.querySelectorAll('#gridMap2 .point-E');
+    points1.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
+    points2.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
+    updateTotals('1');
+    updateTotals('2');
+  }
+}
+
+// Inicialização
+setupRowNumbers('1');
+setupRowNumbers('2');
+createGrid('1');
+createGrid('2');
+loadData();
+
+document.getElementById('saveAll').addEventListener('click', saveData);
+document.getElementById('loadAll').addEventListener('click', loadData);
+document.getElementById('clearAll').addEventListener('click', clearData);
+
+// Atalho Ctrl+S
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    saveData();
+  }
+});
+</script>
+</body>
+</html>
