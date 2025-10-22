@@ -7,18 +7,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --point-size: 8px; /* Aumentado de 6px para 8px */
-  --grid-gap: 1px; /* Reduzido de 2px para 1px */
+  --point-size: 8px;
+  --grid-gap: 0.5px; /* Reduzido de 1px para 0.5px */
   --grid-padding: 6px;
 
   --muted: #4b5563;
   --accent: #06b6d4;
 
-  --color-E-empty: #808080; /* bolinha visível vazia */
-  --color-T: #a855f7;       /* roxo */
-  --color-U: #10b981;       /* verde */
-  --color-M: #eab308;       /* amarelo */
-  --color-X: #000000;       /* preto para estado X */
+  --color-E-empty: #808080;
+  --color-T: #a855f7;
+  --color-U: #10b981;
+  --color-M: #eab308;
+  --color-X: #000000;
 
   --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
 }
@@ -32,17 +32,60 @@ html, body {
   color: #000000;
 }
 
-.app { max-width: 1400px; margin: 28px auto; padding: 20px; height: calc(100vh - 56px); display: flex; flex-direction: column; }
-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.app { 
+  max-width: 1400px; 
+  margin: 28px auto; 
+  padding: 20px; 
+  height: calc(100vh - 56px); 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; /* Centraliza os filhos horizontalmente */
+}
+header { 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  margin-bottom: 18px; 
+  width: 100%; /* Garante que o header ocupe toda a largura disponível */
+}
 h1 { font-size: 20px; margin: 0; }
 p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
 
-.section { flex: 1; display: flex; flex-direction: column; margin-bottom: 40px; }
-.section-header { font-size: 18px; margin-bottom: 12px; }
+.section { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  margin-bottom: 40px; 
+  width: 100%; /* Garante que a seção ocupe toda a largura disponível */
+}
+.section-header { 
+  font-size: 24px;
+  margin-bottom: 12px; 
+  text-align: center;
+}
+.section-header.cold { color: #06b6d4; }
+.section-header.hot { color: #ef4444; }
 
-.grid-container-area { position: relative; display: flex; flex-direction: column; gap: 15px; flex: 1; }
-.grid-and-numbers { position: relative; display: flex; max-height: 600px; max-width: 100%; }
-.grid-wrapper { position: relative; flex: 1; overflow: auto; max-height: 100%; }
+.grid-container-area { 
+  position: relative; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 15px; 
+  flex: 1; 
+  align-items: center; /* Centraliza a grade horizontalmente */
+}
+.grid-and-numbers { 
+  position: relative; 
+  display: flex; 
+  max-height: 600px; 
+  max-width: 100%; 
+}
+.grid-wrapper { 
+  position: relative; 
+  flex: 1; 
+  overflow: auto; 
+  max-height: 100%; 
+}
 
 .grid {
   display: grid;
@@ -97,7 +140,15 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
 }
 
 /* Totais */
-.totals { background: #f7f7f7; border-radius: 12px; padding: 16px; width: 300px; min-width: 250px; border: 1px solid rgba(0,0,0,0.08); }
+.totals { 
+  background: #f7f7f7; 
+  border-radius: 12px; 
+  padding: 16px; 
+  width: 300px; 
+  min-width: 250px; 
+  border: 1px solid rgba(0,0,0,0.08); 
+  margin: 0 auto; /* Centraliza o quadro de totais */
+}
 .totals h3 { font-size: 16px; margin: 0 0 10px; }
 .total-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
 .total-item .label { display: flex; align-items: center; gap: 6px; }
@@ -120,7 +171,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 /* Números das linhas ajustados */
 .row-numbers {
   position: absolute;
-  left: calc(var(--grid-padding) - 20px); /* Ajustado para ficar coladinho */
+  left: calc(var(--grid-padding) - 20px);
   top: var(--grid-padding);
   display: flex;
   flex-direction: column;
@@ -132,7 +183,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   height: calc(var(--point-size) + var(--grid-gap));
   line-height: calc(var(--point-size) + var(--grid-gap));
   text-align: right;
-  padding-right: 4px; /* Espaço fino entre número e bolinha */
+  padding-right: 4px;
 }
 </style>
 </head>
@@ -151,7 +202,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   </header>
 
   <div class="section">
-    <div class="section-header">Lado Frio</div>
+    <div class="section-header cold">Lado Frio</div>
     <div class="grid-container-area">
       <div class="grid-and-numbers">
         <div class="row-numbers" id="rowNumbers1"></div>
@@ -167,7 +218,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   </div>
 
   <div class="section">
-    <div class="section-header">Lado Quente</div>
+    <div class="section-header hot">Lado Quente</div>
     <div class="grid-container-area">
       <div class="grid-and-numbers">
         <div class="row-numbers" id="rowNumbers2"></div>
