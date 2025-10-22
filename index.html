@@ -8,7 +8,7 @@
 <style>
 :root {
   --point-size: 8px;
-  --grid-gap: 0.5px; /* Reduzido de 1px para 0.5px */
+  --grid-gap: 0.2px; /* Reduzido de 0.5px para 0.2px */
   --grid-padding: 6px;
 
   --muted: #4b5563;
@@ -39,14 +39,14 @@ html, body {
   height: calc(100vh - 56px); 
   display: flex; 
   flex-direction: column; 
-  align-items: center; /* Centraliza os filhos horizontalmente */
+  align-items: center;
 }
 header { 
   display: flex; 
   align-items: center; 
   justify-content: space-between; 
   margin-bottom: 18px; 
-  width: 100%; /* Garante que o header ocupe toda a largura disponível */
+  width: 100%;
 }
 h1 { font-size: 20px; margin: 0; }
 p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
@@ -56,7 +56,7 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
   display: flex; 
   flex-direction: column; 
   margin-bottom: 40px; 
-  width: 100%; /* Garante que a seção ocupe toda a largura disponível */
+  width: 100%;
 }
 .section-header { 
   font-size: 24px;
@@ -72,7 +72,7 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
   flex-direction: column; 
   gap: 15px; 
   flex: 1; 
-  align-items: center; /* Centraliza a grade horizontalmente */
+  align-items: center;
 }
 .grid-and-numbers { 
   position: relative; 
@@ -147,7 +147,7 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
   width: 300px; 
   min-width: 250px; 
   border: 1px solid rgba(0,0,0,0.08); 
-  margin: 0 auto; /* Centraliza o quadro de totais */
+  margin: 0 auto;
 }
 .totals h3 { font-size: 16px; margin: 0 0 10px; }
 .total-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
