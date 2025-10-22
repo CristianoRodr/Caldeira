@@ -8,7 +8,7 @@
 <style>
 :root {
   --point-size: 8px;
-  --grid-gap: 0.2px; /* Reduzido de 0.5px para 0.2px */
+  --grid-gap: 0.2px;
   --grid-padding: 6px;
 
   --muted: #4b5563;
@@ -79,6 +79,7 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
   display: flex; 
   max-height: 600px; 
   max-width: 100%; 
+  align-items: flex-start; /* Ensure vertical alignment */
 }
 .grid-wrapper { 
   position: relative; 
@@ -101,7 +102,6 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
   position: relative;
 }
 
-/* Linhas divisórias vermelhas centralizadas */
 .grid::before, .grid::after {
   content: '';
   position: absolute;
@@ -124,22 +124,12 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
 
 .grid-cell { width: var(--point-size); height: var(--point-size); display: flex; align-items: center; justify-content: center; }
 .point { width: var(--point-size); height: var(--point-size); border-radius: 50%; background-color: var(--color-E-empty); transition: background-color 0.2s; flex-shrink: 0; box-shadow: 0 0 2px rgba(0,0,0,0.25); position: relative; }
-.point-E { cursor: pointer; }
+.point-E { cursor: pointer; background-color: var(--color-E-empty); }
 .point-E[data-state="T"] { background-color: var(--color-T); }
 .point-E[data-state="U"] { background-color: var(--color-U); }
 .point-E[data-state="M"] { background-color: var(--color-M); }
 .point-E[data-state="X"] { background-color: var(--color-X); }
-/*.point-E[data-state="X"]::after {
-/  content: 'X';
-  position: absolute;
-  color: white;
-  font-size: calc(var(--point-size) * 0.8);
-  line-height: var(--point-size);
-  text-align: center;
-  font-weight: bold;
-}
 
-/* Totais */
 .totals { 
   background: #f7f7f7; 
   border-radius: 12px; 
@@ -162,19 +152,19 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
 .editable-label:hover { background: rgba(0,0,0,0.06); }
 .editable-label:focus { outline: 2px solid var(--accent); background: rgba(6,182,212,0.12); }
 
-/* Botões */
 .controls { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0; }
 button { background: #f3f4f6; border: 1px solid rgba(0,0,0,0.1); color: #111827; padding: 8px 12px; border-radius: 10px; cursor: pointer; }
 button.primary { background: linear-gradient(90deg, var(--accent), #0891b2); color: #021226; border: 0; }
 button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 
-/* Números das linhas ajustados */
 .row-numbers {
   position: absolute;
   left: calc(var(--grid-padding) - 20px);
   top: var(--grid-padding);
   display: flex;
   flex-direction: column;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  min-width: 20px; /* Ensure space for numbers */
   font-size: 10px;
   color: var(--muted);
   pointer-events: none;
@@ -198,6 +188,8 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
       <button id="saveAll" class="primary">Salvar Tudo</button>
       <button id="loadAll" class="ghost">Carregar</button>
       <button id="clearAll" class="ghost">Limpar</button>
+      <button id="copyData" class="ghost">Copiar Dados</button>
+      <button id="pasteData" class="ghost">Colar Dados</button>
     </div>
   </header>
 
@@ -249,7 +241,6 @@ const defaultLabels = {
 let currentLabels1 = { ...defaultLabels };
 let currentLabels2 = { ...defaultLabels };
 
-/* MAP_TEMPLATE completo (45 linhas × 77 colunas) sem coluna de números */
 const MAP_TEMPLATE = `
 NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNENNNENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 NNNNNNNNNNNNNNNNNNNNNNNNNNNNNENNNNNNNNNNNNNNNNNENNNNNNNNNNNNNNNNNNNNNNNNNNNNN
@@ -298,7 +289,7 @@ NNNNNNNNNNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNNNNNNNNNN
 NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNDNNNDNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 `.trim();
 
-function setupRowNumbers(mapId){
+function setupRowNumbers(mapId) {
   const rowNumbersDiv = document.getElementById(`rowNumbers${mapId}`);
   rowNumbersDiv.innerHTML = '';
   for (let i = 1; i <= 45; i++) {
@@ -306,9 +297,10 @@ function setupRowNumbers(mapId){
     span.textContent = i;
     rowNumbersDiv.appendChild(span);
   }
+  console.log(`Map ${mapId}: Created ${rowNumbersDiv.children.length} row numbers`);
 }
 
-function createGrid(mapId){
+function createGrid(mapId) {
   const mapLines = MAP_TEMPLATE.split('\n').map(l => l.trim());
   const grid = document.getElementById(`gridMap${mapId}`);
   grid.innerHTML = '';
@@ -323,19 +315,28 @@ function createGrid(mapId){
       const cell = document.createElement('div');
       cell.classList.add('grid-cell');
 
-      if (char === 'N') { grid.appendChild(cell); continue; }
+      if (char === 'N') { 
+        grid.appendChild(cell); 
+        continue; 
+      }
 
       const point = document.createElement('div');
       point.classList.add('point');
 
       if (['D', 'E', 'T', 'U', 'M'].includes(char)) {
         point.classList.add('point-E');
-        const initialState = (rowIndex >= 23 && (char === 'D' || char === 'E')) ? 'X' : (char === 'D' || char === 'E') ? '' : char;
+        let initialState = '';
+        if (char === 'T') initialState = 'T';
+        else if (char === 'U') initialState = 'U';
+        else if (char === 'M') initialState = 'M';
+        else if (char === 'D' || char === 'E') initialState = rowIndex >= 23 ? 'X' : '';
+        
         point.dataset.initial = initialState;
         point.dataset.state = initialState;
         point.dataset.index = pointIndex++;
         point.dataset.mapId = mapId;
         point.addEventListener('click', () => cycleState(point));
+        console.log(`Map ${mapId}, Row ${rowIndex + 1}, Col ${col + 1}: Created point with state ${initialState}`);
       }
 
       cell.appendChild(point);
@@ -343,6 +344,7 @@ function createGrid(mapId){
     }
   });
 
+  console.log(`Map ${mapId}: Total points created: ${pointIndex}`);
   updateTotals(mapId);
 }
 
@@ -481,6 +483,41 @@ function clearData() {
   }
 }
 
+function copyData() {
+  const data = {
+    gridDataMap77x45_map1: localStorage.getItem('gridDataMap77x45_map1'),
+    gridDataMap77x45_map2: localStorage.getItem('gridDataMap77x45_map2'),
+    gridLabels1: localStorage.getItem('gridLabels1'),
+    gridLabels2: localStorage.getItem('gridLabels2')
+  };
+  navigator.clipboard.writeText(JSON.stringify(data)).then(() => {
+    alert('Dados copiados para a área de transferência!');
+  }).catch(err => {
+    console.error('Erro ao copiar dados:', err);
+    alert('Erro ao copiar dados. Verifique o console para mais detalhes.');
+  });
+}
+
+function pasteData() {
+  navigator.clipboard.readText().then(text => {
+    try {
+      const data = JSON.parse(text);
+      if (data.gridDataMap77x45_map1) localStorage.setItem('gridDataMap77x45_map1', data.gridDataMap77x45_map1);
+      if (data.gridDataMap77x45_map2) localStorage.setItem('gridDataMap77x45_map2', data.gridDataMap77x45_map2);
+      if (data.gridLabels1) localStorage.setItem('gridLabels1', data.gridLabels1);
+      if (data.gridLabels2) localStorage.setItem('gridLabels2', data.gridLabels2);
+      loadData();
+      alert('Dados colados com sucesso!');
+    } catch (err) {
+      console.error('Erro ao colar dados:', err);
+      alert('Erro ao colar dados. Certifique-se de que os dados copiados são válidos.');
+    }
+  }).catch(err => {
+    console.error('Erro ao acessar a área de transferência:', err);
+    alert('Erro ao acessar a área de transferência.');
+  });
+}
+
 // Inicialização
 setupRowNumbers('1');
 setupRowNumbers('2');
@@ -491,6 +528,8 @@ loadData();
 document.getElementById('saveAll').addEventListener('click', saveData);
 document.getElementById('loadAll').addEventListener('click', loadData);
 document.getElementById('clearAll').addEventListener('click', clearData);
+document.getElementById('copyData').addEventListener('click', copyData);
+document.getElementById('pasteData').addEventListener('click', pasteData);
 
 // Atalho Ctrl+S
 document.addEventListener('keydown', (e) => {
