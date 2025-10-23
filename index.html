@@ -189,13 +189,13 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 }
 
 .popup {
-  position: absolute;
+  position: fixed;
   background: rgba(0, 0, 0, 0.8);
   color: white;
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 12px;
-  z-index: 1000;
+  z-index: 2000;
   pointer-events: none;
   white-space: nowrap;
 }
@@ -346,7 +346,7 @@ NNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNN
 NNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNN
 NNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNN
 NNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNN
-NNNNNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNNNNN
 NNNNNNNNNNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNNNNNNNNNN
 NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNDNNNDNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 `.trim();
@@ -432,15 +432,32 @@ function cycleState(point) {
   popup.classList.add('popup');
   popup.textContent = popupText;
 
-  // Append popup to document.body instead of grid
+  // Append popup to document.body
   document.body.appendChild(popup);
 
   const pointRect = point.getBoundingClientRect();
   const popupRect = popup.getBoundingClientRect();
 
-  // Position relative to the viewport
-  popup.style.left = `${pointRect.left + (pointRect.width / 2) - (popupRect.width / 2)}px`;
-  popup.style.top = `${pointRect.top - popupRect.height - 4}px`;
+  // Position relative to the viewport, accounting for page scroll only
+  const scrollX = window.scrollX || window.pageXOffset;
+  const scrollY = window.scrollY || window.pageYOffset;
+
+  let left = pointRect.left + scrollX + (pointRect.width / 2) - (popupRect.width / 2);
+  let top = pointRect.top + scrollY - popupRect.height - 4;
+
+  // Ensure popup stays within viewport boundaries
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+  left = Math.max(0, Math.min(left, viewportWidth - popupRect.width));
+  top = Math.max(0, Math.min(top, viewportHeight - popupRect.height));
+
+  popup.style.left = `${left}px`;
+  popup.style.top = `${top}px`;
+
+  // Debugging logs
+  console.log(`Map ${mapId}: Clicked point at Row ${row}, Col ${col}`);
+  console.log(`Map ${mapId}: Popup created at left: ${popup.style.left}, top: ${popup.style.top}, text: ${popupText}`);
+  console.log(`Map ${mapId}: pointRect: ${JSON.stringify(pointRect)}, popupRect: ${JSON.stringify(popupRect)}, scrollX: ${scrollX}, scrollY: ${scrollY}, viewportWidth: ${viewportWidth}, viewportHeight: ${viewportHeight}`);
 
   setTimeout(() => {
     popup.remove();
@@ -620,8 +637,8 @@ function copyData() {
     gridDataMap77x45_map2: localStorage.getItem('gridDataMap77x45_map2'),
     gridLabels1: localStorage.getItem('gridLabels1'),
     gridLabels2: localStorage.getItem('gridLabels2'),
-    checkboxStates1: localStorage.getItem('checkboxStates1'),
-    checkboxStates2: localStorage.getItem('checkboxStates2')
+    checkboxStates1: localStorage.getItem('gridLabels1'),
+    checkboxStates2: localStorage.getItem('gridLabels2')
   };
   navigator.clipboard.writeText(JSON.stringify(data)).then(() => {
     alert('Dados copiados para a área de transferência!');
