@@ -164,9 +164,8 @@ button { background: #f3f4f6; border: 1px solid rgba(0,0,0,0.1); color: #111827;
 button.primary { background: linear-gradient(90deg, var(--accent), #0891b2); color: #021226; border: 0; }
 button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 
-.row-numbers {
+.row-numbers, .row-counts {
   position: absolute;
-  left: calc(var(--grid-padding) - 25px);
   top: var(--grid-padding);
   display: flex;
   flex-direction: column;
@@ -176,11 +175,21 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   color: var(--muted);
   pointer-events: none;
 }
-.row-numbers span {
+.row-numbers {
+  left: calc(var(--grid-padding) - 25px);
+}
+.row-counts {
+  right: calc(var(--grid-padding) - 25px); /* Posiciona à direita da grade */
+}
+.row-numbers span, .row-counts span {
   height: calc(var(--point-size) + var(--grid-gap));
   line-height: calc(var(--point-size) + var(--grid-gap));
   text-align: right;
   padding-right: 4px;
+}
+.row-counts span {
+  text-align: left; /* Alinha contagens à esquerda */
+  padding-left: 4px;
 }
 
 .checkbox {
@@ -219,7 +228,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   .grid-wrapper {
     overflow: visible;
   }
-  .row-numbers {
+  .row-numbers, .row-counts {
     font-size: 8px;
   }
   .controls {
@@ -261,6 +270,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
         <div class="grid-wrapper" id="wrapperMap1">
           <div class="grid" id="gridMap1"></div>
         </div>
+        <div class="row-counts" id="rowCounts1"></div> <!-- Nova div para contagem por linha -->
       </div>
       <div class="totals" id="totalsContainer1">
         <h3>Totais Gerais</h3>
@@ -277,6 +287,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
         <div class="grid-wrapper" id="wrapperMap2">
           <div class="grid" id="gridMap2"></div>
         </div>
+        <div class="row-counts" id="rowCounts2"></div> <!-- Nova div para contagem por linha -->
       </div>
       <div class="totals" id="totalsContainer2">
         <h3>Totais Gerais</h3>
@@ -288,6 +299,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 
 <script>
 const GRID_COLUMNS = 77;
+const GRID_ROWS = 45; // Definido para consistência
 const stateKeys = ['T','U','M','X'];
 const states = ['', 'T','U','M','X'];
 
@@ -354,12 +366,23 @@ NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNDNNNDNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 function setupRowNumbers(mapId) {
   const rowNumbersDiv = document.getElementById(`rowNumbers${mapId}`);
   rowNumbersDiv.innerHTML = '';
-  for (let i = 1; i <= 45; i++) {
+  for (let i = 1; i <= GRID_ROWS; i++) {
     const span = document.createElement('span');
     span.textContent = i;
     rowNumbersDiv.appendChild(span);
   }
   console.log(`Map ${mapId}: Created ${rowNumbersDiv.children.length} row numbers`);
+}
+
+function setupRowCounts(mapId) {
+  const rowCountsDiv = document.getElementById(`rowCounts${mapId}`);
+  rowCountsDiv.innerHTML = '';
+  for (let i = 1; i <= GRID_ROWS; i++) {
+    const span = document.createElement('span');
+    span.textContent = '0'; // Inicializa com zero
+    rowCountsDiv.appendChild(span);
+  }
+  console.log(`Map ${mapId}: Created ${rowCountsDiv.children.length} row counts`);
 }
 
 function createGrid(mapId) {
@@ -372,7 +395,7 @@ function createGrid(mapId) {
     if (line.length !== GRID_COLUMNS) {
       console.warn(`Mapa ${mapId}, Linha ${rowIndex + 1} tem ${line.length} colunas, esperado ${GRID_COLUMNS}.`);
     }
-    let pointCol = 0; // Counter for actual point columns in this row
+    let pointCol = 0;
     for (let col = 0; col < GRID_COLUMNS; col++) {
       const char = line[col] || 'N';
       const cell = document.createElement('div');
@@ -383,7 +406,7 @@ function createGrid(mapId) {
         continue; 
       }
 
-      pointCol++; // Increment point column only for non-'N' cells
+      pointCol++;
       const point = document.createElement('div');
       point.classList.add('point');
 
@@ -399,8 +422,8 @@ function createGrid(mapId) {
         point.dataset.state = initialState;
         point.dataset.index = pointIndex++;
         point.dataset.mapId = mapId;
-        point.dataset.row = rowIndex + 1; // Store 1-based row
-        point.dataset.col = pointCol; // Store the actual point column number
+        point.dataset.row = rowIndex + 1;
+        point.dataset.col = pointCol;
         point.addEventListener('click', () => cycleState(point));
         console.log(`Map ${mapId}, Row ${rowIndex + 1}, Col ${pointCol}: Created point with state ${initialState}`);
       }
@@ -432,17 +455,14 @@ function cycleState(point) {
   popup.classList.add('popup');
   popup.textContent = popupText;
 
-  // Append popup to document.body
   document.body.appendChild(popup);
 
   const pointRect = point.getBoundingClientRect();
   const popupRect = popup.getBoundingClientRect();
 
-  // Position relative to the viewport, using only pointRect coordinates
   let left = pointRect.left + (pointRect.width / 2) - (popupRect.width / 2);
-  let top = pointRect.top - popupRect.height - 2; // 2px above the point
+  let top = pointRect.top - popupRect.height - 2;
 
-  // Ensure popup stays within viewport boundaries
   const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight;
   left = Math.max(10, Math.min(left, viewportWidth - popupRect.width - 10));
@@ -451,7 +471,6 @@ function cycleState(point) {
   popup.style.left = `${left}px`;
   popup.style.top = `${top}px`;
 
-  // Debugging logs
   console.log(`Map ${mapId}: Clicked point at Row ${row}, Col ${col}`);
   console.log(`Map ${mapId}: Popup created at left: ${popup.style.left}, top: ${popup.style.top}, text: ${popupText}`);
   console.log(`Map ${mapId}: pointRect: ${JSON.stringify(pointRect)}, popupRect: ${JSON.stringify(popupRect)}, viewportWidth: ${viewportWidth}, viewportHeight: ${viewportHeight}`);
@@ -466,13 +485,28 @@ function cycleState(point) {
 function updateTotals(mapId) {
   const pointsE = document.querySelectorAll(`#gridMap${mapId} .point-E`);
   const counts = { '': 0, 'T': 0, 'U': 0, 'M': 0, 'X': 0 };
+  const rowCounts = Array(GRID_ROWS).fill(0); // Array para contar pontos por linha
+  const checkboxStates = mapId === '1' ? checkboxStates1 : checkboxStates2;
+
   pointsE.forEach(p => {
     const s = p.dataset.state || '';
+    const rowIndex = parseInt(p.dataset.row) - 1; // 0-based
     counts[s] = (counts[s] || 0) + 1;
+    if (checkboxStates[s] && s !== '') { // Conta apenas estados selecionados e não vazios
+      rowCounts[rowIndex]++;
+    }
+  });
+
+  // Atualizar contagem por linha
+  const rowCountsDiv = document.getElementById(`rowCounts${mapId}`);
+  rowCountsDiv.innerHTML = '';
+  rowCounts.forEach(count => {
+    const span = document.createElement('span');
+    span.textContent = count;
+    rowCountsDiv.appendChild(span);
   });
 
   const currentLabels = mapId === '1' ? currentLabels1 : currentLabels2;
-  const checkboxStates = mapId === '1' ? checkboxStates1 : checkboxStates2;
   const totalsDiv = document.getElementById(`totals${mapId}`);
   totalsDiv.innerHTML = `
     <div class="total-item">
@@ -556,10 +590,7 @@ function updateTotals(mapId) {
       const mapId = checkbox.dataset.mapId;
       const checkboxStates = mapId === '1' ? checkboxStates1 : checkboxStates2;
       checkboxStates[key] = checkbox.checked;
-      const selectedTotal = Object.keys(counts).reduce((sum, key) => {
-        return checkboxStates[key] ? sum + counts[key] : sum;
-      }, 0);
-      document.getElementById(`selectedTotal${mapId}`).textContent = selectedTotal;
+      updateTotals(mapId); // Atualiza totais e contagem por linha
     });
   });
 }
@@ -670,6 +701,8 @@ function pasteData() {
 // Inicialização
 setupRowNumbers('1');
 setupRowNumbers('2');
+setupRowCounts('1'); // Inicializa contagem por linha
+setupRowCounts('2');
 createGrid('1');
 createGrid('2');
 loadData();
@@ -680,7 +713,6 @@ document.getElementById('clearAll').addEventListener('click', clearData);
 document.getElementById('copyData').addEventListener('click', copyData);
 document.getElementById('pasteData').addEventListener('click', pasteData);
 
-// Atalho Ctrl+S
 document.addEventListener('keydown', (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key === 's') {
     e.preventDefault();
