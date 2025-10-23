@@ -5,22 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mapa do Espelho – Caldeira U-130 (Simulação)</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 :root {
-  --point-size: 8px;
-  --grid-gap: 0.2px;
-  --grid-padding: 6px;
-
+  --point-size: 12px;
+  --grid-gap: 0.5px;
+  --grid-padding: 8px;
   --muted: #4b5563;
   --accent: #06b6d4;
-
   --color-E-empty: #FF0000;
   --color-T: #00FF00;
   --color-U: #0000FF;
   --color-M: #FFFF00;
   --color-X: #000000;
-
   --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
+  --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
 }
 
 * { box-sizing: border-box; }
@@ -85,15 +84,12 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
 .grid-and-numbers { 
   position: relative; 
   display: flex; 
-  max-height: 600px; 
-  max-width: 100%; 
   align-items: flex-start;
 }
 .grid-wrapper { 
   position: relative; 
   flex: 1; 
-  overflow: auto; 
-  max-height: 100%; 
+  overflow: visible;
 }
 
 .grid {
@@ -104,7 +100,7 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
   background: #ffffff;
   border-radius: 12px;
   border: 1px solid rgba(0,0,0,0.12);
-  width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
+  width: var(--grid-width);
   height: var(--grid-height);
   flex-shrink: 0;
   position: relative;
@@ -130,13 +126,44 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
   left: 0;
 }
 
-.grid-cell { width: var(--point-size); height: var(--point-size); display: flex; align-items: center; justify-content: center; }
-.point { width: var(--point-size); height: var(--point-size); border-radius: 50%; background-color: var(--color-E-empty); transition: background-color 0.2s; flex-shrink: 0; box-shadow: 0 0 2px rgba(0,0,0,0.25); position: relative; }
+.grid-cell { 
+  width: var(--point-size); 
+  height: var(--point-size); 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  position: relative;
+}
+.point { 
+  width: var(--point-size); 
+  height: var(--point-size); 
+  border-radius: 50%; 
+  background-color: var(--color-E-empty); 
+  transition: background-color 0.2s; 
+  flex-shrink: 0; 
+  box-shadow: 0 0 2px rgba(0,0,0,0.25); 
+}
 .point-E { cursor: pointer; background-color: var(--color-E-empty); }
 .point-E[data-state="T"] { background-color: var(--color-T); }
 .point-E[data-state="U"] { background-color: var(--color-U); }
 .point-E[data-state="M"] { background-color: var(--color-M); }
 .point-E[data-state="X"] { background-color: var(--color-X); }
+
+.row-label-left, .row-label-right {
+  font-size: 8px;
+  color: var(--muted);
+  pointer-events: none;
+  line-height: var(--point-size);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.row-label-left {
+  left: -10px;
+}
+.row-label-right {
+  right: -10px;
+}
 
 .totals { 
   background: #f7f7f7; 
@@ -164,9 +191,10 @@ button { background: #f3f4f6; border: 1px solid rgba(0,0,0,0.1); color: #111827;
 button.primary { background: linear-gradient(90deg, var(--accent), #0891b2); color: #021226; border: 0; }
 button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 
-.row-numbers, .row-counts {
+.row-counts {
   position: absolute;
   top: var(--grid-padding);
+  right: calc(-20px);
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -175,19 +203,9 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   color: var(--muted);
   pointer-events: none;
 }
-.row-numbers {
-  left: calc(var(--grid-padding) - 25px);
-}
-.row-counts {
-  right: calc(var(--grid-padding) - 25px);
-}
-.row-numbers span, .row-counts span {
+.row-counts span {
   height: calc(var(--point-size) + var(--grid-gap));
   line-height: calc(var(--point-size) + var(--grid-gap));
-  text-align: right;
-  padding-right: 4px;
-}
-.row-counts span {
   text-align: left;
   padding-left: 4px;
 }
@@ -228,7 +246,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   .grid-wrapper {
     overflow: visible;
   }
-  .row-numbers, .row-counts {
+  .row-counts {
     font-size: 8px;
   }
   .controls {
@@ -243,6 +261,39 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   .popup {
     display: none;
   }
+  .row-label-left, .row-label-right {
+    font-size: 6px;
+  }
+}
+
+.pdf-export {
+  position: absolute;
+  top: -9999px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Inter, sans-serif;
+  background: #ffffff;
+}
+
+.pdf-grid {
+  transform: scale(0.6);
+  transform-origin: top left;
+  width: 100%;
+  max-width: 1000px;
+  page-break-inside: avoid;
+}
+
+.pdf-row-counts {
+  font-size: 6px !important;
+}
+
+.pdf-totals {
+  background: #f7f7f7 !important;
+  border: 1px solid rgba(0,0,0,0.08) !important;
+  width: 200px !important;
+  min-width: 200px !important;
 }
 </style>
 </head>
@@ -259,6 +310,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
       <button id="clearAll" class="ghost">Limpar</button>
       <button id="copyData" class="ghost">Copiar Dados</button>
       <button id="pasteData" class="ghost">Colar Dados</button>
+      <button id="exportPdf" class="primary">Exportar PDF</button>
     </div>
   </header>
 
@@ -266,7 +318,6 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
     <div class="section-header cold">Lado Frio</div>
     <div class="grid-container-area">
       <div class="grid-and-numbers">
-        <div class="row-numbers" id="rowNumbers1"></div>
         <div class="grid-wrapper" id="wrapperMap1">
           <div class="grid" id="gridMap1"></div>
         </div>
@@ -283,7 +334,6 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
     <div class="section-header hot">Lado Quente</div>
     <div class="grid-container-area">
       <div class="grid-and-numbers">
-        <div class="row-numbers" id="rowNumbers2"></div>
         <div class="grid-wrapper" id="wrapperMap2">
           <div class="grid" id="gridMap2"></div>
         </div>
@@ -312,8 +362,8 @@ const defaultLabels = {
 };
 let currentLabels1 = { ...defaultLabels };
 let currentLabels2 = { ...defaultLabels };
-let checkboxStates1 = { '': true, 'T': true, 'U': true, 'M': true, 'X': true };
-let checkboxStates2 = { '': true, 'T': true, 'U': true, 'M': true, 'X': true };
+let checkboxStates1 = { '': false, 'T': true, 'U': true, 'M': true, 'X': false };
+let checkboxStates2 = { '': false, 'T': true, 'U': true, 'M': true, 'X': false };
 
 const MAP_TEMPLATE = `
 NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNENNNENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
@@ -363,39 +413,35 @@ NNNNNNNNNNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNNNNNNNNNN
 NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNDNNNDNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 `.trim();
 
-function setupRowNumbers(mapId) {
-  const rowNumbersDiv = document.getElementById(`rowNumbers${mapId}`);
-  rowNumbersDiv.innerHTML = '';
-  for (let i = 1; i <= GRID_ROWS; i++) {
-    const span = document.createElement('span');
-    span.textContent = i;
-    rowNumbersDiv.appendChild(span);
-  }
-  console.log(`Map ${mapId}: Created ${rowNumbersDiv.children.length} row numbers`);
-}
+let rowPointCounts1 = new Array(GRID_ROWS).fill(0);
+let rowPointCounts2 = new Array(GRID_ROWS).fill(0);
 
-function setupRowCounts(mapId) {
-  const rowCountsDiv = document.getElementById(`rowCounts${mapId}`);
+function setupRowCounts(mapId, isPdf = false) {
+  const rowCountsDiv = document.getElementById(`rowCounts${mapId}${isPdf ? 'Pdf' : ''}`);
   rowCountsDiv.innerHTML = '';
   for (let i = 1; i <= GRID_ROWS; i++) {
     const span = document.createElement('span');
     span.textContent = '0';
     rowCountsDiv.appendChild(span);
   }
-  console.log(`Map ${mapId}: Created ${rowCountsDiv.children.length} row counts`);
+  console.log(`Map ${mapId}${isPdf ? ' Pdf' : ''}: Created ${rowCountsDiv.children.length} row counts`);
 }
 
-function createGrid(mapId) {
+function createGrid(mapId, isPdf = false) {
   const mapLines = MAP_TEMPLATE.split('\n').map(l => l.trim());
-  const grid = document.getElementById(`gridMap${mapId}`);
+  const grid = document.getElementById(`gridMap${mapId}${isPdf ? 'Pdf' : ''}`);
   grid.innerHTML = '';
   let pointIndex = 0;
+  const rowPointCounts = mapId === '1' ? rowPointCounts1 : rowPointCounts2;
 
   mapLines.forEach((line, rowIndex) => {
     if (line.length !== GRID_COLUMNS) {
       console.warn(`Mapa ${mapId}, Linha ${rowIndex + 1} tem ${line.length} colunas, esperado ${GRID_COLUMNS}.`);
     }
     let pointCol = 0;
+    let firstPointCell = null;
+    let lastPointCell = null;
+
     for (let col = 0; col < GRID_COLUMNS; col++) {
       const char = line[col] || 'N';
       const cell = document.createElement('div');
@@ -424,17 +470,42 @@ function createGrid(mapId) {
         point.dataset.mapId = mapId;
         point.dataset.row = rowIndex + 1;
         point.dataset.col = pointCol;
-        point.addEventListener('click', () => cycleState(point));
-        console.log(`Map ${mapId}, Row ${rowIndex + 1}, Col ${pointCol}: Created point with state ${initialState}`);
+        if (!isPdf) {
+          point.addEventListener('click', () => cycleState(point));
+        }
+
+        if (pointCol === 1) {
+          firstPointCell = cell;
+          const labelLeft = document.createElement('span');
+          labelLeft.classList.add('row-label-left');
+          if (isPdf) labelLeft.classList.add('pdf-row-labels');
+          labelLeft.textContent = rowIndex + 1;
+          cell.appendChild(labelLeft);
+        }
+        lastPointCell = cell;
+
+        console.log(`Map ${mapId}${isPdf ? ' Pdf' : ''}, Row ${rowIndex + 1}, Col ${pointCol}: Created point with state ${initialState}`);
       }
 
       cell.appendChild(point);
       grid.appendChild(cell);
     }
+
+    if (lastPointCell) {
+      const labelRight = document.createElement('span');
+      labelRight.classList.add('row-label-right');
+      if (isPdf) labelRight.classList.add('pdf-row-labels');
+      labelRight.textContent = rowIndex + 1;
+      lastPointCell.appendChild(labelRight);
+    }
+
+    rowPointCounts[rowIndex] = pointCol;
   });
 
-  console.log(`Map ${mapId}: Total points created: ${pointIndex}`);
-  updateTotals(mapId);
+  console.log(`Map ${mapId}${isPdf ? ' Pdf' : ''}: Total points created: ${pointIndex}`);
+  if (!isPdf) {
+    updateTotals(mapId);
+  }
 }
 
 function cycleState(point) {
@@ -444,12 +515,14 @@ function cycleState(point) {
   const nextIndex = (currentIndex + 1) % states.length;
   point.dataset.state = states[nextIndex];
 
-  // Show popup
   const row = point.dataset.row;
   const col = point.dataset.col;
+  const rowPointCounts = mapId === '1' ? rowPointCounts1 : rowPointCounts2;
+  const totalInRow = rowPointCounts[parseInt(row) - 1];
+  const mirroredCol = totalInRow - parseInt(col) + 1;
   const labels = mapId === '1' ? currentLabels1 : currentLabels2;
   const legend = labels[point.dataset.state] || defaultLabels[point.dataset.state];
-  const popupText = `L${row.padStart(2, '0')}-C${col.padStart(2, '0')} ${legend}`;
+  const popupText = `L${row.padStart(2, '0')} - C${col.padStart(2, '0')} ou C${mirroredCol.toString().padStart(2, '0')} ${legend}`;
 
   const popup = document.createElement('div');
   popup.classList.add('popup');
@@ -457,7 +530,6 @@ function cycleState(point) {
 
   document.body.appendChild(popup);
 
-  // Posicionar no canto superior esquerdo
   popup.style.left = '10px';
   popup.style.top = '10px';
 
@@ -471,22 +543,27 @@ function cycleState(point) {
   updateTotals(mapId);
 }
 
-function updateTotals(mapId) {
-  const pointsE = document.querySelectorAll(`#gridMap${mapId} .point-E`);
+function updateTotals(mapId, isPdf = false) {
+  const pointsE = document.querySelectorAll(`#gridMap${mapId}${isPdf ? 'Pdf' : ''} .point-E`);
   const counts = { '': 0, 'T': 0, 'U': 0, 'M': 0, 'X': 0 };
   const rowCounts = Array(GRID_ROWS).fill(0);
   const checkboxStates = mapId === '1' ? checkboxStates1 : checkboxStates2;
+
+  console.log(`Map ${mapId}${isPdf ? ' Pdf' : ''}: Checkbox states:`, JSON.stringify(checkboxStates));
 
   pointsE.forEach(p => {
     const s = p.dataset.state || '';
     const rowIndex = parseInt(p.dataset.row) - 1;
     counts[s] = (counts[s] || 0) + 1;
-    if (checkboxStates[s] && s !== '') {
+    if (checkboxStates[s]) {
       rowCounts[rowIndex]++;
     }
   });
 
-  const rowCountsDiv = document.getElementById(`rowCounts${mapId}`);
+  console.log(`Map ${mapId}${isPdf ? ' Pdf' : ''}: Counts:`, JSON.stringify(counts));
+  console.log(`Map ${mapId}${isPdf ? ' Pdf' : ''}: Row counts:`, JSON.stringify(rowCounts));
+
+  const rowCountsDiv = document.getElementById(`rowCounts${mapId}${isPdf ? 'Pdf' : ''}`);
   rowCountsDiv.innerHTML = '';
   rowCounts.forEach(count => {
     const span = document.createElement('span');
@@ -495,45 +572,45 @@ function updateTotals(mapId) {
   });
 
   const currentLabels = mapId === '1' ? currentLabels1 : currentLabels2;
-  const totalsDiv = document.getElementById(`totals${mapId}`);
+  const totalsDiv = document.getElementById(`totals${mapId}${isPdf ? 'Pdf' : ''}`);
   totalsDiv.innerHTML = `
     <div class="total-item">
       <div class="label">
         <div class="dot empty"></div>
-        <span class="editable-label label-text-" contenteditable="true" data-key="" data-map-id="${mapId}">${currentLabels['']}</span>
-        <input type="checkbox" class="checkbox" data-key="" data-map-id="${mapId}" ${checkboxStates[''] ? 'checked' : ''}>
+        <span class="editable-label label-text-" ${isPdf ? '' : 'contenteditable="true"'} data-key="" data-map-id="${mapId}">${currentLabels['']}</span>
+        ${isPdf ? '' : `<input type="checkbox" class="checkbox" data-key="" data-map-id="${mapId}" ${checkboxStates[''] ? 'checked' : ''}>`}
       </div>
       <span>${counts['']}</span>
     </div>
     <div class="total-item">
       <div class="label">
         <div class="dot T"></div>
-        <span class="editable-label label-text-T" contenteditable="true" data-key="T" data-map-id="${mapId}">${currentLabels['T']}</span>
-        <input type="checkbox" class="checkbox" data-key="T" data-map-id="${mapId}" ${checkboxStates['T'] ? 'checked' : ''}>
+        <span class="editable-label label-text-T" ${isPdf ? '' : 'contenteditable="true"'} data-key="T" data-map-id="${mapId}">${currentLabels['T']}</span>
+        ${isPdf ? '' : `<input type="checkbox" class="checkbox" data-key="T" data-map-id="${mapId}" ${checkboxStates['T'] ? 'checked' : ''}>`}
       </div>
       <span>${counts['T']}</span>
     </div>
     <div class="total-item">
       <div class="label">
         <div class="dot U"></div>
-        <span class="editable-label label-text-U" contenteditable="true" data-key="U" data-map-id="${mapId}">${currentLabels['U']}</span>
-        <input type="checkbox" class="checkbox" data-key="U" data-map-id="${mapId}" ${checkboxStates['U'] ? 'checked' : ''}>
+        <span class="editable-label label-text-U" ${isPdf ? '' : 'contenteditable="true"'} data-key="U" data-map-id="${mapId}">${currentLabels['U']}</span>
+        ${isPdf ? '' : `<input type="checkbox" class="checkbox" data-key="U" data-map-id="${mapId}" ${checkboxStates['U'] ? 'checked' : ''}>`}
       </div>
       <span>${counts['U']}</span>
     </div>
     <div class="total-item">
       <div class="label">
         <div class="dot M"></div>
-        <span class="editable-label label-text-M" contenteditable="true" data-key="M" data-map-id="${mapId}">${currentLabels['M']}</span>
-        <input type="checkbox" class="checkbox" data-key="M" data-map-id="${mapId}" ${checkboxStates['M'] ? 'checked' : ''}>
+        <span class="editable-label label-text-M" ${isPdf ? '' : 'contenteditable="true"'} data-key="M" data-map-id="${mapId}">${currentLabels['M']}</span>
+        ${isPdf ? '' : `<input type="checkbox" class="checkbox" data-key="M" data-map-id="${mapId}" ${checkboxStates['M'] ? 'checked' : ''}>`}
       </div>
       <span>${counts['M']}</span>
     </div>
     <div class="total-item">
       <div class="label">
         <div class="dot X"></div>
-        <span class="editable-label label-text-X" contenteditable="true" data-key="X" data-map-id="${mapId}">${currentLabels['X']}</span>
-        <input type="checkbox" class="checkbox" data-key="X" data-map-id="${mapId}" ${checkboxStates['X'] ? 'checked' : ''}>
+        <span class="editable-label label-text-X" ${isPdf ? '' : 'contenteditable="true"'} data-key="X" data-map-id="${mapId}">${currentLabels['X']}</span>
+        ${isPdf ? '' : `<input type="checkbox" class="checkbox" data-key="X" data-map-id="${mapId}" ${checkboxStates['X'] ? 'checked' : ''}>`}
       </div>
       <span>${counts['X']}</span>
     </div>
@@ -543,44 +620,151 @@ function updateTotals(mapId) {
     </div>
     <div class="total-item" style="font-weight: bold;">
       <div class="label">Total Selecionado</div>
-      <span id="selectedTotal${mapId}"></span>
+      <span id="selectedTotal${mapId}${isPdf ? 'Pdf' : ''}"></span>
     </div>
   `;
+
+  if (!isPdf) {
+    const checkboxes = totalsDiv.querySelectorAll('.checkbox');
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', (e) => {
+        const key = cb.dataset.key;
+        const mapId = cb.dataset.mapId;
+        if (mapId === '1') {
+          checkboxStates1[key] = cb.checked;
+        } else {
+          checkboxStates2[key] = cb.checked;
+        }
+        updateTotals(mapId);
+      });
+    });
+
+    const editableLabels = totalsDiv.querySelectorAll('.editable-label');
+    editableLabels.forEach(el => {
+      el.addEventListener('blur', (e) => {
+        const key = el.dataset.key;
+        const mapId = el.dataset.mapId;
+        const newText = el.textContent.trim();
+        if (mapId === '1') {
+          currentLabels1[key] = newText || defaultLabels[key];
+        } else {
+          currentLabels2[key] = newText || defaultLabels[key];
+        }
+      });
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          el.blur();
+        }
+      });
+    });
+  }
 
   const selectedTotal = Object.keys(counts).reduce((sum, key) => {
     return checkboxStates[key] ? sum + counts[key] : sum;
   }, 0);
-  document.getElementById(`selectedTotal${mapId}`).textContent = selectedTotal;
+  document.getElementById(`selectedTotal${mapId}${isPdf ? 'Pdf' : ''}`).textContent = selectedTotal;
 
-  document.querySelectorAll(`#totals${mapId} .editable-label`).forEach(label => {
-    label.addEventListener('blur', () => {
-      const key = label.dataset.key;
-      const mapId = label.dataset.mapId;
-      const labels = mapId === '1' ? currentLabels1 : currentLabels2;
-      const text = label.textContent.trim();
-      if (text === '') {
-        label.textContent = labels[key] || defaultLabels[key];
-      } else {
-        labels[key] = text;
-      }
-    });
-    label.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        label.blur();
-      }
-    });
+  console.log(`Map ${mapId}${isPdf ? ' Pdf' : ''}: Total Selecionado: ${selectedTotal}`);
+}
+
+function exportToPDF() {
+  console.log('Iniciando exportação de PDF...');
+
+  // Criar container temporário para o PDF
+  const pdfContent = document.createElement('div');
+  pdfContent.classList.add('pdf-export');
+  pdfContent.style.display = 'block'; // Tornar visível para html2canvas
+  pdfContent.style.position = 'absolute';
+  pdfContent.style.top = '-9999px'; // Fora da tela
+  pdfContent.innerHTML = `
+    <header style="text-align: center; margin-bottom: 20px;">
+      <h1 style="margin: 0; font-size: 24px;">Mapa do Espelho – Trocador de Calor</h1>
+      <p style="margin: 5px 0 0; color: #4b5563; font-size: 14px;">Relatório de Estados das Bolinhas</p>
+    </header>
+
+    <div style="margin-bottom: 40px;">
+      <div class="section-header cold" style="font-size: 24px; margin-bottom: 12px; text-align: center;">Lado Frio</div>
+      <div class="grid-and-numbers" style="position: relative; display: flex; align-items: flex-start;">
+        <div class="grid-wrapper" id="wrapperMap1Pdf">
+          <div class="grid pdf-grid" id="gridMap1Pdf"></div>
+        </div>
+        <div class="row-counts pdf-row-counts" id="rowCounts1Pdf"></div>
+      </div>
+      <div class="totals pdf-totals" id="totalsContainer1Pdf">
+        <h3>Totais Gerais</h3>
+        <div id="totals1Pdf"></div>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 40px;">
+      <div class="section-header hot" style="font-size: 24px; margin-bottom: 12px; text-align: center;">Lado Quente</div>
+      <div class="grid-and-numbers" style="position: relative; display: flex; align-items: flex-start;">
+        <div class="grid-wrapper" id="wrapperMap2Pdf">
+          <div class="grid pdf-grid" id="gridMap2Pdf"></div>
+        </div>
+        <div class="row-counts pdf-row-counts" id="rowCounts2Pdf"></div>
+      </div>
+      <div class="totals pdf-totals" id="totalsContainer2Pdf">
+        <h3>Totais Gerais</h3>
+        <div id="totals2Pdf"></div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(pdfContent);
+  console.log('Container PDF criado:', pdfContent);
+
+  // Criar grids e contagens para o PDF
+  setupRowCounts('1', true);
+  setupRowCounts('2', true);
+  createGrid('1', true);
+  createGrid('2', true);
+
+  // Copiar estados das bolinhas
+  const points1 = document.querySelectorAll('#gridMap1 .point-E');
+  const points1Pdf = document.querySelectorAll('#gridMap1Pdf .point-E');
+  console.log(`Copiando estados para Mapa 1: ${points1.length} pontos para ${points1Pdf.length} pontos PDF`);
+  points1.forEach((p, i) => {
+    if (points1Pdf[i]) {
+      points1Pdf[i].dataset.state = p.dataset.state || '';
+    }
   });
 
-  document.querySelectorAll(`#totals${mapId} .checkbox`).forEach(checkbox => {
-    checkbox.addEventListener('change', () => {
-      const key = checkbox.dataset.key;
-      const mapId = checkbox.dataset.mapId;
-      const checkboxStates = mapId === '1' ? checkboxStates1 : checkboxStates2;
-      checkboxStates[key] = checkbox.checked;
-      updateTotals(mapId);
-    });
+  const points2 = document.querySelectorAll('#gridMap2 .point-E');
+  const points2Pdf = document.querySelectorAll('#gridMap2Pdf .point-E');
+  console.log(`Copiando estados para Mapa 2: ${points2.length} pontos para ${points2Pdf.length} pontos PDF`);
+  points2.forEach((p, i) => {
+    if (points2Pdf[i]) {
+      points2Pdf[i].dataset.state = p.dataset.state || '';
+    }
   });
+
+  // Atualizar totais no PDF
+  updateTotals('1', true);
+  updateTotals('2', true);
+
+  // Configurações do PDF
+  const opt = {
+    margin: 0.5,
+    filename: 'Mapa_do_Espelho.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true, logging: true },
+    jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
+  };
+
+  // Atraso para garantir renderização
+  setTimeout(() => {
+    console.log('Iniciando renderização do PDF...');
+    html2pdf().set(opt).from(pdfContent).save().then(() => {
+      console.log('PDF gerado com sucesso');
+      pdfContent.remove();
+    }).catch(err => {
+      console.error('Erro ao gerar PDF:', err);
+      alert('Erro ao gerar PDF. Verifique o console para mais detalhes.');
+      pdfContent.remove();
+    });
+  }, 1000);
 }
 
 function saveData() {
@@ -594,7 +778,7 @@ function saveData() {
   localStorage.setItem('gridLabels2', JSON.stringify(currentLabels2));
   localStorage.setItem('checkboxStates1', JSON.stringify(checkboxStates1));
   localStorage.setItem('checkboxStates2', JSON.stringify(checkboxStates2));
-  alert('Dados salvos!');
+  console.log('Dados salvos no localStorage');
 }
 
 function loadData() {
@@ -607,8 +791,19 @@ function loadData() {
   
   if (savedLabels1) currentLabels1 = { ...defaultLabels, ...savedLabels1 };
   if (savedLabels2) currentLabels2 = { ...defaultLabels, ...savedLabels2 };
-  if (savedCheckboxStates1) checkboxStates1 = { ...checkboxStates1, ...savedCheckboxStates1 };
-  if (savedCheckboxStates2) checkboxStates2 = { ...checkboxStates2, ...savedCheckboxStates2 };
+  if (savedCheckboxStates1) {
+    checkboxStates1 = { ...checkboxStates1, ...savedCheckboxStates1 };
+    checkboxStates1[''] = savedCheckboxStates1 && savedCheckboxStates1[''] === true ? true : false;
+    checkboxStates1['X'] = savedCheckboxStates1 && savedCheckboxStates1['X'] === true ? true : false;
+  }
+  if (savedCheckboxStates2) {
+    checkboxStates2 = { ...checkboxStates2, ...savedCheckboxStates2 };
+    checkboxStates2[''] = savedCheckboxStates2 && savedCheckboxStates2[''] === true ? true : false;
+    checkboxStates2['X'] = savedCheckboxStates2 && savedCheckboxStates2['X'] === true ? true : false;
+  }
+
+  console.log(`LoadData: checkboxStates1:`, JSON.stringify(checkboxStates1));
+  console.log(`LoadData: checkboxStates2:`, JSON.stringify(checkboxStates2));
 
   const points1 = document.querySelectorAll('#gridMap1 .point-E');
   const points2 = document.querySelectorAll('#gridMap2 .point-E');
@@ -636,8 +831,8 @@ function clearData() {
     localStorage.removeItem('checkboxStates2');
     currentLabels1 = { ...defaultLabels };
     currentLabels2 = { ...defaultLabels };
-    checkboxStates1 = { '': true, 'T': true, 'U': true, 'M': true, 'X': true };
-    checkboxStates2 = { '': true, 'T': true, 'U': true, 'M': true, 'X': true };
+    checkboxStates1 = { '': false, 'T': true, 'U': true, 'M': true, 'X': false };
+    checkboxStates2 = { '': false, 'T': true, 'U': true, 'M': true, 'X': false };
     const points1 = document.querySelectorAll('#gridMap1 .point-E');
     const points2 = document.querySelectorAll('#gridMap2 .point-E');
     points1.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
@@ -648,6 +843,7 @@ function clearData() {
 }
 
 function copyData() {
+  saveData(); // Salvar antes de copiar
   const data = {
     gridDataMap77x45_map1: localStorage.getItem('gridDataMap77x45_map1'),
     gridDataMap77x45_map2: localStorage.getItem('gridDataMap77x45_map2'),
@@ -657,7 +853,7 @@ function copyData() {
     checkboxStates2: localStorage.getItem('checkboxStates2')
   };
   navigator.clipboard.writeText(JSON.stringify(data)).then(() => {
-    alert('Dados copiados para a área de transferência!');
+    alert('Dados salvos e copiados para a área de transferência!');
   }).catch(err => {
     console.error('Erro ao copiar dados:', err);
     alert('Erro ao copiar dados. Verifique o console para mais detalhes.');
@@ -687,8 +883,6 @@ function pasteData() {
 }
 
 // Inicialização
-setupRowNumbers('1');
-setupRowNumbers('2');
 setupRowCounts('1');
 setupRowCounts('2');
 createGrid('1');
@@ -700,6 +894,7 @@ document.getElementById('loadAll').addEventListener('click', loadData);
 document.getElementById('clearAll').addEventListener('click', clearData);
 document.getElementById('copyData').addEventListener('click', copyData);
 document.getElementById('pasteData').addEventListener('click', pasteData);
+document.getElementById('exportPdf').addEventListener('click', exportToPDF);
 
 document.addEventListener('keydown', (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key === 's') {
