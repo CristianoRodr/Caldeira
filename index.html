@@ -63,7 +63,7 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
   flex: 1; 
   display: flex; 
   flex-direction: column; 
-  margin-bottom: 60px; /* Increased from 40px */
+  margin-bottom: 60px;
   width: 100%;
 }
 .section-header { 
@@ -81,8 +81,6 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
   gap: 15px; 
   flex: 1; 
   align-items: center;
-  margin-bottom: 150px;
-  
 }
 .grid-and-numbers { 
   position: relative; 
@@ -168,7 +166,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 
 .row-numbers {
   position: absolute;
-  left: calc(var(--grid-padding) - 25px);
+  left: calc(var(--grid-padding) - 20px);
   top: var(--grid-padding);
   display: flex;
   flex-direction: column;
@@ -185,7 +183,11 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   padding-right: 4px;
 }
 
-/* Print-specific styles */
+.checkbox {
+  margin-left: 8px;
+  cursor: pointer;
+}
+
 @media print {
   .app {
     max-width: 100%;
@@ -193,26 +195,29 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
     height: auto;
   }
   .section {
-    page-break-inside: avoid; /* Prevent splitting sections */
+    page-break-inside: avoid;
     margin-bottom: 40px;
   }
   .grid {
-    transform: scale(0.8); /* Scale down to fit A4 */
+    transform: scale(0.8);
     transform-origin: top left;
     width: 100%;
-    max-width: 700px; /* Ensure it fits within A4 width */
+    max-width: 700px;
   }
   .grid-wrapper {
-    overflow: visible; /* Allow full grid visibility */
+    overflow: visible;
   }
   .row-numbers {
-    font-size: 8px; /* Slightly smaller for print */
+    font-size: 8px;
   }
   .controls {
-    display: none; /* Hide buttons when printing */
+    display: none;
   }
   .totals {
     page-break-inside: avoid;
+  }
+  .checkbox {
+    display: none; /* Hide checkboxes when printing */
   }
 }
 </style>
@@ -221,7 +226,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 <div class="app">
   <header>
     <div>
-      <h1>Mapa do Espelho –  Caldeira U-130</h1>
+      <h1>Mapa do Espelho – Trocador de Calor</h1>
       <p class="lead">Todas as bolinhas são editáveis (clicáveis).</p>
     </div>
     <div class="controls">
@@ -280,6 +285,8 @@ const defaultLabels = {
 };
 let currentLabels1 = { ...defaultLabels };
 let currentLabels2 = { ...defaultLabels };
+let checkboxStates1 = { '': true, 'T': true, 'U': true, 'M': true, 'X': true }; // Default all checked
+let checkboxStates2 = { '': true, 'T': true, 'U': true, 'M': true, 'X': true };
 
 const MAP_TEMPLATE = `
 NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNENNNENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
@@ -406,12 +413,14 @@ function updateTotals(mapId) {
   });
 
   const currentLabels = mapId === '1' ? currentLabels1 : currentLabels2;
+  const checkboxStates = mapId === '1' ? checkboxStates1 : checkboxStates2;
   const totalsDiv = document.getElementById(`totals${mapId}`);
   totalsDiv.innerHTML = `
     <div class="total-item">
       <div class="label">
         <div class="dot empty"></div>
         <span class="editable-label label-text-" contenteditable="true" data-key="" data-map-id="${mapId}">${currentLabels['']}</span>
+        <input type="checkbox" class="checkbox" data-key="" data-map-id="${mapId}" ${checkboxStates[''] ? 'checked' : ''}>
       </div>
       <span>${counts['']}</span>
     </div>
@@ -419,6 +428,7 @@ function updateTotals(mapId) {
       <div class="label">
         <div class="dot T"></div>
         <span class="editable-label label-text-T" contenteditable="true" data-key="T" data-map-id="${mapId}">${currentLabels['T']}</span>
+        <input type="checkbox" class="checkbox" data-key="T" data-map-id="${mapId}" ${checkboxStates['T'] ? 'checked' : ''}>
       </div>
       <span>${counts['T']}</span>
     </div>
@@ -426,6 +436,7 @@ function updateTotals(mapId) {
       <div class="label">
         <div class="dot U"></div>
         <span class="editable-label label-text-U" contenteditable="true" data-key="U" data-map-id="${mapId}">${currentLabels['U']}</span>
+        <input type="checkbox" class="checkbox" data-key="U" data-map-id="${mapId}" ${checkboxStates['U'] ? 'checked' : ''}>
       </div>
       <span>${counts['U']}</span>
     </div>
@@ -433,6 +444,7 @@ function updateTotals(mapId) {
       <div class="label">
         <div class="dot M"></div>
         <span class="editable-label label-text-M" contenteditable="true" data-key="M" data-map-id="${mapId}">${currentLabels['M']}</span>
+        <input type="checkbox" class="checkbox" data-key="M" data-map-id="${mapId}" ${checkboxStates['M'] ? 'checked' : ''}>
       </div>
       <span>${counts['M']}</span>
     </div>
@@ -440,6 +452,7 @@ function updateTotals(mapId) {
       <div class="label">
         <div class="dot X"></div>
         <span class="editable-label label-text-X" contenteditable="true" data-key="X" data-map-id="${mapId}">${currentLabels['X']}</span>
+        <input type="checkbox" class="checkbox" data-key="X" data-map-id="${mapId}" ${checkboxStates['X'] ? 'checked' : ''}>
       </div>
       <span>${counts['X']}</span>
     </div>
@@ -447,8 +460,19 @@ function updateTotals(mapId) {
       <div class="label">Total de Pontos Visíveis</div>
       <span>${pointsE.length}</span>
     </div>
+    <div class="total-item" style="font-weight: bold;">
+      <div class="label">Total Selecionado</div>
+      <span id="selectedTotal${mapId}"></span>
+    </div>
   `;
 
+  // Update selected total
+  const selectedTotal = Object.keys(counts).reduce((sum, key) => {
+    return checkboxStates[key] ? sum + counts[key] : sum;
+  }, 0);
+  document.getElementById(`selectedTotal${mapId}`).textContent = selectedTotal;
+
+  // Editable labels
   document.querySelectorAll(`#totals${mapId} .editable-label`).forEach(label => {
     label.addEventListener('blur', () => {
       const key = label.dataset.key;
@@ -468,6 +492,20 @@ function updateTotals(mapId) {
       }
     });
   });
+
+  // Checkbox event listeners
+  document.querySelectorAll(`#totals${mapId} .checkbox`).forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      const key = checkbox.dataset.key;
+      const mapId = checkbox.dataset.mapId;
+      const checkboxStates = mapId === '1' ? checkboxStates1 : checkboxStates2;
+      checkboxStates[key] = checkbox.checked;
+      const selectedTotal = Object.keys(counts).reduce((sum, key) => {
+        return checkboxStates[key] ? sum + counts[key] : sum;
+      }, 0);
+      document.getElementById(`selectedTotal${mapId}`).textContent = selectedTotal;
+    });
+  });
 }
 
 function saveData() {
@@ -479,6 +517,8 @@ function saveData() {
   localStorage.setItem('gridDataMap77x45_map2', JSON.stringify(data2));
   localStorage.setItem('gridLabels1', JSON.stringify(currentLabels1));
   localStorage.setItem('gridLabels2', JSON.stringify(currentLabels2));
+  localStorage.setItem('checkboxStates1', JSON.stringify(checkboxStates1));
+  localStorage.setItem('checkboxStates2', JSON.stringify(checkboxStates2));
   alert('Dados salvos!');
 }
 
@@ -487,8 +527,13 @@ function loadData() {
   const data2 = JSON.parse(localStorage.getItem('gridDataMap77x45_map2'));
   const savedLabels1 = JSON.parse(localStorage.getItem('gridLabels1'));
   const savedLabels2 = JSON.parse(localStorage.getItem('gridLabels2'));
+  const savedCheckboxStates1 = JSON.parse(localStorage.getItem('checkboxStates1'));
+  const savedCheckboxStates2 = JSON.parse(localStorage.getItem('checkboxStates2'));
+  
   if (savedLabels1) currentLabels1 = { ...defaultLabels, ...savedLabels1 };
   if (savedLabels2) currentLabels2 = { ...defaultLabels, ...savedLabels2 };
+  if (savedCheckboxStates1) checkboxStates1 = { ...checkboxStates1, ...savedCheckboxStates1 };
+  if (savedCheckboxStates2) checkboxStates2 = { ...checkboxStates2, ...savedCheckboxStates2 };
 
   const points1 = document.querySelectorAll('#gridMap1 .point-E');
   const points2 = document.querySelectorAll('#gridMap2 .point-E');
@@ -512,8 +557,12 @@ function clearData() {
     localStorage.removeItem('gridDataMap77x45_map2');
     localStorage.removeItem('gridLabels1');
     localStorage.removeItem('gridLabels2');
+    localStorage.removeItem('checkboxStates1');
+    localStorage.removeItem('checkboxStates2');
     currentLabels1 = { ...defaultLabels };
     currentLabels2 = { ...defaultLabels };
+    checkboxStates1 = { '': true, 'T': true, 'U': true, 'M': true, 'X': true };
+    checkboxStates2 = { '': true, 'T': true, 'U': true, 'M': true, 'X': true };
     const points1 = document.querySelectorAll('#gridMap1 .point-E');
     const points2 = document.querySelectorAll('#gridMap2 .point-E');
     points1.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
@@ -528,7 +577,9 @@ function copyData() {
     gridDataMap77x45_map1: localStorage.getItem('gridDataMap77x45_map1'),
     gridDataMap77x45_map2: localStorage.getItem('gridDataMap77x45_map2'),
     gridLabels1: localStorage.getItem('gridLabels1'),
-    gridLabels2: localStorage.getItem('gridLabels2')
+    gridLabels2: localStorage.getItem('gridLabels2'),
+    checkboxStates1: localStorage.getItem('checkboxStates1'),
+    checkboxStates2: localStorage.getItem('checkboxStates2')
   };
   navigator.clipboard.writeText(JSON.stringify(data)).then(() => {
     alert('Dados copiados para a área de transferência!');
@@ -546,6 +597,8 @@ function pasteData() {
       if (data.gridDataMap77x45_map2) localStorage.setItem('gridDataMap77x45_map2', data.gridDataMap77x45_map2);
       if (data.gridLabels1) localStorage.setItem('gridLabels1', data.gridLabels1);
       if (data.gridLabels2) localStorage.setItem('gridLabels2', data.gridLabels2);
+      if (data.checkboxStates1) localStorage.setItem('checkboxStates1', data.checkboxStates1);
+      if (data.checkboxStates2) localStorage.setItem('checkboxStates2', data.checkboxStates2);
       loadData();
       alert('Dados colados com sucesso!');
     } catch (err) {
