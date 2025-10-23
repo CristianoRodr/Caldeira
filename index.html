@@ -426,7 +426,7 @@ function cycleState(point) {
   const col = point.dataset.col;
   const labels = mapId === '1' ? currentLabels1 : currentLabels2;
   const legend = labels[point.dataset.state] || defaultLabels[point.dataset.state];
-  const popupText = `${row.padStart(2, '0')}-${col.padStart(2, '0')} ${legend}`;
+  const popupText = `L${row.padStart(2, '0')}-C${col.padStart(2, '0')} ${legend}`;
 
   const popup = document.createElement('div');
   popup.classList.add('popup');
