@@ -179,7 +179,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   left: calc(var(--grid-padding) - 25px);
 }
 .row-counts {
-  right: calc(var(--grid-padding) - 25px); /* Posiciona à direita da grade */
+  right: calc(var(--grid-padding) - 25px);
 }
 .row-numbers span, .row-counts span {
   height: calc(var(--point-size) + var(--grid-gap));
@@ -188,7 +188,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   padding-right: 4px;
 }
 .row-counts span {
-  text-align: left; /* Alinha contagens à esquerda */
+  text-align: left;
   padding-left: 4px;
 }
 
@@ -270,7 +270,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
         <div class="grid-wrapper" id="wrapperMap1">
           <div class="grid" id="gridMap1"></div>
         </div>
-        <div class="row-counts" id="rowCounts1"></div> <!-- Nova div para contagem por linha -->
+        <div class="row-counts" id="rowCounts1"></div>
       </div>
       <div class="totals" id="totalsContainer1">
         <h3>Totais Gerais</h3>
@@ -287,7 +287,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
         <div class="grid-wrapper" id="wrapperMap2">
           <div class="grid" id="gridMap2"></div>
         </div>
-        <div class="row-counts" id="rowCounts2"></div> <!-- Nova div para contagem por linha -->
+        <div class="row-counts" id="rowCounts2"></div>
       </div>
       <div class="totals" id="totalsContainer2">
         <h3>Totais Gerais</h3>
@@ -299,7 +299,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 
 <script>
 const GRID_COLUMNS = 77;
-const GRID_ROWS = 45; // Definido para consistência
+const GRID_ROWS = 45;
 const stateKeys = ['T','U','M','X'];
 const states = ['', 'T','U','M','X'];
 
@@ -379,7 +379,7 @@ function setupRowCounts(mapId) {
   rowCountsDiv.innerHTML = '';
   for (let i = 1; i <= GRID_ROWS; i++) {
     const span = document.createElement('span');
-    span.textContent = '0'; // Inicializa com zero
+    span.textContent = '0';
     rowCountsDiv.appendChild(span);
   }
   console.log(`Map ${mapId}: Created ${rowCountsDiv.children.length} row counts`);
@@ -457,23 +457,12 @@ function cycleState(point) {
 
   document.body.appendChild(popup);
 
-  const pointRect = point.getBoundingClientRect();
-  const popupRect = popup.getBoundingClientRect();
-
-  let left = pointRect.left + (pointRect.width / 2) - (popupRect.width / 2);
-  let top = pointRect.top - popupRect.height - 2;
-
-  const viewportWidth = window.innerWidth;
-  const viewportHeight = window.innerHeight;
-  left = Math.max(10, Math.min(left, viewportWidth - popupRect.width - 10));
-  top = Math.max(10, Math.min(top, viewportHeight - popupRect.height - 10));
-
-  popup.style.left = `${left}px`;
-  popup.style.top = `${top}px`;
+  // Posicionar no canto superior esquerdo
+  popup.style.left = '10px';
+  popup.style.top = '10px';
 
   console.log(`Map ${mapId}: Clicked point at Row ${row}, Col ${col}`);
   console.log(`Map ${mapId}: Popup created at left: ${popup.style.left}, top: ${popup.style.top}, text: ${popupText}`);
-  console.log(`Map ${mapId}: pointRect: ${JSON.stringify(pointRect)}, popupRect: ${JSON.stringify(popupRect)}, viewportWidth: ${viewportWidth}, viewportHeight: ${viewportHeight}`);
 
   setTimeout(() => {
     popup.remove();
@@ -485,19 +474,18 @@ function cycleState(point) {
 function updateTotals(mapId) {
   const pointsE = document.querySelectorAll(`#gridMap${mapId} .point-E`);
   const counts = { '': 0, 'T': 0, 'U': 0, 'M': 0, 'X': 0 };
-  const rowCounts = Array(GRID_ROWS).fill(0); // Array para contar pontos por linha
+  const rowCounts = Array(GRID_ROWS).fill(0);
   const checkboxStates = mapId === '1' ? checkboxStates1 : checkboxStates2;
 
   pointsE.forEach(p => {
     const s = p.dataset.state || '';
-    const rowIndex = parseInt(p.dataset.row) - 1; // 0-based
+    const rowIndex = parseInt(p.dataset.row) - 1;
     counts[s] = (counts[s] || 0) + 1;
-    if (checkboxStates[s] && s !== '') { // Conta apenas estados selecionados e não vazios
+    if (checkboxStates[s] && s !== '') {
       rowCounts[rowIndex]++;
     }
   });
 
-  // Atualizar contagem por linha
   const rowCountsDiv = document.getElementById(`rowCounts${mapId}`);
   rowCountsDiv.innerHTML = '';
   rowCounts.forEach(count => {
@@ -590,7 +578,7 @@ function updateTotals(mapId) {
       const mapId = checkbox.dataset.mapId;
       const checkboxStates = mapId === '1' ? checkboxStates1 : checkboxStates2;
       checkboxStates[key] = checkbox.checked;
-      updateTotals(mapId); // Atualiza totais e contagem por linha
+      updateTotals(mapId);
     });
   });
 }
@@ -701,7 +689,7 @@ function pasteData() {
 // Inicialização
 setupRowNumbers('1');
 setupRowNumbers('2');
-setupRowCounts('1'); // Inicializa contagem por linha
+setupRowCounts('1');
 setupRowCounts('2');
 createGrid('1');
 createGrid('2');
