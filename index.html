@@ -437,19 +437,23 @@ function cycleState(point) {
 
   const pointRect = point.getBoundingClientRect();
   const popupRect = popup.getBoundingClientRect();
+  const wrapper = document.getElementById(`wrapperMap${mapId}`);
 
-  // Position relative to the viewport, accounting for page scroll only
+  // Position relative to the viewport, accounting for page and wrapper scroll
   const scrollX = window.scrollX || window.pageXOffset;
   const scrollY = window.scrollY || window.pageYOffset;
+  const wrapperScrollX = wrapper.scrollLeft;
+  const wrapperScrollY = wrapper.scrollTop;
 
-  let left = pointRect.left + scrollX + (pointRect.width / 2) - (popupRect.width / 2);
-  let top = pointRect.top + scrollY - popupRect.height - 4;
+  // Calculate position to place popup directly above the point
+  let left = pointRect.left + scrollX + wrapperScrollX + (pointRect.width / 2) - (popupRect.width / 2);
+  let top = pointRect.top + scrollY + wrapperScrollY - popupRect.height - 2; // Reduced offset to 2px
 
   // Ensure popup stays within viewport boundaries
   const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight;
-  left = Math.max(0, Math.min(left, viewportWidth - popupRect.width));
-  top = Math.max(0, Math.min(top, viewportHeight - popupRect.height));
+  left = Math.max(10, Math.min(left, viewportWidth - popupRect.width - 10));
+  top = Math.max(10, Math.min(top, viewportHeight - popupRect.height - 10));
 
   popup.style.left = `${left}px`;
   popup.style.top = `${top}px`;
@@ -457,7 +461,7 @@ function cycleState(point) {
   // Debugging logs
   console.log(`Map ${mapId}: Clicked point at Row ${row}, Col ${col}`);
   console.log(`Map ${mapId}: Popup created at left: ${popup.style.left}, top: ${popup.style.top}, text: ${popupText}`);
-  console.log(`Map ${mapId}: pointRect: ${JSON.stringify(pointRect)}, popupRect: ${JSON.stringify(popupRect)}, scrollX: ${scrollX}, scrollY: ${scrollY}, viewportWidth: ${viewportWidth}, viewportHeight: ${viewportHeight}`);
+  console.log(`Map ${mapId}: pointRect: ${JSON.stringify(pointRect)}, popupRect: ${JSON.stringify(popupRect)}, scrollX: ${scrollX}, scrollY: ${scrollY}, wrapperScrollX: ${wrapperScrollX}, wrapperScrollY: ${wrapperScrollY}, viewportWidth: ${viewportWidth}, viewportHeight: ${viewportHeight}`);
 
   setTimeout(() => {
     popup.remove();
@@ -637,8 +641,8 @@ function copyData() {
     gridDataMap77x45_map2: localStorage.getItem('gridDataMap77x45_map2'),
     gridLabels1: localStorage.getItem('gridLabels1'),
     gridLabels2: localStorage.getItem('gridLabels2'),
-    checkboxStates1: localStorage.getItem('gridLabels1'),
-    checkboxStates2: localStorage.getItem('gridLabels2')
+    checkboxStates1: localStorage.getItem('checkboxStates1'),
+    checkboxStates2: localStorage.getItem('checkboxStates2')
   };
   navigator.clipboard.writeText(JSON.stringify(data)).then(() => {
     alert('Dados copiados para a área de transferência!');
