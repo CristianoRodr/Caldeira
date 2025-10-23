@@ -188,6 +188,18 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   cursor: pointer;
 }
 
+.popup {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  z-index: 1000;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
 @media print {
   .app {
     max-width: 100%;
@@ -217,7 +229,10 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
     page-break-inside: avoid;
   }
   .checkbox {
-    display: none; /* Hide checkboxes when printing */
+    display: none;
+  }
+  .popup {
+    display: none;
   }
 }
 </style>
@@ -285,7 +300,7 @@ const defaultLabels = {
 };
 let currentLabels1 = { ...defaultLabels };
 let currentLabels2 = { ...defaultLabels };
-let checkboxStates1 = { '': true, 'T': true, 'U': true, 'M': true, 'X': true }; // Default all checked
+let checkboxStates1 = { '': true, 'T': true, 'U': true, 'M': true, 'X': true };
 let checkboxStates2 = { '': true, 'T': true, 'U': true, 'M': true, 'X': true };
 
 const MAP_TEMPLATE = `
@@ -382,6 +397,8 @@ function createGrid(mapId) {
         point.dataset.state = initialState;
         point.dataset.index = pointIndex++;
         point.dataset.mapId = mapId;
+        point.dataset.row = rowIndex + 1; // Store 1-based row
+        point.dataset.col = col + 1; // Store 1-based column
         point.addEventListener('click', () => cycleState(point));
         console.log(`Map ${mapId}, Row ${rowIndex + 1}, Col ${col + 1}: Created point with state ${initialState}`);
       }
@@ -401,6 +418,32 @@ function cycleState(point) {
   const currentIndex = states.indexOf(currentState);
   const nextIndex = (currentIndex + 1) % states.length;
   point.dataset.state = states[nextIndex];
+
+  // Show popup
+  const row = point.dataset.row;
+  const col = point.dataset.col;
+  const labels = mapId === '1' ? currentLabels1 : currentLabels2;
+  const legend = labels[point.dataset.state] || defaultLabels[point.dataset.state];
+  const popupText = `${row.padStart(2, '0')}-${col.padStart(2, '0')} ${legend}`;
+
+  const popup = document.createElement('div');
+  popup.classList.add('popup');
+  popup.textContent = popupText;
+
+  const grid = document.getElementById(`gridMap${mapId}`);
+  grid.appendChild(popup);
+
+  const pointRect = point.getBoundingClientRect();
+  const gridRect = grid.getBoundingClientRect();
+  const popupRect = popup.getBoundingClientRect();
+
+  popup.style.left = `${pointRect.left - gridRect.left + (pointRect.width / 2) - (popupRect.width / 2)}px`;
+  popup.style.top = `${pointRect.top - gridRect.top - popupRect.height - 4}px`;
+
+  setTimeout(() => {
+    popup.remove();
+  }, 300);
+
   updateTotals(mapId);
 }
 
@@ -466,13 +509,11 @@ function updateTotals(mapId) {
     </div>
   `;
 
-  // Update selected total
   const selectedTotal = Object.keys(counts).reduce((sum, key) => {
     return checkboxStates[key] ? sum + counts[key] : sum;
   }, 0);
   document.getElementById(`selectedTotal${mapId}`).textContent = selectedTotal;
 
-  // Editable labels
   document.querySelectorAll(`#totals${mapId} .editable-label`).forEach(label => {
     label.addEventListener('blur', () => {
       const key = label.dataset.key;
@@ -493,7 +534,6 @@ function updateTotals(mapId) {
     });
   });
 
-  // Checkbox event listeners
   document.querySelectorAll(`#totals${mapId} .checkbox`).forEach(checkbox => {
     checkbox.addEventListener('change', () => {
       const key = checkbox.dataset.key;
