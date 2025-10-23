@@ -346,7 +346,7 @@ NNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNN
 NNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNN
 NNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNN
 NNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNN
-NNNNNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNNNNN
 NNNNNNNNNNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNNNNNNNNNN
 NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNDNNNDNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 `.trim();
@@ -372,6 +372,7 @@ function createGrid(mapId) {
     if (line.length !== GRID_COLUMNS) {
       console.warn(`Mapa ${mapId}, Linha ${rowIndex + 1} tem ${line.length} colunas, esperado ${GRID_COLUMNS}.`);
     }
+    let pointCol = 0; // Counter for actual point columns in this row
     for (let col = 0; col < GRID_COLUMNS; col++) {
       const char = line[col] || 'N';
       const cell = document.createElement('div');
@@ -382,6 +383,7 @@ function createGrid(mapId) {
         continue; 
       }
 
+      pointCol++; // Increment point column only for non-'N' cells
       const point = document.createElement('div');
       point.classList.add('point');
 
@@ -398,9 +400,9 @@ function createGrid(mapId) {
         point.dataset.index = pointIndex++;
         point.dataset.mapId = mapId;
         point.dataset.row = rowIndex + 1; // Store 1-based row
-        point.dataset.col = col + 1; // Store 1-based column
+        point.dataset.col = pointCol; // Store the actual point column number
         point.addEventListener('click', () => cycleState(point));
-        console.log(`Map ${mapId}, Row ${rowIndex + 1}, Col ${col + 1}: Created point with state ${initialState}`);
+        console.log(`Map ${mapId}, Row ${rowIndex + 1}, Col ${pointCol}: Created point with state ${initialState}`);
       }
 
       cell.appendChild(point);
@@ -430,15 +432,15 @@ function cycleState(point) {
   popup.classList.add('popup');
   popup.textContent = popupText;
 
-  const grid = document.getElementById(`gridMap${mapId}`);
-  grid.appendChild(popup);
+  // Append popup to document.body instead of grid
+  document.body.appendChild(popup);
 
   const pointRect = point.getBoundingClientRect();
-  const gridRect = grid.getBoundingClientRect();
   const popupRect = popup.getBoundingClientRect();
 
-  popup.style.left = `${pointRect.left - gridRect.left + (pointRect.width / 2) - (popupRect.width / 2)}px`;
-  popup.style.top = `${pointRect.top - gridRect.top - popupRect.height - 4}px`;
+  // Position relative to the viewport
+  popup.style.left = `${pointRect.left + (pointRect.width / 2) - (popupRect.width / 2)}px`;
+  popup.style.top = `${pointRect.top - popupRect.height - 4}px`;
 
   setTimeout(() => {
     popup.remove();
