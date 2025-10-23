@@ -63,7 +63,7 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
   flex: 1; 
   display: flex; 
   flex-direction: column; 
-  margin-bottom: 60px;
+  margin-bottom: 160px;
   width: 100%;
 }
 .section-header { 
@@ -241,7 +241,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 <div class="app">
   <header>
     <div>
-      <h1>Mapa do Espelho – Caldeira U-130</h1>
+      <h1>Mapa do Espelho – Trocador de Calor</h1>
       <p class="lead">Todas as bolinhas são editáveis (clicáveis).</p>
     </div>
     <div class="controls">
@@ -437,17 +437,10 @@ function cycleState(point) {
 
   const pointRect = point.getBoundingClientRect();
   const popupRect = popup.getBoundingClientRect();
-  const wrapper = document.getElementById(`wrapperMap${mapId}`);
 
-  // Position relative to the viewport, accounting for page and wrapper scroll
-  const scrollX = window.scrollX || window.pageXOffset;
-  const scrollY = window.scrollY || window.pageYOffset;
-  const wrapperScrollX = wrapper.scrollLeft;
-  const wrapperScrollY = wrapper.scrollTop;
-
-  // Calculate position to place popup directly above the point
-  let left = pointRect.left + scrollX + wrapperScrollX + (pointRect.width / 2) - (popupRect.width / 2);
-  let top = pointRect.top + scrollY + wrapperScrollY - popupRect.height - 2; // Reduced offset to 2px
+  // Position relative to the viewport, using only pointRect coordinates
+  let left = pointRect.left + (pointRect.width / 2) - (popupRect.width / 2);
+  let top = pointRect.top - popupRect.height - 2; // 2px above the point
 
   // Ensure popup stays within viewport boundaries
   const viewportWidth = window.innerWidth;
@@ -461,11 +454,11 @@ function cycleState(point) {
   // Debugging logs
   console.log(`Map ${mapId}: Clicked point at Row ${row}, Col ${col}`);
   console.log(`Map ${mapId}: Popup created at left: ${popup.style.left}, top: ${popup.style.top}, text: ${popupText}`);
-  console.log(`Map ${mapId}: pointRect: ${JSON.stringify(pointRect)}, popupRect: ${JSON.stringify(popupRect)}, scrollX: ${scrollX}, scrollY: ${scrollY}, wrapperScrollX: ${wrapperScrollX}, wrapperScrollY: ${wrapperScrollY}, viewportWidth: ${viewportWidth}, viewportHeight: ${viewportHeight}`);
+  console.log(`Map ${mapId}: pointRect: ${JSON.stringify(pointRect)}, popupRect: ${JSON.stringify(popupRect)}, viewportWidth: ${viewportWidth}, viewportHeight: ${viewportHeight}`);
 
   setTimeout(() => {
     popup.remove();
-  }, 1000);
+  }, 500);
 
   updateTotals(mapId);
 }
