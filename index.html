@@ -43,19 +43,27 @@ html, body {
 }
 header { 
   display: flex; 
+  flex-direction: column; 
   align-items: center; 
-  justify-content: space-between; 
   margin-bottom: 18px; 
   width: 100%;
 }
-h1 { font-size: 20px; margin: 0; }
-p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+h1 { font-size: 20px; margin: 0; text-align: center; }
+p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: center; }
+
+.controls { 
+  display: flex; 
+  gap: 8px; 
+  flex-wrap: wrap; 
+  margin-top: 12px; 
+  justify-content: center; 
+}
 
 .section { 
   flex: 1; 
   display: flex; 
   flex-direction: column; 
-  margin-bottom: 40px; 
+  margin-bottom: 60px; /* Increased from 40px */
   width: 100%;
 }
 .section-header { 
@@ -79,7 +87,7 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
   display: flex; 
   max-height: 600px; 
   max-width: 100%; 
-  align-items: flex-start; /* Ensure vertical alignment */
+  align-items: flex-start;
 }
 .grid-wrapper { 
   position: relative; 
@@ -152,7 +160,6 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
 .editable-label:hover { background: rgba(0,0,0,0.06); }
 .editable-label:focus { outline: 2px solid var(--accent); background: rgba(6,182,212,0.12); }
 
-.controls { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0; }
 button { background: #f3f4f6; border: 1px solid rgba(0,0,0,0.1); color: #111827; padding: 8px 12px; border-radius: 10px; cursor: pointer; }
 button.primary { background: linear-gradient(90deg, var(--accent), #0891b2); color: #021226; border: 0; }
 button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
@@ -163,8 +170,8 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   top: var(--grid-padding);
   display: flex;
   flex-direction: column;
-  flex-wrap: nowrap; /* Prevent wrapping */
-  min-width: 20px; /* Ensure space for numbers */
+  flex-wrap: nowrap;
+  min-width: 20px;
   font-size: 10px;
   color: var(--muted);
   pointer-events: none;
@@ -174,6 +181,37 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   line-height: calc(var(--point-size) + var(--grid-gap));
   text-align: right;
   padding-right: 4px;
+}
+
+/* Print-specific styles */
+@media print {
+  .app {
+    max-width: 100%;
+    padding: 10px;
+    height: auto;
+  }
+  .section {
+    page-break-inside: avoid; /* Prevent splitting sections */
+    margin-bottom: 40px;
+  }
+  .grid {
+    transform: scale(0.8); /* Scale down to fit A4 */
+    transform-origin: top left;
+    width: 100%;
+    max-width: 700px; /* Ensure it fits within A4 width */
+  }
+  .grid-wrapper {
+    overflow: visible; /* Allow full grid visibility */
+  }
+  .row-numbers {
+    font-size: 8px; /* Slightly smaller for print */
+  }
+  .controls {
+    display: none; /* Hide buttons when printing */
+  }
+  .totals {
+    page-break-inside: avoid;
+  }
 }
 </style>
 </head>
