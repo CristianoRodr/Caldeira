@@ -38,7 +38,6 @@ html, body {
   flex-direction: column;
   align-items: center;
   overflow-y: auto;
-  overflow-x: hidden;
 }
 header {
   display: flex;
@@ -74,7 +73,7 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
   display: flex;
   flex-direction: column;
   gap: 15px;
-  align-items: center;
+  align-items: flex-start; /* Alinha à esquerda para evitar centralização que pode cortar a rolagem */
   width: 100%;
   overflow-x: auto;
 }
@@ -86,7 +85,8 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
 }
 .grid-wrapper {
   position: relative;
-  overflow: visible;
+  min-width: var(--grid-width); /* Garante que o wrapper não encolha */
+  overflow-x: auto; /* Adiciona rolagem horizontal no wrapper */
 }
 .grid {
   display: grid;
@@ -95,11 +95,10 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
   padding: var(--grid-padding);
   background: #ffffff;
   border-radius: 12px;
-  border: 1px solid transparent;
+  border: 1px solid rgba(0,0,0,0.12);
   width: var(--grid-width);
   height: var(--grid-height);
   flex-shrink: 0;
-  position: relative;
 }
 .grid::before, .grid::after {
   content: '';
@@ -136,45 +135,23 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
   transition: background-color 0.2s;
   flex-shrink: 0;
   box-shadow: 0 0 2px rgba(0,0,0,0.25);
-  position: relative;
-  z-index: 2;
 }
 .point-E { cursor: pointer; background-color: var(--color-E-empty); }
 .point-E[data-state="T"] { background-color: var(--color-T); }
 .point-E[data-state="U"] { background-color: var(--color-U); }
 .point-E[data-state="M"] { background-color: var(--color-M); }
 .point-E[data-state="X"] { background-color: var(--color-X); }
-
-/* Labels das linhas - POSICIONAMENTO CORRIGIDO */
 .row-label-left, .row-label-right {
-  font-size: 7px;
+  font-size: 8px;
   color: var(--muted);
   pointer-events: none;
-  line-height: 1;
+  line-height: var(--point-size);
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 1;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 1px 2px;
-  border-radius: 2px;
-  white-space: nowrap;
 }
-.row-label-left { 
-  left: -14px; 
-  text-align: right;
-}
-.row-label-right { 
-  right: -14px; 
-  text-align: left;
-}
-
-/* Ajuste para garantir que os labels não sobreponham */
-.grid-cell:has(.row-label-left),
-.grid-cell:has(.row-label-right) {
-  overflow: visible;
-}
-
+.row-label-left { left: -15px; }
+.row-label-right { right: -15px; }
 .totals {
   background: #f7f7f7;
   border-radius: 12px;
@@ -202,7 +179,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 .row-counts {
   position: absolute;
   top: var(--grid-padding);
-  right: calc(-40px);
+  right: calc(-20px);
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -268,14 +245,12 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   }
   .row-label-left, .row-label-right {
     font-size: 6px;
-    background: white;
   }
 }
 @media (max-width: 768px) {
   .app {
     padding: 10px;
     overflow-y: auto;
-    overflow-x: hidden;
   }
   .grid-container-area {
     overflow-x: auto;
@@ -283,6 +258,10 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   }
   .grid-and-numbers {
     min-width: var(--grid-width);
+  }
+  .grid-wrapper {
+    min-width: var(--grid-width);
+    overflow-x: auto;
   }
   .grid {
     min-width: var(--grid-width);
@@ -296,9 +275,6 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   .grid {
     --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
     --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
-  }
-  .row-label-left, .row-label-right {
-    font-size: 6px;
   }
 }
 @media (max-width: 480px) {
@@ -324,7 +300,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
     --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
   }
   .row-label-left, .row-label-right {
-    font-size: 5px;
+    font-size: 6px;
   }
   .row-counts {
     font-size: 8px;
@@ -443,7 +419,6 @@ NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNDNNNDNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 `.trim();
 let rowPointCounts1 = new Array(GRID_ROWS).fill(0);
 let rowPointCounts2 = new Array(GRID_ROWS).fill(0);
-
 function setupRowCounts(mapId) {
   const rowCountsDiv = document.getElementById(`rowCounts${mapId}`);
   rowCountsDiv.innerHTML = '';
@@ -452,8 +427,8 @@ function setupRowCounts(mapId) {
     span.textContent = '0';
     rowCountsDiv.appendChild(span);
   }
+  console.log(`Map ${mapId}: Created ${rowCountsDiv.children.length} row counts`);
 }
-
 function createGrid(mapId) {
   const mapLines = MAP_TEMPLATE.split('\n').map(l => l.trim());
   const grid = document.getElementById(`gridMap${mapId}`);
@@ -464,7 +439,6 @@ function createGrid(mapId) {
   grid.innerHTML = '';
   let pointIndex = 0;
   const rowPointCounts = mapId === '1' ? rowPointCounts1 : rowPointCounts2;
-  
   mapLines.forEach((line, rowIndex) => {
     if (line.length !== GRID_COLUMNS) {
       console.warn(`Mapa ${mapId}, Linha ${rowIndex + 1} tem ${line.length} colunas, esperado ${GRID_COLUMNS}.`);
@@ -472,21 +446,17 @@ function createGrid(mapId) {
     let pointCol = 0;
     let firstPointCell = null;
     let lastPointCell = null;
-    
     for (let col = 0; col < GRID_COLUMNS; col++) {
       const char = line[col] || 'N';
       const cell = document.createElement('div');
       cell.classList.add('grid-cell');
-      
       if (char === 'N') {
         grid.appendChild(cell);
         continue;
       }
-      
       pointCol++;
       const point = document.createElement('div');
       point.classList.add('point');
-      
       if (['D', 'E', 'T', 'U', 'M'].includes(char)) {
         point.classList.add('point-E');
         let initialState = '';
@@ -502,8 +472,6 @@ function createGrid(mapId) {
         point.dataset.row = rowIndex + 1;
         point.dataset.col = pointCol;
         point.addEventListener('click', () => cycleState(point));
-        
-        // Adicionar label apenas na primeira e última célula com ponto de cada linha
         if (pointCol === 1) {
           firstPointCell = cell;
           const labelLeft = document.createElement('span');
@@ -511,28 +479,23 @@ function createGrid(mapId) {
           labelLeft.textContent = rowIndex + 1;
           cell.appendChild(labelLeft);
         }
-        
         lastPointCell = cell;
+        console.log(`Map ${mapId}, Row ${rowIndex + 1}, Col ${pointCol}: Created point with state ${initialState}`);
       }
-      
       cell.appendChild(point);
       grid.appendChild(cell);
     }
-    
-    // Adicionar label direito na última célula com ponto
-    if (lastPointCell && lastPointCell !== firstPointCell) {
+    if (lastPointCell) {
       const labelRight = document.createElement('span');
       labelRight.classList.add('row-label-right');
       labelRight.textContent = rowIndex + 1;
       lastPointCell.appendChild(labelRight);
     }
-    
     rowPointCounts[rowIndex] = pointCol;
   });
-  
+  console.log(`Map ${mapId}: Total points created: ${pointIndex}`);
   updateTotals(mapId);
 }
-
 function cycleState(point) {
   const mapId = point.dataset.mapId;
   const currentState = point.dataset.state || '';
@@ -553,20 +516,19 @@ function cycleState(point) {
   document.body.appendChild(popup);
   popup.style.left = '10px';
   popup.style.top = '10px';
+  console.log(`Map ${mapId}: Clicked point at Row ${row}, Col ${col}`);
+  console.log(`Map ${mapId}: Popup created at left: ${popup.style.left}, top: ${popup.style.top}, text: ${popupText}`);
   setTimeout(() => {
     popup.remove();
   }, 1000);
   updateTotals(mapId);
 }
-
-// ... (o restante das funções permanece igual: updateTotals, saveData, loadData, clearData, copyData, pasteData)
-
 function updateTotals(mapId) {
   const pointsE = document.querySelectorAll(`#gridMap${mapId} .point-E`);
   const counts = { '': 0, 'T': 0, 'U': 0, 'M': 0, 'X': 0 };
   const rowCounts = Array(GRID_ROWS).fill(0);
   const checkboxStates = mapId === '1' ? checkboxStates1 : checkboxStates2;
-  
+  console.log(`Map ${mapId}: Checkbox states:`, JSON.stringify(checkboxStates));
   pointsE.forEach(p => {
     const s = p.dataset.state || '';
     const rowIndex = parseInt(p.dataset.row) - 1;
@@ -575,7 +537,8 @@ function updateTotals(mapId) {
       rowCounts[rowIndex]++;
     }
   });
-  
+  console.log(`Map ${mapId}: Counts:`, JSON.stringify(counts));
+  console.log(`Map ${mapId}: Row counts:`, JSON.stringify(rowCounts));
   const rowCountsDiv = document.getElementById(`rowCounts${mapId}`);
   rowCountsDiv.innerHTML = '';
   rowCounts.forEach(count => {
@@ -583,7 +546,6 @@ function updateTotals(mapId) {
     span.textContent = count;
     rowCountsDiv.appendChild(span);
   });
-  
   const currentLabels = mapId === '1' ? currentLabels1 : currentLabels2;
   const totalsDiv = document.getElementById(`totals${mapId}`);
   totalsDiv.innerHTML = `
@@ -636,7 +598,6 @@ function updateTotals(mapId) {
       <span id="selectedTotal${mapId}"></span>
     </div>
   `;
-  
   const checkboxes = totalsDiv.querySelectorAll('.checkbox');
   checkboxes.forEach(cb => {
     cb.addEventListener('change', (e) => {
@@ -650,7 +611,6 @@ function updateTotals(mapId) {
       updateTotals(mapId);
     });
   });
-  
   const editableLabels = totalsDiv.querySelectorAll('.editable-label');
   editableLabels.forEach(el => {
     el.addEventListener('blur', (e) => {
@@ -670,63 +630,83 @@ function updateTotals(mapId) {
       }
     });
   });
-  
   const selectedTotal = Object.keys(counts).reduce((sum, key) => {
     return checkboxStates[key] ? sum + counts[key] : sum;
   }, 0);
   document.getElementById(`selectedTotal${mapId}`).textContent = selectedTotal;
+  console.log(`Map ${mapId}: Total Selecionado: ${selectedTotal}`);
 }
-
 function saveData() {
-  const points1 = document.querySelectorAll('#gridMap1 .point-E');
-  const points2 = document.querySelectorAll('#gridMap2 .point-E');
-  const data1 = Array.from(points1).map(p => p.dataset.state);
-  const data2 = Array.from(points2).map(p => p.dataset.state);
-  localStorage.setItem('gridDataMap77x45_map1', JSON.stringify(data1));
-  localStorage.setItem('gridDataMap77x45_map2', JSON.stringify(data2));
-  localStorage.setItem('gridLabels1', JSON.stringify(currentLabels1));
-  localStorage.setItem('gridLabels2', JSON.stringify(currentLabels2));
-  localStorage.setItem('checkboxStates1', JSON.stringify(checkboxStates1));
-  localStorage.setItem('checkboxStates2', JSON.stringify(checkboxStates2));
+  try {
+    const points1 = document.querySelectorAll('#gridMap1 .point-E');
+    const points2 = document.querySelectorAll('#gridMap2 .point-E');
+    const data1 = Array.from(points1).map(p => p.dataset.state);
+    const data2 = Array.from(points2).map(p => p.dataset.state);
+    localStorage.setItem('gridDataMap77x45_map1', JSON.stringify(data1));
+    localStorage.setItem('gridDataMap77x45_map2', JSON.stringify(data2));
+    localStorage.setItem('gridLabels1', JSON.stringify(currentLabels1));
+    localStorage.setItem('gridLabels2', JSON.stringify(currentLabels2));
+    localStorage.setItem('checkboxStates1', JSON.stringify(checkboxStates1));
+    localStorage.setItem('checkboxStates2', JSON.stringify(checkboxStates2));
+    console.log('Dados salvos no localStorage:');
+    console.log('Map 1 Data:', data1.length, 'points');
+    console.log('Map 2 Data:', data2.length, 'points');
+    console.log('Labels 1:', currentLabels1);
+    console.log('Labels 2:', currentLabels2);
+    console.log('Checkbox States 1:', checkboxStates1);
+    console.log('Checkbox States 2:', checkboxStates2);
+    alert('Dados salvos com sucesso!');
+  } catch (err) {
+    console.error('Erro ao salvar dados:', err);
+    alert('Erro ao salvar dados. Verifique o console para mais detalhes.');
+  }
 }
-
 function loadData() {
-  const data1 = JSON.parse(localStorage.getItem('gridDataMap77x45_map1'));
-  const data2 = JSON.parse(localStorage.getItem('gridDataMap77x45_map2'));
-  const savedLabels1 = JSON.parse(localStorage.getItem('gridLabels1'));
-  const savedLabels2 = JSON.parse(localStorage.getItem('gridLabels2'));
-  const savedCheckboxStates1 = JSON.parse(localStorage.getItem('checkboxStates1'));
-  const savedCheckboxStates2 = JSON.parse(localStorage.getItem('checkboxStates2'));
- 
-  if (savedLabels1) currentLabels1 = { ...defaultLabels, ...savedLabels1 };
-  if (savedLabels2) currentLabels2 = { ...defaultLabels, ...savedLabels2 };
-  if (savedCheckboxStates1) {
-    checkboxStates1 = { ...checkboxStates1, ...savedCheckboxStates1 };
-    checkboxStates1[''] = savedCheckboxStates1 && savedCheckboxStates1[''] === true ? true : false;
-    checkboxStates1['X'] = savedCheckboxStates1 && savedCheckboxStates1['X'] === true ? true : false;
+  try {
+    const data1 = JSON.parse(localStorage.getItem('gridDataMap77x45_map1'));
+    const data2 = JSON.parse(localStorage.getItem('gridDataMap77x45_map2'));
+    const savedLabels1 = JSON.parse(localStorage.getItem('gridLabels1'));
+    const savedLabels2 = JSON.parse(localStorage.getItem('gridLabels2'));
+    const savedCheckboxStates1 = JSON.parse(localStorage.getItem('checkboxStates1'));
+    const savedCheckboxStates2 = JSON.parse(localStorage.getItem('checkboxStates2'));
+   
+    if (savedLabels1) currentLabels1 = { ...defaultLabels, ...savedLabels1 };
+    if (savedLabels2) currentLabels2 = { ...defaultLabels, ...savedLabels2 };
+    if (savedCheckboxStates1) {
+      checkboxStates1 = { ...checkboxStates1, ...savedCheckboxStates1 };
+      checkboxStates1[''] = savedCheckboxStates1 && savedCheckboxStates1[''] === true ? true : false;
+      checkboxStates1['X'] = savedCheckboxStates1 && savedCheckboxStates1['X'] === true ? true : false;
+    }
+    if (savedCheckboxStates2) {
+      checkboxStates2 = { ...checkboxStates2, ...savedCheckboxStates2 };
+      checkboxStates2[''] = savedCheckboxStates2 && savedCheckboxStates2[''] === true ? true : false;
+      checkboxStates2['X'] = savedCheckboxStates2 && savedCheckboxStates2['X'] === true ? true : false;
+    }
+    console.log(`LoadData: checkboxStates1:`, JSON.stringify(checkboxStates1));
+    console.log(`LoadData: checkboxStates2:`, JSON.stringify(checkboxStates2));
+    const points1 = document.querySelectorAll('#gridMap1 .point-E');
+    const points2 = document.querySelectorAll('#gridMap2 .point-E');
+    if (data1 && points1.length === data1.length) {
+      points1.forEach((p, i) => { p.dataset.state = data1[i] || ''; });
+      console.log('Loaded Map 1 Data:', data1.length, 'points');
+    } else {
+      points1.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
+      console.log('Reset Map 1 to initial states');
+    }
+    if (data2 && points2.length === data2.length) {
+      points2.forEach((p, i) => { p.dataset.state = data2[i] || ''; });
+      console.log('Loaded Map 2 Data:', data2.length, 'points');
+    } else {
+      points2.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
+      console.log('Reset Map 2 to initial states');
+    }
+    updateTotals('1');
+    updateTotals('2');
+  } catch (err) {
+    console.error('Erro ao carregar dados:', err);
+    alert('Erro ao carregar dados. Verifique o console para mais detalhes.');
   }
-  if (savedCheckboxStates2) {
-    checkboxStates2 = { ...checkboxStates2, ...savedCheckboxStates2 };
-    checkboxStates2[''] = savedCheckboxStates2 && savedCheckboxStates2[''] === true ? true : false;
-    checkboxStates2['X'] = savedCheckboxStates2 && savedCheckboxStates2['X'] === true ? true : false;
-  }
-  
-  const points1 = document.querySelectorAll('#gridMap1 .point-E');
-  const points2 = document.querySelectorAll('#gridMap2 .point-E');
-  if (data1 && points1.length === data1.length) {
-    points1.forEach((p, i) => { p.dataset.state = data1[i] || ''; });
-  } else {
-    points1.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
-  }
-  if (data2 && points2.length === data2.length) {
-    points2.forEach((p, i) => { p.dataset.state = data2[i] || ''; });
-  } else {
-    points2.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
-  }
-  updateTotals('1');
-  updateTotals('2');
 }
-
 function clearData() {
   if (confirm('Tem certeza que deseja limpar todos os dados?')) {
     localStorage.removeItem('gridDataMap77x45_map1');
@@ -745,9 +725,10 @@ function clearData() {
     points2.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
     updateTotals('1');
     updateTotals('2');
+    console.log('Dados limpos');
+    alert('Dados limpos com sucesso!');
   }
 }
-
 function copyData() {
   saveData();
   const data = {
@@ -759,13 +740,13 @@ function copyData() {
     checkboxStates2: localStorage.getItem('checkboxStates2')
   };
   navigator.clipboard.writeText(JSON.stringify(data)).then(() => {
+    console.log('Dados copiados para a área de transferência');
     alert('Dados salvos e copiados para a área de transferência!');
   }).catch(err => {
     console.error('Erro ao copiar dados:', err);
     alert('Erro ao copiar dados. Verifique o console para mais detalhes.');
   });
 }
-
 function pasteData() {
   navigator.clipboard.readText().then(text => {
     try {
@@ -777,6 +758,7 @@ function pasteData() {
       if (data.checkboxStates1) localStorage.setItem('checkboxStates1', data.checkboxStates1);
       if (data.checkboxStates2) localStorage.setItem('checkboxStates2', data.checkboxStates2);
       loadData();
+      console.log('Dados colados com sucesso');
       alert('Dados colados com sucesso!');
     } catch (err) {
       console.error('Erro ao colar dados:', err);
@@ -787,20 +769,17 @@ function pasteData() {
     alert('Erro ao acessar a área de transferência.');
   });
 }
-
 // Inicialização
 setupRowCounts('1');
 setupRowCounts('2');
 createGrid('1');
 createGrid('2');
 loadData();
-
 document.getElementById('saveAll').addEventListener('click', saveData);
 document.getElementById('loadAll').addEventListener('click', loadData);
 document.getElementById('clearAll').addEventListener('click', clearData);
 document.getElementById('copyData').addEventListener('click', copyData);
 document.getElementById('pasteData').addEventListener('click', pasteData);
-
 document.addEventListener('keydown', (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key === 's') {
     e.preventDefault();
