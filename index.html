@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mapa do Espelho – Caldeira U-130 </title>
+<title>Mapa do Espelho – Caldeira U-130</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -20,7 +20,6 @@
   --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
   --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
 }
-
 * { box-sizing: border-box; }
 html, body {
   height: 100%;
@@ -28,69 +27,67 @@ html, body {
   font-family: Inter, system-ui, Arial;
   background: #ffffff;
   color: #000000;
+  overflow: auto;
 }
-
-.app { 
-  max-width: 1400px; 
-  margin: 28px auto; 
-  padding: 20px; 
-  height: calc(100vh - 56px); 
-  display: flex; 
-  flex-direction: column; 
+.app {
+  max-width: 1400px;
+  margin: 28px auto;
+  padding: 20px;
+  min-height: calc(100vh - 56px);
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
-header { 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  margin-bottom: 18px; 
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 18px;
   width: 100%;
 }
 h1 { font-size: 20px; margin: 0; text-align: center; }
 p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: center; }
-
-.controls { 
-  display: flex; 
-  gap: 8px; 
-  flex-wrap: wrap; 
-  margin-top: 12px; 
-  justify-content: center; 
+.controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  justify-content: center;
 }
-
-.section { 
-  flex: 1; 
-  display: flex; 
-  flex-direction: column; 
-  margin-bottom: 160px;
+.section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 40px;
   width: 100%;
 }
-.section-header { 
+.section-header {
   font-size: 24px;
-  margin-bottom: 12px; 
+  margin-bottom: 12px;
   text-align: center;
 }
 .section-header.cold { color: #06b6d4; }
 .section-header.hot { color: #ef4444; }
-
-.grid-container-area { 
-  position: relative; 
-  display: flex; 
-  flex-direction: column; 
-  gap: 15px; 
-  flex: 1; 
+.grid-container-area {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
   align-items: center;
+  width: 100%;
+  overflow-x: auto;
 }
-.grid-and-numbers { 
-  position: relative; 
-  display: flex; 
+.grid-and-numbers {
+  position: relative;
+  display: flex;
   align-items: flex-start;
+  min-width: var(--grid-width);
 }
-.grid-wrapper { 
-  position: relative; 
-  flex: 1; 
+.grid-wrapper {
+  position: relative;
   overflow: visible;
 }
-
 .grid {
   display: grid;
   grid-template-columns: repeat(77, var(--point-size));
@@ -104,7 +101,6 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
   flex-shrink: 0;
   position: relative;
 }
-
 .grid::before, .grid::after {
   content: '';
   position: absolute;
@@ -124,23 +120,24 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
   width: 100%;
   left: 0;
 }
-
-.grid-cell { 
-  width: var(--point-size); 
-  height: var(--point-size); 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
+.grid-cell {
+  width: var(--point-size);
+  height: var(--point-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
 }
-.point { 
-  width: var(--point-size); 
-  height: var(--point-size); 
-  border-radius: 50%; 
-  background-color: var(--color-E-empty); 
-  transition: background-color 0.2s; 
-  flex-shrink: 0; 
-  box-shadow: 0 0 2px rgba(0,0,0,0.25); 
+.point {
+  width: var(--point-size);
+  height: var(--point-size);
+  border-radius: 50%;
+  background-color: var(--color-E-empty);
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+  box-shadow: 0 0 2px rgba(0,0,0,0.25);
+  position: relative;
+  z-index: 2;
 }
 .point-E { cursor: pointer; background-color: var(--color-E-empty); }
 .point-E[data-state="T"] { background-color: var(--color-T); }
@@ -148,29 +145,43 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
 .point-E[data-state="M"] { background-color: var(--color-M); }
 .point-E[data-state="X"] { background-color: var(--color-X); }
 
+/* Labels das linhas - POSICIONAMENTO CORRIGIDO */
 .row-label-left, .row-label-right {
-  font-size: 8px;
+  font-size: 7px;
   color: var(--muted);
   pointer-events: none;
-  line-height: var(--point-size);
+  line-height: 1;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 1px 2px;
+  border-radius: 2px;
+  white-space: nowrap;
 }
-.row-label-left {
-  left: -15px;
+.row-label-left { 
+  left: -14px; 
+  text-align: right;
 }
-.row-label-right {
-  right: -15px;
+.row-label-right { 
+  right: -14px; 
+  text-align: left;
 }
 
-.totals { 
-  background: #f7f7f7; 
-  border-radius: 12px; 
-  padding: 16px; 
-  width: 300px; 
-  min-width: 250px; 
-  border: 1px solid rgba(0,0,0,0.08); 
+/* Ajuste para garantir que os labels não sobreponham */
+.grid-cell:has(.row-label-left),
+.grid-cell:has(.row-label-right) {
+  overflow: visible;
+}
+
+.totals {
+  background: #f7f7f7;
+  border-radius: 12px;
+  padding: 16px;
+  width: 300px;
+  min-width: 250px;
+  border: 1px solid rgba(0,0,0,0.08);
   margin: 0 auto;
 }
 .totals h3 { font-size: 16px; margin: 0 0 10px; }
@@ -185,11 +196,9 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
 .editable-label { display: inline-block; cursor: pointer; min-width: 50px; padding: 1px 4px; border-radius: 4px; line-height: 1.2; }
 .editable-label:hover { background: rgba(0,0,0,0.06); }
 .editable-label:focus { outline: 2px solid var(--accent); background: rgba(6,182,212,0.12); }
-
 button { background: #f3f4f6; border: 1px solid rgba(0,0,0,0.1); color: #111827; padding: 8px 12px; border-radius: 10px; cursor: pointer; }
 button.primary { background: linear-gradient(90deg, var(--accent), #0891b2); color: #021226; border: 0; }
 button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
-
 .row-counts {
   position: absolute;
   top: var(--grid-padding);
@@ -208,12 +217,10 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   text-align: left;
   padding-left: 4px;
 }
-
 .checkbox {
   margin-left: 8px;
   cursor: pointer;
 }
-
 .popup {
   position: fixed;
   background: rgba(0, 0, 0, 0.8);
@@ -225,7 +232,6 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   pointer-events: none;
   white-space: nowrap;
 }
-
 @media print {
   .app {
     max-width: 100%;
@@ -262,6 +268,66 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   }
   .row-label-left, .row-label-right {
     font-size: 6px;
+    background: white;
+  }
+}
+@media (max-width: 768px) {
+  .app {
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .grid-container-area {
+    overflow-x: auto;
+    width: 100%;
+  }
+  .grid-and-numbers {
+    min-width: var(--grid-width);
+  }
+  .grid {
+    min-width: var(--grid-width);
+  }
+  .section {
+    margin-bottom: 30px;
+  }
+  .point {
+    --point-size: 10px;
+  }
+  .grid {
+    --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
+    --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
+  }
+  .row-label-left, .row-label-right {
+    font-size: 6px;
+  }
+}
+@media (max-width: 480px) {
+  .app {
+    padding: 8px;
+  }
+  .section-header {
+    font-size: 20px;
+  }
+  .totals {
+    width: 100%;
+    min-width: 200px;
+  }
+  .controls {
+    flex-direction: column;
+    align-items: center;
+  }
+  .point {
+    --point-size: 8px;
+  }
+  .grid {
+    --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
+    --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
+  }
+  .row-label-left, .row-label-right {
+    font-size: 5px;
+  }
+  .row-counts {
+    font-size: 8px;
   }
 }
 </style>
@@ -281,7 +347,6 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
       <button id="pasteData" class="ghost">Colar Dados</button>
     </div>
   </header>
-
   <div class="section">
     <div class="section-header cold">Lado Frio</div>
     <div class="grid-container-area">
@@ -297,7 +362,6 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
       </div>
     </div>
   </div>
-
   <div class="section">
     <div class="section-header hot">Lado Quente</div>
     <div class="grid-container-area">
@@ -314,13 +378,11 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
     </div>
   </div>
 </div>
-
 <script>
 const GRID_COLUMNS = 77;
 const GRID_ROWS = 45;
 const stateKeys = ['T','U','M','X'];
 const states = ['', 'T','U','M','X'];
-
 const defaultLabels = {
   '': 'Vazio',
   'T': 'Est. Emp.',
@@ -332,7 +394,6 @@ let currentLabels1 = { ...defaultLabels };
 let currentLabels2 = { ...defaultLabels };
 let checkboxStates1 = { '': false, 'T': true, 'U': true, 'M': true, 'X': false };
 let checkboxStates2 = { '': false, 'T': true, 'U': true, 'M': true, 'X': false };
-
 const MAP_TEMPLATE = `
 NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNENNNENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 NNNNNNNNNNNNNNNNNNNNNNNNNNNNNENNNNNNNNNNNNNNNNNENNNNNNNNNNNNNNNNNNNNNNNNNNNNN
@@ -380,7 +441,6 @@ NNNNNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNNNNN
 NNNNNNNNNNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNNNNNNNNNN
 NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNDNNNDNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 `.trim();
-
 let rowPointCounts1 = new Array(GRID_ROWS).fill(0);
 let rowPointCounts2 = new Array(GRID_ROWS).fill(0);
 
@@ -392,7 +452,6 @@ function setupRowCounts(mapId) {
     span.textContent = '0';
     rowCountsDiv.appendChild(span);
   }
-  console.log(`Map ${mapId}: Created ${rowCountsDiv.children.length} row counts`);
 }
 
 function createGrid(mapId) {
@@ -405,7 +464,7 @@ function createGrid(mapId) {
   grid.innerHTML = '';
   let pointIndex = 0;
   const rowPointCounts = mapId === '1' ? rowPointCounts1 : rowPointCounts2;
-
+  
   mapLines.forEach((line, rowIndex) => {
     if (line.length !== GRID_COLUMNS) {
       console.warn(`Mapa ${mapId}, Linha ${rowIndex + 1} tem ${line.length} colunas, esperado ${GRID_COLUMNS}.`);
@@ -413,21 +472,21 @@ function createGrid(mapId) {
     let pointCol = 0;
     let firstPointCell = null;
     let lastPointCell = null;
-
+    
     for (let col = 0; col < GRID_COLUMNS; col++) {
       const char = line[col] || 'N';
       const cell = document.createElement('div');
       cell.classList.add('grid-cell');
-
-      if (char === 'N') { 
-        grid.appendChild(cell); 
-        continue; 
+      
+      if (char === 'N') {
+        grid.appendChild(cell);
+        continue;
       }
-
+      
       pointCol++;
       const point = document.createElement('div');
       point.classList.add('point');
-
+      
       if (['D', 'E', 'T', 'U', 'M'].includes(char)) {
         point.classList.add('point-E');
         let initialState = '';
@@ -435,7 +494,7 @@ function createGrid(mapId) {
         else if (char === 'U') initialState = 'U';
         else if (char === 'M') initialState = 'M';
         else if (char === 'D' || char === 'E') initialState = rowIndex >= 23 ? 'X' : '';
-        
+       
         point.dataset.initial = initialState;
         point.dataset.state = initialState;
         point.dataset.index = pointIndex++;
@@ -443,7 +502,8 @@ function createGrid(mapId) {
         point.dataset.row = rowIndex + 1;
         point.dataset.col = pointCol;
         point.addEventListener('click', () => cycleState(point));
-
+        
+        // Adicionar label apenas na primeira e última célula com ponto de cada linha
         if (pointCol === 1) {
           firstPointCell = cell;
           const labelLeft = document.createElement('span');
@@ -451,26 +511,25 @@ function createGrid(mapId) {
           labelLeft.textContent = rowIndex + 1;
           cell.appendChild(labelLeft);
         }
+        
         lastPointCell = cell;
-
-        console.log(`Map ${mapId}, Row ${rowIndex + 1}, Col ${pointCol}: Created point with state ${initialState}`);
       }
-
+      
       cell.appendChild(point);
       grid.appendChild(cell);
     }
-
-    if (lastPointCell) {
+    
+    // Adicionar label direito na última célula com ponto
+    if (lastPointCell && lastPointCell !== firstPointCell) {
       const labelRight = document.createElement('span');
       labelRight.classList.add('row-label-right');
       labelRight.textContent = rowIndex + 1;
       lastPointCell.appendChild(labelRight);
     }
-
+    
     rowPointCounts[rowIndex] = pointCol;
   });
-
-  console.log(`Map ${mapId}: Total points created: ${pointIndex}`);
+  
   updateTotals(mapId);
 }
 
@@ -480,7 +539,6 @@ function cycleState(point) {
   const currentIndex = states.indexOf(currentState);
   const nextIndex = (currentIndex + 1) % states.length;
   point.dataset.state = states[nextIndex];
-
   const row = point.dataset.row;
   const col = point.dataset.col;
   const rowPointCounts = mapId === '1' ? rowPointCounts1 : rowPointCounts2;
@@ -489,34 +547,26 @@ function cycleState(point) {
   const labels = mapId === '1' ? currentLabels1 : currentLabels2;
   const legend = labels[point.dataset.state] || defaultLabels[point.dataset.state];
   const popupText = `L${row.padStart(2, '0')} - C${col.padStart(2, '0')} ou C${mirroredCol.toString().padStart(2, '0')} ${legend}`;
-
   const popup = document.createElement('div');
   popup.classList.add('popup');
   popup.textContent = popupText;
-
   document.body.appendChild(popup);
-
   popup.style.left = '10px';
   popup.style.top = '10px';
-
-  console.log(`Map ${mapId}: Clicked point at Row ${row}, Col ${col}`);
-  console.log(`Map ${mapId}: Popup created at left: ${popup.style.left}, top: ${popup.style.top}, text: ${popupText}`);
-
   setTimeout(() => {
     popup.remove();
   }, 1000);
-
   updateTotals(mapId);
 }
+
+// ... (o restante das funções permanece igual: updateTotals, saveData, loadData, clearData, copyData, pasteData)
 
 function updateTotals(mapId) {
   const pointsE = document.querySelectorAll(`#gridMap${mapId} .point-E`);
   const counts = { '': 0, 'T': 0, 'U': 0, 'M': 0, 'X': 0 };
   const rowCounts = Array(GRID_ROWS).fill(0);
   const checkboxStates = mapId === '1' ? checkboxStates1 : checkboxStates2;
-
-  console.log(`Map ${mapId}: Checkbox states:`, JSON.stringify(checkboxStates));
-
+  
   pointsE.forEach(p => {
     const s = p.dataset.state || '';
     const rowIndex = parseInt(p.dataset.row) - 1;
@@ -525,10 +575,7 @@ function updateTotals(mapId) {
       rowCounts[rowIndex]++;
     }
   });
-
-  console.log(`Map ${mapId}: Counts:`, JSON.stringify(counts));
-  console.log(`Map ${mapId}: Row counts:`, JSON.stringify(rowCounts));
-
+  
   const rowCountsDiv = document.getElementById(`rowCounts${mapId}`);
   rowCountsDiv.innerHTML = '';
   rowCounts.forEach(count => {
@@ -536,7 +583,7 @@ function updateTotals(mapId) {
     span.textContent = count;
     rowCountsDiv.appendChild(span);
   });
-
+  
   const currentLabels = mapId === '1' ? currentLabels1 : currentLabels2;
   const totalsDiv = document.getElementById(`totals${mapId}`);
   totalsDiv.innerHTML = `
@@ -589,7 +636,7 @@ function updateTotals(mapId) {
       <span id="selectedTotal${mapId}"></span>
     </div>
   `;
-
+  
   const checkboxes = totalsDiv.querySelectorAll('.checkbox');
   checkboxes.forEach(cb => {
     cb.addEventListener('change', (e) => {
@@ -603,7 +650,7 @@ function updateTotals(mapId) {
       updateTotals(mapId);
     });
   });
-
+  
   const editableLabels = totalsDiv.querySelectorAll('.editable-label');
   editableLabels.forEach(el => {
     el.addEventListener('blur', (e) => {
@@ -623,13 +670,11 @@ function updateTotals(mapId) {
       }
     });
   });
-
+  
   const selectedTotal = Object.keys(counts).reduce((sum, key) => {
     return checkboxStates[key] ? sum + counts[key] : sum;
   }, 0);
   document.getElementById(`selectedTotal${mapId}`).textContent = selectedTotal;
-
-  console.log(`Map ${mapId}: Total Selecionado: ${selectedTotal}`);
 }
 
 function saveData() {
@@ -643,7 +688,6 @@ function saveData() {
   localStorage.setItem('gridLabels2', JSON.stringify(currentLabels2));
   localStorage.setItem('checkboxStates1', JSON.stringify(checkboxStates1));
   localStorage.setItem('checkboxStates2', JSON.stringify(checkboxStates2));
-  console.log('Dados salvos no localStorage');
 }
 
 function loadData() {
@@ -653,7 +697,7 @@ function loadData() {
   const savedLabels2 = JSON.parse(localStorage.getItem('gridLabels2'));
   const savedCheckboxStates1 = JSON.parse(localStorage.getItem('checkboxStates1'));
   const savedCheckboxStates2 = JSON.parse(localStorage.getItem('checkboxStates2'));
-  
+ 
   if (savedLabels1) currentLabels1 = { ...defaultLabels, ...savedLabels1 };
   if (savedLabels2) currentLabels2 = { ...defaultLabels, ...savedLabels2 };
   if (savedCheckboxStates1) {
@@ -666,10 +710,7 @@ function loadData() {
     checkboxStates2[''] = savedCheckboxStates2 && savedCheckboxStates2[''] === true ? true : false;
     checkboxStates2['X'] = savedCheckboxStates2 && savedCheckboxStates2['X'] === true ? true : false;
   }
-
-  console.log(`LoadData: checkboxStates1:`, JSON.stringify(checkboxStates1));
-  console.log(`LoadData: checkboxStates2:`, JSON.stringify(checkboxStates2));
-
+  
   const points1 = document.querySelectorAll('#gridMap1 .point-E');
   const points2 = document.querySelectorAll('#gridMap2 .point-E');
   if (data1 && points1.length === data1.length) {
