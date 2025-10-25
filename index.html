@@ -135,8 +135,8 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
  transition: background-color 0.2s;
  flex-shrink: 0;
  box-shadow: 0 0 2px rgba(0,0,0,0.25);
- -webkit-print-color-adjust: exact; /* Força cores no Webkit */
- print-color-adjust: exact; /* Padrão CSS para impressão de cores */
+ -webkit-print-color-adjust: exact;
+ print-color-adjust: exact;
 }
 .point-E { cursor: pointer; background-color: var(--color-E-empty); }
 .point-E[data-state="T"] { background-color: var(--color-T); }
@@ -218,17 +218,21 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   --point-size: 6px;
   --grid-gap: 0.25px;
   --grid-padding: 4px;
+  --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
+  --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
  }
  .app {
   max-width: 100%;
   padding: 10px;
   height: auto;
-  -webkit-print-color-adjust: exact; /* Força cores no Webkit */
-  print-color-adjust: exact; /* Padrão CSS para impressão de cores */
+  transform: scale(0.65);
+  transform-origin: top left;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
  }
  .section {
   page-break-inside: avoid;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
  }
  .grid-container-area {
   overflow-x: visible !important;
@@ -237,19 +241,20 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
  }
  .grid-and-numbers {
   min-width: auto;
-  width: auto;
+  width: var(--grid-width);
  }
  .grid-wrapper {
   overflow: visible;
   min-width: 0;
+  width: var(--grid-width);
  }
  .grid {
-  transform: none; /* Remove escala para evitar distorção */
-  width: var(--grid-width); /* Usa o cálculo com variáveis reduzidas */
-  max-width: none; /* Remove limite de largura */
-  height: var(--grid-height); /* Usa o cálculo com variáveis reduzidas */
-  overflow: visible; /* Garante que todo o grid seja visível */
-  border: none; /* Opcional: remove borda para melhor ajuste */
+  transform: none;
+  width: var(--grid-width);
+  max-width: none;
+  height: var(--grid-height);
+  overflow: visible;
+  border: none;
  }
  .row-counts {
   font-size: 6px;
@@ -270,7 +275,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
  .totals {
   page-break-inside: avoid;
   width: auto;
-  max-width: 300px;
+  max-width: 200px;
   margin: 10px auto;
  }
  .checkbox {
@@ -285,13 +290,18 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   right: -10px;
  }
  .point {
-  -webkit-print-color-adjust: exact; /* Garante que as cores dos pontos sejam impressas */
+  -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
-  box-shadow: none; /* Remove sombra para evitar distorção em tamanhos pequenos */
+  box-shadow: none;
  }
 }
 /* Media Queries for Screen */
 @media (max-width: 768px) {
+ :root {
+  --point-size: 10px;
+  --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
+  --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
+ }
  .app {
   padding: 10px;
   overflow-y: auto;
@@ -299,6 +309,8 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
  .grid-container-area {
   overflow-x: auto;
   width: 100%;
+  scrollbar-width: auto;
+  -webkit-overflow-scrolling: touch;
  }
  .grid-and-numbers {
   min-width: var(--grid-width);
@@ -306,6 +318,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
  .grid-wrapper {
   min-width: var(--grid-width);
   overflow-x: auto;
+  scrollbar-width: auto;
  }
  .grid {
   min-width: var(--grid-width);
@@ -313,15 +326,19 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
  .section {
   margin-bottom: 30px;
  }
- .point {
-  --point-size: 10px;
+ .row-label-left, .row-label-right {
+  font-size: 7px;
  }
- .grid {
-  --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
-  --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
+ .row-counts {
+  font-size: 9px;
  }
 }
 @media (max-width: 480px) {
+ :root {
+  --point-size: 8px;
+  --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
+  --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
+ }
  .app {
   padding: 8px;
  }
@@ -337,12 +354,13 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   flex-direction: column;
   align-items: center;
  }
- .point {
-  --point-size: 8px;
+ .grid-container-area {
+  overflow-x: auto;
+  scrollbar-width: auto;
  }
- .grid {
-  --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
-  --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
+ .grid-wrapper {
+  overflow-x: auto;
+  scrollbar-width: auto;
  }
  .row-label-left, .row-label-right {
   font-size: 6px;
@@ -368,7 +386,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
  <button id="pasteData" class="ghost">Colar Dados</button>
  <button id="generatePdf" class="ghost">Gerar PDF</button>
  </div>
- </header>
+ </ taakje </header>
  <div class="section">
  <div class="section-header cold">Lado Frio</div>
  <div class="grid-container-area">
@@ -383,7 +401,6 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
  <div id="totals1"></div>
  </div>
  </div>
- </div>
  <div class="section">
  <div class="section-header hot">Lado Quente</div>
  <div class="grid-container-area">
@@ -396,7 +413,6 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
  <div class="totals" id="totalsContainer2">
  <h3>Totais Gerais</h3>
  <div id="totals2"></div>
- </div>
  </div>
  </div>
 </div>
@@ -813,11 +829,9 @@ function pasteData() {
  alert('Erro ao acessar a área de transferência.');
  });
 }
-// Função para gerar PDF
 document.getElementById('generatePdf').addEventListener('click', () => {
  window.print();
 });
-// Inicialização
 setupRowCounts('1');
 setupRowCounts('2');
 createGrid('1');
