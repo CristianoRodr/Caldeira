@@ -7,134 +7,136 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --point-size: 12px;
-  --grid-gap: 0.5px;
-  --grid-padding: 8px;
-  --muted: #4b5563;
-  --accent: #06b6d4;
-  --color-E-empty: #FF0000;
-  --color-T: #00FF00;
-  --color-U: #0000FF;
-  --color-M: #FFFF00;
-  --color-X: #000000;
-  --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
-  --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
+ --point-size: 12px;
+ --grid-gap: 0.5px;
+ --grid-padding: 8px;
+ --muted: #4b5563;
+ --accent: #06b6d4;
+ --color-E-empty: #FF0000;
+ --color-T: #00FF00;
+ --color-U: #0000FF;
+ --color-M: #FFFF00;
+ --color-X: #000000;
+ --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
+ --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
 }
 * { box-sizing: border-box; }
 html, body {
-  height: 100%;
-  margin: 0;
-  font-family: Inter, system-ui, Arial;
-  background: #ffffff;
-  color: #000000;
-  overflow: auto;
+ height: 100%;
+ margin: 0;
+ font-family: Inter, system-ui, Arial;
+ background: #ffffff;
+ color: #000000;
+ overflow: auto;
 }
 .app {
-  max-width: 1400px;
-  margin: 28px auto;
-  padding: 20px;
-  min-height: calc(100vh - 56px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow-y: auto;
+ max-width: 1400px;
+ margin: 28px auto;
+ padding: 20px;
+ min-height: calc(100vh - 56px);
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ overflow-y: auto;
 }
 header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 18px;
-  width: 100%;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ margin-bottom: 18px;
+ width: 100%;
 }
 h1 { font-size: 20px; margin: 0; text-align: center; }
 p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: center; }
 .controls {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 12px;
-  justify-content: center;
+ display: flex;
+ gap: 8px;
+ flex-wrap: wrap;
+ margin-top: 12px;
+ justify-content: center;
 }
 .section {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 40px;
-  width: 100%;
+ display: flex;
+ flex-direction: column;
+ margin-bottom: 40px;
+ width: 100%;
 }
 .section-header {
-  font-size: 24px;
-  margin-bottom: 12px;
-  text-align: center;
+ font-size: 24px;
+ margin-bottom: 12px;
+ text-align: center;
 }
 .section-header.cold { color: #06b6d4; }
 .section-header.hot { color: #ef4444; }
 .grid-container-area {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  align-items: flex-start; /* Alinha à esquerda para evitar centralização que pode cortar a rolagem */
-  width: 100%;
-  overflow-x: auto;
+ position: relative;
+ display: flex;
+ flex-direction: column;
+ gap: 15px;
+ align-items: center;
+ width: 100%;
+ overflow-x: auto;
 }
 .grid-and-numbers {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  min-width: var(--grid-width);
+ position: relative;
+ display: flex;
+ align-items: flex-start;
+ min-width: var(--grid-width);
 }
 .grid-wrapper {
-  position: relative;
-  min-width: var(--grid-width); /* Garante que o wrapper não encolha */
-  overflow-x: auto; /* Adiciona rolagem horizontal no wrapper */
+ position: relative;
+ min-width: var(--grid-width);
+ overflow-x: auto;
 }
 .grid {
-  display: grid;
-  grid-template-columns: repeat(77, var(--point-size));
-  gap: var(--grid-gap);
-  padding: var(--grid-padding);
-  background: #ffffff;
-  border-radius: 12px;
-  border: 1px solid rgba(0,0,0,0.12);
-  width: var(--grid-width);
-  height: var(--grid-height);
-  flex-shrink: 0;
+ display: grid;
+ grid-template-columns: repeat(77, var(--point-size));
+ gap: var(--grid-gap);
+ padding: var(--grid-padding);
+ background: #ffffff;
+ border-radius: 12px;
+ border: 1px solid rgba(0,0,0,0.12);
+ width: var(--grid-width);
+ height: var(--grid-height);
+ flex-shrink: 0;
 }
 .grid::before, .grid::after {
-  content: '';
-  position: absolute;
-  z-index: 10;
-  background-color: red;
-  pointer-events: none;
+ content: '';
+ position: absolute;
+ z-index: 10;
+ background-color: red;
+ pointer-events: none;
 }
 .grid::before {
-  left: calc(38.5 * var(--point-size) + 38 * var(--grid-gap) + var(--grid-padding));
-  width: 2px;
-  height: var(--grid-height);
-  top: 0;
+ left: calc(38.5 * var(--point-size) + 38 * var(--grid-gap) + var(--grid-padding));
+ width: 2px;
+ height: var(--grid-height);
+ top: 0;
 }
 .grid::after {
-  top: calc(23 * var(--point-size) + 22.5 * var(--grid-gap) + var(--grid-padding));
-  height: 2px;
-  width: 100%;
-  left: 0;
+ top: calc(23 * var(--point-size) + 22.5 * var(--grid-gap) + var(--grid-padding));
+ height: 2px;
+ width: 100%;
+ left: 0;
 }
 .grid-cell {
-  width: var(--point-size);
-  height: var(--point-size);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+ width: var(--point-size);
+ height: var(--point-size);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ position: relative;
 }
 .point {
-  width: var(--point-size);
-  height: var(--point-size);
-  border-radius: 50%;
-  background-color: var(--color-E-empty);
-  transition: background-color 0.2s;
-  flex-shrink: 0;
-  box-shadow: 0 0 2px rgba(0,0,0,0.25);
+ width: var(--point-size);
+ height: var(--point-size);
+ border-radius: 50%;
+ background-color: var(--color-E-empty);
+ transition: background-color 0.2s;
+ flex-shrink: 0;
+ box-shadow: 0 0 2px rgba(0,0,0,0.25);
+ -webkit-print-color-adjust: exact; /* Força cores no Webkit */
+ print-color-adjust: exact; /* Padrão CSS para impressão de cores */
 }
 .point-E { cursor: pointer; background-color: var(--color-E-empty); }
 .point-E[data-state="T"] { background-color: var(--color-T); }
@@ -142,24 +144,25 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
 .point-E[data-state="M"] { background-color: var(--color-M); }
 .point-E[data-state="X"] { background-color: var(--color-X); }
 .row-label-left, .row-label-right {
-  font-size: 8px;
-  color: var(--muted);
-  pointer-events: none;
-  line-height: var(--point-size);
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+ font-size: 8px;
+ color: var(--muted);
+ pointer-events: none;
+ line-height: var(--point-size);
+ position: absolute;
+ top: 50%;
+ transform: translateY(-50%);
 }
 .row-label-left { left: -15px; }
 .row-label-right { right: -15px; }
 .totals {
-  background: #f7f7f7;
-  border-radius: 12px;
-  padding: 16px;
-  width: 300px;
-  min-width: 250px;
-  border: 1px solid rgba(0,0,0,0.08);
-  margin: 0 auto;
+ background: #f7f7f7;
+ border-radius: 12px;
+ padding: 16px;
+ width: 300px;
+ min-width: 250px;
+ max-width: 300px;
+ border: 1px solid rgba(0,0,0,0.08);
+ margin: 0 auto;
 }
 .totals h3 { font-size: 16px; margin: 0 0 10px; }
 .total-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
@@ -177,182 +180,225 @@ button { background: #f3f4f6; border: 1px solid rgba(0,0,0,0.1); color: #111827;
 button.primary { background: linear-gradient(90deg, var(--accent), #0891b2); color: #021226; border: 0; }
 button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 .row-counts {
-  position: absolute;
-  top: var(--grid-padding);
-  right: calc(-20px);
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  min-width: 20px;
-  font-size: 10px;
-  color: var(--muted);
-  pointer-events: none;
+ position: absolute;
+ top: var(--grid-padding);
+ right: calc(-20px);
+ display: flex;
+ flex-direction: column;
+ flex-wrap: nowrap;
+ min-width: 20px;
+ font-size: 10px;
+ color: var(--muted);
+ pointer-events: none;
 }
 .row-counts span {
-  height: calc(var(--point-size) + var(--grid-gap));
-  line-height: calc(var(--point-size) + var(--grid-gap));
-  text-align: left;
-  padding-left: 4px;
+ height: calc(var(--point-size) + var(--grid-gap));
+ line-height: calc(var(--point-size) + var(--grid-gap));
+ text-align: left;
+ padding-left: 4px;
 }
 .checkbox {
-  margin-left: 8px;
-  cursor: pointer;
+ margin-left: 8px;
+ cursor: pointer;
 }
 .popup {
-  position: fixed;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  z-index: 2000;
-  pointer-events: none;
-  white-space: nowrap;
+ position: fixed;
+ background: rgba(0, 0, 0, 0.8);
+ color: white;
+ padding: 4px 8px;
+ border-radius: 4px;
+ font-size: 12px;
+ z-index: 2000;
+ pointer-events: none;
+ white-space: nowrap;
 }
+/* Media Query for Print */
 @media print {
-  .app {
-    max-width: 100%;
-    padding: 10px;
-    height: auto;
-  }
-  .section {
-    page-break-inside: avoid;
-    margin-bottom: 40px;
-  }
-  .grid {
-    transform: scale(0.8);
-    transform-origin: top left;
-    width: 100%;
-    max-width: 700px;
-  }
-  .grid-wrapper {
-    overflow: visible;
-  }
-  .row-counts {
-    font-size: 8px;
-  }
-  .controls {
-    display: none;
-  }
-  .totals {
-    page-break-inside: avoid;
-  }
-  .checkbox {
-    display: none;
-  }
-  .popup {
-    display: none;
-  }
-  .row-label-left, .row-label-right {
-    font-size: 6px;
-  }
+ :root {
+  --point-size: 6px;
+  --grid-gap: 0.25px;
+  --grid-padding: 4px;
+ }
+ .app {
+  max-width: 100%;
+  padding: 10px;
+  height: auto;
+  -webkit-print-color-adjust: exact; /* Força cores no Webkit */
+  print-color-adjust: exact; /* Padrão CSS para impressão de cores */
+ }
+ .section {
+  page-break-inside: avoid;
+  margin-bottom: 40px;
+ }
+ .grid-container-area {
+  overflow-x: visible !important;
+  width: auto;
+  align-items: center;
+ }
+ .grid-and-numbers {
+  min-width: auto;
+  width: auto;
+ }
+ .grid-wrapper {
+  overflow: visible;
+  min-width: 0;
+ }
+ .grid {
+  transform: none; /* Remove escala para evitar distorção */
+  width: var(--grid-width); /* Usa o cálculo com variáveis reduzidas */
+  max-width: none; /* Remove limite de largura */
+  height: var(--grid-height); /* Usa o cálculo com variáveis reduzidas */
+  overflow: visible; /* Garante que todo o grid seja visível */
+  border: none; /* Opcional: remove borda para melhor ajuste */
+ }
+ .row-counts {
+  font-size: 6px;
+  right: -10px;
+  top: var(--grid-padding);
+  display: flex;
+  flex-direction: column;
+  min-width: 15px;
+ }
+ .row-counts span {
+  height: calc(var(--point-size) + var(--grid-gap));
+  line-height: calc(var(--point-size) + var(--grid-gap));
+  padding-left: 2px;
+ }
+ .controls {
+  display: none;
+ }
+ .totals {
+  page-break-inside: avoid;
+  width: auto;
+  max-width: 300px;
+  margin: 10px auto;
+ }
+ .checkbox {
+  display: none;
+ }
+ .popup {
+  display: none;
+ }
+ .row-label-left, .row-label-right {
+  font-size: 6px;
+  left: -10px;
+  right: -10px;
+ }
+ .point {
+  -webkit-print-color-adjust: exact; /* Garante que as cores dos pontos sejam impressas */
+  print-color-adjust: exact;
+  box-shadow: none; /* Remove sombra para evitar distorção em tamanhos pequenos */
+ }
 }
+/* Media Queries for Screen */
 @media (max-width: 768px) {
-  .app {
-    padding: 10px;
-    overflow-y: auto;
-  }
-  .grid-container-area {
-    overflow-x: auto;
-    width: 100%;
-  }
-  .grid-and-numbers {
-    min-width: var(--grid-width);
-  }
-  .grid-wrapper {
-    min-width: var(--grid-width);
-    overflow-x: auto;
-  }
-  .grid {
-    min-width: var(--grid-width);
-  }
-  .section {
-    margin-bottom: 30px;
-  }
-  .point {
-    --point-size: 10px;
-  }
-  .grid {
-    --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
-    --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
-  }
+ .app {
+  padding: 10px;
+  overflow-y: auto;
+ }
+ .grid-container-area {
+  overflow-x: auto;
+  width: 100%;
+ }
+ .grid-and-numbers {
+  min-width: var(--grid-width);
+ }
+ .grid-wrapper {
+  min-width: var(--grid-width);
+  overflow-x: auto;
+ }
+ .grid {
+  min-width: var(--grid-width);
+ }
+ .section {
+  margin-bottom: 30px;
+ }
+ .point {
+  --point-size: 10px;
+ }
+ .grid {
+  --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
+  --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
+ }
 }
 @media (max-width: 480px) {
-  .app {
-    padding: 8px;
-  }
-  .section-header {
-    font-size: 20px;
-  }
-  .totals {
-    width: 100%;
-    min-width: 200px;
-  }
-  .controls {
-    flex-direction: column;
-    align-items: center;
-  }
-  .point {
-    --point-size: 8px;
-  }
-  .grid {
-    --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
-    --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
-  }
-  .row-label-left, .row-label-right {
-    font-size: 6px;
-  }
-  .row-counts {
-    font-size: 8px;
-  }
+ .app {
+  padding: 8px;
+ }
+ .section-header {
+  font-size: 20px;
+ }
+ .totals {
+  width: 100%;
+  min-width: 200px;
+  max-width: 300px;
+ }
+ .controls {
+  flex-direction: column;
+  align-items: center;
+ }
+ .point {
+  --point-size: 8px;
+ }
+ .grid {
+  --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
+  --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
+ }
+ .row-label-left, .row-label-right {
+  font-size: 6px;
+ }
+ .row-counts {
+  font-size: 8px;
+ }
 }
 </style>
 </head>
 <body>
 <div class="app">
-  <header>
-    <div>
-      <h1>Mapa do Espelho – Caldeira U-130</h1>
-      <p class="lead">Todas as bolinhas são editáveis (clicáveis).</p>
-    </div>
-    <div class="controls">
-      <button id="saveAll" class="primary">Salvar Tudo</button>
-      <button id="loadAll" class="ghost">Carregar</button>
-      <button id="clearAll" class="ghost">Limpar</button>
-      <button id="copyData" class="ghost">Copiar Dados</button>
-      <button id="pasteData" class="ghost">Colar Dados</button>
-    </div>
-  </header>
-  <div class="section">
-    <div class="section-header cold">Lado Frio</div>
-    <div class="grid-container-area">
-      <div class="grid-and-numbers">
-        <div class="grid-wrapper" id="wrapperMap1">
-          <div class="grid" id="gridMap1"></div>
-        </div>
-        <div class="row-counts" id="rowCounts1"></div>
-      </div>
-      <div class="totals" id="totalsContainer1">
-        <h3>Totais Gerais</h3>
-        <div id="totals1"></div>
-      </div>
-    </div>
-  </div>
-  <div class="section">
-    <div class="section-header hot">Lado Quente</div>
-    <div class="grid-container-area">
-      <div class="grid-and-numbers">
-        <div class="grid-wrapper" id="wrapperMap2">
-          <div class="grid" id="gridMap2"></div>
-        </div>
-        <div class="row-counts" id="rowCounts2"></div>
-      </div>
-      <div class="totals" id="totalsContainer2">
-        <h3>Totais Gerais</h3>
-        <div id="totals2"></div>
-      </div>
-    </div>
-  </div>
+ <header>
+ <div>
+ <h1>Mapa do Espelho – Caldeira U-130</h1>
+ <p class="lead">Todas as bolinhas são editáveis (clicáveis).</p>
+ </div>
+ <div class="controls">
+ <button id="saveAll" class="primary">Salvar Tudo</button>
+ <button id="loadAll" class="ghost">Carregar</button>
+ <button id="clearAll" class="ghost">Limpar</button>
+ <button id="copyData" class="ghost">Copiar Dados</button>
+ <button id="pasteData" class="ghost">Colar Dados</button>
+ <button id="generatePdf" class="ghost">Gerar PDF</button>
+ </div>
+ </header>
+ <div class="section">
+ <div class="section-header cold">Lado Frio</div>
+ <div class="grid-container-area">
+ <div class="grid-and-numbers">
+ <div class="grid-wrapper" id="wrapperMap1">
+ <div class="grid" id="gridMap1"></div>
+ </div>
+ <div class="row-counts" id="rowCounts1"></div>
+ </div>
+ <div class="totals" id="totalsContainer1">
+ <h3>Totais Gerais</h3>
+ <div id="totals1"></div>
+ </div>
+ </div>
+ </div>
+ <div class="section">
+ <div class="section-header hot">Lado Quente</div>
+ <div class="grid-container-area">
+ <div class="grid-and-numbers">
+ <div class="grid-wrapper" id="wrapperMap2">
+ <div class="grid" id="gridMap2"></div>
+ </div>
+ <div class="row-counts" id="rowCounts2"></div>
+ </div>
+ <div class="totals" id="totalsContainer2">
+ <h3>Totais Gerais</h3>
+ <div id="totals2"></div>
+ </div>
+ </div>
+ </div>
 </div>
 <script>
 const GRID_COLUMNS = 77;
@@ -360,11 +406,11 @@ const GRID_ROWS = 45;
 const stateKeys = ['T','U','M','X'];
 const states = ['', 'T','U','M','X'];
 const defaultLabels = {
-  '': 'Vazio',
-  'T': 'Est. Emp.',
-  'U': 'Usinagem',
-  'M': 'Mat. Removido',
-  'X': 'Sem escopo'
+ '': 'Vazio',
+ 'T': 'Est. Emp.',
+ 'U': 'Usinagem',
+ 'M': 'Mat. Removido',
+ 'X': 'Sem escopo'
 };
 let currentLabels1 = { ...defaultLabels };
 let currentLabels2 = { ...defaultLabels };
@@ -420,355 +466,357 @@ NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNDNNNDNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 let rowPointCounts1 = new Array(GRID_ROWS).fill(0);
 let rowPointCounts2 = new Array(GRID_ROWS).fill(0);
 function setupRowCounts(mapId) {
-  const rowCountsDiv = document.getElementById(`rowCounts${mapId}`);
-  rowCountsDiv.innerHTML = '';
-  for (let i = 1; i <= GRID_ROWS; i++) {
-    const span = document.createElement('span');
-    span.textContent = '0';
-    rowCountsDiv.appendChild(span);
-  }
-  console.log(`Map ${mapId}: Created ${rowCountsDiv.children.length} row counts`);
+ const rowCountsDiv = document.getElementById(`rowCounts${mapId}`);
+ rowCountsDiv.innerHTML = '';
+ for (let i = 1; i <= GRID_ROWS; i++) {
+ const span = document.createElement('span');
+ span.textContent = '0';
+ rowCountsDiv.appendChild(span);
+ }
+ console.log(`Map ${mapId}: Created ${rowCountsDiv.children.length} row counts`);
 }
 function createGrid(mapId) {
-  const mapLines = MAP_TEMPLATE.split('\n').map(l => l.trim());
-  const grid = document.getElementById(`gridMap${mapId}`);
-  if (!grid) {
-    console.error(`Grid #gridMap${mapId} não encontrado`);
-    return;
-  }
-  grid.innerHTML = '';
-  let pointIndex = 0;
-  const rowPointCounts = mapId === '1' ? rowPointCounts1 : rowPointCounts2;
-  mapLines.forEach((line, rowIndex) => {
-    if (line.length !== GRID_COLUMNS) {
-      console.warn(`Mapa ${mapId}, Linha ${rowIndex + 1} tem ${line.length} colunas, esperado ${GRID_COLUMNS}.`);
-    }
-    let pointCol = 0;
-    let firstPointCell = null;
-    let lastPointCell = null;
-    for (let col = 0; col < GRID_COLUMNS; col++) {
-      const char = line[col] || 'N';
-      const cell = document.createElement('div');
-      cell.classList.add('grid-cell');
-      if (char === 'N') {
-        grid.appendChild(cell);
-        continue;
-      }
-      pointCol++;
-      const point = document.createElement('div');
-      point.classList.add('point');
-      if (['D', 'E', 'T', 'U', 'M'].includes(char)) {
-        point.classList.add('point-E');
-        let initialState = '';
-        if (char === 'T') initialState = 'T';
-        else if (char === 'U') initialState = 'U';
-        else if (char === 'M') initialState = 'M';
-        else if (char === 'D' || char === 'E') initialState = rowIndex >= 23 ? 'X' : '';
-       
-        point.dataset.initial = initialState;
-        point.dataset.state = initialState;
-        point.dataset.index = pointIndex++;
-        point.dataset.mapId = mapId;
-        point.dataset.row = rowIndex + 1;
-        point.dataset.col = pointCol;
-        point.addEventListener('click', () => cycleState(point));
-        if (pointCol === 1) {
-          firstPointCell = cell;
-          const labelLeft = document.createElement('span');
-          labelLeft.classList.add('row-label-left');
-          labelLeft.textContent = rowIndex + 1;
-          cell.appendChild(labelLeft);
-        }
-        lastPointCell = cell;
-        console.log(`Map ${mapId}, Row ${rowIndex + 1}, Col ${pointCol}: Created point with state ${initialState}`);
-      }
-      cell.appendChild(point);
-      grid.appendChild(cell);
-    }
-    if (lastPointCell) {
-      const labelRight = document.createElement('span');
-      labelRight.classList.add('row-label-right');
-      labelRight.textContent = rowIndex + 1;
-      lastPointCell.appendChild(labelRight);
-    }
-    rowPointCounts[rowIndex] = pointCol;
-  });
-  console.log(`Map ${mapId}: Total points created: ${pointIndex}`);
-  updateTotals(mapId);
+ const mapLines = MAP_TEMPLATE.split('\n').map(l => l.trim());
+ const grid = document.getElementById(`gridMap${mapId}`);
+ if (!grid) {
+ console.error(`Grid #gridMap${mapId} não encontrado`);
+ return;
+ }
+ grid.innerHTML = '';
+ let pointIndex = 0;
+ const rowPointCounts = mapId === '1' ? rowPointCounts1 : rowPointCounts2;
+ mapLines.forEach((line, rowIndex) => {
+ if (line.length !== GRID_COLUMNS) {
+ console.warn(`Mapa ${mapId}, Linha ${rowIndex + 1} tem ${line.length} colunas, esperado ${GRID_COLUMNS}.`);
+ }
+ let pointCol = 0;
+ let firstPointCell = null;
+ let lastPointCell = null;
+ for (let col = 0; col < GRID_COLUMNS; col++) {
+ const char = line[col] || 'N';
+ const cell = document.createElement('div');
+ cell.classList.add('grid-cell');
+ if (char === 'N') {
+ grid.appendChild(cell);
+ continue;
+ }
+ pointCol++;
+ const point = document.createElement('div');
+ point.classList.add('point');
+ if (['D', 'E', 'T', 'U', 'M'].includes(char)) {
+ point.classList.add('point-E');
+ let initialState = '';
+ if (char === 'T') initialState = 'T';
+ else if (char === 'U') initialState = 'U';
+ else if (char === 'M') initialState = 'M';
+ else if (char === 'D' || char === 'E') initialState = rowIndex >= 23 ? 'X' : '';
+ point.dataset.initial = initialState;
+ point.dataset.state = initialState;
+ point.dataset.index = pointIndex++;
+ point.dataset.mapId = mapId;
+ point.dataset.row = rowIndex + 1;
+ point.dataset.col = pointCol;
+ point.addEventListener('click', () => cycleState(point));
+ if (pointCol === 1) {
+ firstPointCell = cell;
+ const labelLeft = document.createElement('span');
+ labelLeft.classList.add('row-label-left');
+ labelLeft.textContent = rowIndex + 1;
+ cell.appendChild(labelLeft);
+ }
+ lastPointCell = cell;
+ console.log(`Map ${mapId}, Row ${rowIndex + 1}, Col ${pointCol}: Created point with state ${initialState}`);
+ }
+ cell.appendChild(point);
+ grid.appendChild(cell);
+ }
+ if (lastPointCell) {
+ const labelRight = document.createElement('span');
+ labelRight.classList.add('row-label-right');
+ labelRight.textContent = rowIndex + 1;
+ lastPointCell.appendChild(labelRight);
+ }
+ rowPointCounts[rowIndex] = pointCol;
+ });
+ console.log(`Map ${mapId}: Total points created: ${pointIndex}`);
+ updateTotals(mapId);
 }
 function cycleState(point) {
-  const mapId = point.dataset.mapId;
-  const currentState = point.dataset.state || '';
-  const currentIndex = states.indexOf(currentState);
-  const nextIndex = (currentIndex + 1) % states.length;
-  point.dataset.state = states[nextIndex];
-  const row = point.dataset.row;
-  const col = point.dataset.col;
-  const rowPointCounts = mapId === '1' ? rowPointCounts1 : rowPointCounts2;
-  const totalInRow = rowPointCounts[parseInt(row) - 1];
-  const mirroredCol = totalInRow - parseInt(col) + 1;
-  const labels = mapId === '1' ? currentLabels1 : currentLabels2;
-  const legend = labels[point.dataset.state] || defaultLabels[point.dataset.state];
-  const popupText = `L${row.padStart(2, '0')} - C${col.padStart(2, '0')} ou C${mirroredCol.toString().padStart(2, '0')} ${legend}`;
-  const popup = document.createElement('div');
-  popup.classList.add('popup');
-  popup.textContent = popupText;
-  document.body.appendChild(popup);
-  popup.style.left = '10px';
-  popup.style.top = '10px';
-  console.log(`Map ${mapId}: Clicked point at Row ${row}, Col ${col}`);
-  console.log(`Map ${mapId}: Popup created at left: ${popup.style.left}, top: ${popup.style.top}, text: ${popupText}`);
-  setTimeout(() => {
-    popup.remove();
-  }, 1000);
-  updateTotals(mapId);
+ const mapId = point.dataset.mapId;
+ const currentState = point.dataset.state || '';
+ const currentIndex = states.indexOf(currentState);
+ const nextIndex = (currentIndex + 1) % states.length;
+ point.dataset.state = states[nextIndex];
+ const row = point.dataset.row;
+ const col = point.dataset.col;
+ const rowPointCounts = mapId === '1' ? rowPointCounts1 : rowPointCounts2;
+ const totalInRow = rowPointCounts[parseInt(row) - 1];
+ const mirroredCol = totalInRow - parseInt(col) + 1;
+ const labels = mapId === '1' ? currentLabels1 : currentLabels2;
+ const legend = labels[point.dataset.state] || defaultLabels[point.dataset.state];
+ const popupText = `L${row.padStart(2, '0')} - C${col.padStart(2, '0')} ou C${mirroredCol.toString().padStart(2, '0')} ${legend}`;
+ const popup = document.createElement('div');
+ popup.classList.add('popup');
+ popup.textContent = popupText;
+ document.body.appendChild(popup);
+ popup.style.left = '10px';
+ popup.style.top = '10px';
+ console.log(`Map ${mapId}: Clicked point at Row ${row}, Col ${col}`);
+ console.log(`Map ${mapId}: Popup created at left: ${popup.style.left}, top: ${popup.style.top}, text: ${popupText}`);
+ setTimeout(() => {
+ popup.remove();
+ }, 1000);
+ updateTotals(mapId);
 }
 function updateTotals(mapId) {
-  const pointsE = document.querySelectorAll(`#gridMap${mapId} .point-E`);
-  const counts = { '': 0, 'T': 0, 'U': 0, 'M': 0, 'X': 0 };
-  const rowCounts = Array(GRID_ROWS).fill(0);
-  const checkboxStates = mapId === '1' ? checkboxStates1 : checkboxStates2;
-  console.log(`Map ${mapId}: Checkbox states:`, JSON.stringify(checkboxStates));
-  pointsE.forEach(p => {
-    const s = p.dataset.state || '';
-    const rowIndex = parseInt(p.dataset.row) - 1;
-    counts[s] = (counts[s] || 0) + 1;
-    if (checkboxStates[s]) {
-      rowCounts[rowIndex]++;
-    }
-  });
-  console.log(`Map ${mapId}: Counts:`, JSON.stringify(counts));
-  console.log(`Map ${mapId}: Row counts:`, JSON.stringify(rowCounts));
-  const rowCountsDiv = document.getElementById(`rowCounts${mapId}`);
-  rowCountsDiv.innerHTML = '';
-  rowCounts.forEach(count => {
-    const span = document.createElement('span');
-    span.textContent = count;
-    rowCountsDiv.appendChild(span);
-  });
-  const currentLabels = mapId === '1' ? currentLabels1 : currentLabels2;
-  const totalsDiv = document.getElementById(`totals${mapId}`);
-  totalsDiv.innerHTML = `
-    <div class="total-item">
-      <div class="label">
-        <div class="dot empty"></div>
-        <span class="editable-label label-text-" contenteditable="true" data-key="" data-map-id="${mapId}">${currentLabels['']}</span>
-        <input type="checkbox" class="checkbox" data-key="" data-map-id="${mapId}" ${checkboxStates[''] ? 'checked' : ''}>
-      </div>
-      <span>${counts['']}</span>
-    </div>
-    <div class="total-item">
-      <div class="label">
-        <div class="dot T"></div>
-        <span class="editable-label label-text-T" contenteditable="true" data-key="T" data-map-id="${mapId}">${currentLabels['T']}</span>
-        <input type="checkbox" class="checkbox" data-key="T" data-map-id="${mapId}" ${checkboxStates['T'] ? 'checked' : ''}>
-      </div>
-      <span>${counts['T']}</span>
-    </div>
-    <div class="total-item">
-      <div class="label">
-        <div class="dot U"></div>
-        <span class="editable-label label-text-U" contenteditable="true" data-key="U" data-map-id="${mapId}">${currentLabels['U']}</span>
-        <input type="checkbox" class="checkbox" data-key="U" data-map-id="${mapId}" ${checkboxStates['U'] ? 'checked' : ''}>
-      </div>
-      <span>${counts['U']}</span>
-    </div>
-    <div class="total-item">
-      <div class="label">
-        <div class="dot M"></div>
-        <span class="editable-label label-text-M" contenteditable="true" data-key="M" data-map-id="${mapId}">${currentLabels['M']}</span>
-        <input type="checkbox" class="checkbox" data-key="M" data-map-id="${mapId}" ${checkboxStates['M'] ? 'checked' : ''}>
-      </div>
-      <span>${counts['M']}</span>
-    </div>
-    <div class="total-item">
-      <div class="label">
-        <div class="dot X"></div>
-        <span class="editable-label label-text-X" contenteditable="true" data-key="X" data-map-id="${mapId}">${currentLabels['X']}</span>
-        <input type="checkbox" class="checkbox" data-key="X" data-map-id="${mapId}" ${checkboxStates['X'] ? 'checked' : ''}>
-      </div>
-      <span>${counts['X']}</span>
-    </div>
-    <div class="total-item" style="font-weight: bold;">
-      <div class="label">Total de Pontos Visíveis</div>
-      <span>${pointsE.length}</span>
-    </div>
-    <div class="total-item" style="font-weight: bold;">
-      <div class="label">Total Selecionado</div>
-      <span id="selectedTotal${mapId}"></span>
-    </div>
-  `;
-  const checkboxes = totalsDiv.querySelectorAll('.checkbox');
-  checkboxes.forEach(cb => {
-    cb.addEventListener('change', (e) => {
-      const key = cb.dataset.key;
-      const mapId = cb.dataset.mapId;
-      if (mapId === '1') {
-        checkboxStates1[key] = cb.checked;
-      } else {
-        checkboxStates2[key] = cb.checked;
-      }
-      updateTotals(mapId);
-    });
-  });
-  const editableLabels = totalsDiv.querySelectorAll('.editable-label');
-  editableLabels.forEach(el => {
-    el.addEventListener('blur', (e) => {
-      const key = el.dataset.key;
-      const mapId = el.dataset.mapId;
-      const newText = el.textContent.trim();
-      if (mapId === '1') {
-        currentLabels1[key] = newText || defaultLabels[key];
-      } else {
-        currentLabels2[key] = newText || defaultLabels[key];
-      }
-    });
-    el.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        el.blur();
-      }
-    });
-  });
-  const selectedTotal = Object.keys(counts).reduce((sum, key) => {
-    return checkboxStates[key] ? sum + counts[key] : sum;
-  }, 0);
-  document.getElementById(`selectedTotal${mapId}`).textContent = selectedTotal;
-  console.log(`Map ${mapId}: Total Selecionado: ${selectedTotal}`);
+ const pointsE = document.querySelectorAll(`#gridMap${mapId} .point-E`);
+ const counts = { '': 0, 'T': 0, 'U': 0, 'M': 0, 'X': 0 };
+ const rowCounts = Array(GRID_ROWS).fill(0);
+ const checkboxStates = mapId === '1' ? checkboxStates1 : checkboxStates2;
+ console.log(`Map ${mapId}: Checkbox states:`, JSON.stringify(checkboxStates));
+ pointsE.forEach(p => {
+ const s = p.dataset.state || '';
+ const rowIndex = parseInt(p.dataset.row) - 1;
+ counts[s] = (counts[s] || 0) + 1;
+ if (checkboxStates[s]) {
+ rowCounts[rowIndex]++;
+ }
+ });
+ console.log(`Map ${mapId}: Counts:`, JSON.stringify(counts));
+ console.log(`Map ${mapId}: Row counts:`, JSON.stringify(rowCounts));
+ const rowCountsDiv = document.getElementById(`rowCounts${mapId}`);
+ rowCountsDiv.innerHTML = '';
+ rowCounts.forEach(count => {
+ const span = document.createElement('span');
+ span.textContent = count;
+ rowCountsDiv.appendChild(span);
+ });
+ const currentLabels = mapId === '1' ? currentLabels1 : currentLabels2;
+ const totalsDiv = document.getElementById(`totals${mapId}`);
+ totalsDiv.innerHTML = `
+ <div class="total-item">
+ <div class="label">
+ <div class="dot empty"></div>
+ <span class="editable-label label-text-" contenteditable="true" data-key="" data-map-id="${mapId}">${currentLabels['']}</span>
+ <input type="checkbox" class="checkbox" data-key="" data-map-id="${mapId}" ${checkboxStates[''] ? 'checked' : ''}>
+ </div>
+ <span>${counts['']}</span>
+ </div>
+ <div class="total-item">
+ <div class="label">
+ <div class="dot T"></div>
+ <span class="editable-label label-text-T" contenteditable="true" data-key="T" data-map-id="${mapId}">${currentLabels['T']}</span>
+ <input type="checkbox" class="checkbox" data-key="T" data-map-id="${mapId}" ${checkboxStates['T'] ? 'checked' : ''}>
+ </div>
+ <span>${counts['T']}</span>
+ </div>
+ <div class="total-item">
+ <div class="label">
+ <div class="dot U"></div>
+ <span class="editable-label label-text-U" contenteditable="true" data-key="U" data-map-id="${mapId}">${currentLabels['U']}</span>
+ <input type="checkbox" class="checkbox" data-key="U" data-map-id="${mapId}" ${checkboxStates['U'] ? 'checked' : ''}>
+ </div>
+ <span>${counts['U']}</span>
+ </div>
+ <div class="total-item">
+ <div class="label">
+ <div class="dot M"></div>
+ <span class="editable-label label-text-M" contenteditable="true" data-key="M" data-map-id="${mapId}">${currentLabels['M']}</span>
+ <input type="checkbox" class="checkbox" data-key="M" data-map-id="${mapId}" ${checkboxStates['M'] ? 'checked' : ''}>
+ </div>
+ <span>${counts['M']}</span>
+ </div>
+ <div class="total-item">
+ <div class="label">
+ <div class="dot X"></div>
+ <span class="editable-label label-text-X" contenteditable="true" data-key="X" data-map-id="${mapId}">${currentLabels['X']}</span>
+ <input type="checkbox" class="checkbox" data-key="X" data-map-id="${mapId}" ${checkboxStates['X'] ? 'checked' : ''}>
+ </div>
+ <span>${counts['X']}</span>
+ </div>
+ <div class="total-item" style="font-weight: bold;">
+ <div class="label">Total de Pontos Visíveis</div>
+ <span>${pointsE.length}</span>
+ </div>
+ <div class="total-item" style="font-weight: bold;">
+ <div class="label">Total Selecionado</div>
+ <span id="selectedTotal${mapId}"></span>
+ </div>
+ `;
+ const checkboxes = totalsDiv.querySelectorAll('.checkbox');
+ checkboxes.forEach(cb => {
+ cb.addEventListener('change', (e) => {
+ const key = cb.dataset.key;
+ const mapId = cb.dataset.mapId;
+ if (mapId === '1') {
+ checkboxStates1[key] = cb.checked;
+ } else {
+ checkboxStates2[key] = cb.checked;
+ }
+ updateTotals(mapId);
+ });
+ });
+ const editableLabels = totalsDiv.querySelectorAll('.editable-label');
+ editableLabels.forEach(el => {
+ el.addEventListener('blur', (e) => {
+ const key = el.dataset.key;
+ const mapId = el.dataset.mapId;
+ const newText = el.textContent.trim();
+ if (mapId === '1') {
+ currentLabels1[key] = newText || defaultLabels[key];
+ } else {
+ currentLabels2[key] = newText || defaultLabels[key];
+ }
+ });
+ el.addEventListener('keydown', (e) => {
+ if (e.key === 'Enter') {
+ e.preventDefault();
+ el.blur();
+ }
+ });
+ });
+ const selectedTotal = Object.keys(counts).reduce((sum, key) => {
+ return checkboxStates[key] ? sum + counts[key] : sum;
+ }, 0);
+ document.getElementById(`selectedTotal${mapId}`).textContent = selectedTotal;
+ console.log(`Map ${mapId}: Total Selecionado: ${selectedTotal}`);
 }
 function saveData() {
-  try {
-    const points1 = document.querySelectorAll('#gridMap1 .point-E');
-    const points2 = document.querySelectorAll('#gridMap2 .point-E');
-    const data1 = Array.from(points1).map(p => p.dataset.state);
-    const data2 = Array.from(points2).map(p => p.dataset.state);
-    localStorage.setItem('gridDataMap77x45_map1', JSON.stringify(data1));
-    localStorage.setItem('gridDataMap77x45_map2', JSON.stringify(data2));
-    localStorage.setItem('gridLabels1', JSON.stringify(currentLabels1));
-    localStorage.setItem('gridLabels2', JSON.stringify(currentLabels2));
-    localStorage.setItem('checkboxStates1', JSON.stringify(checkboxStates1));
-    localStorage.setItem('checkboxStates2', JSON.stringify(checkboxStates2));
-    console.log('Dados salvos no localStorage:');
-    console.log('Map 1 Data:', data1.length, 'points');
-    console.log('Map 2 Data:', data2.length, 'points');
-    console.log('Labels 1:', currentLabels1);
-    console.log('Labels 2:', currentLabels2);
-    console.log('Checkbox States 1:', checkboxStates1);
-    console.log('Checkbox States 2:', checkboxStates2);
-    alert('Dados salvos com sucesso!');
-  } catch (err) {
-    console.error('Erro ao salvar dados:', err);
-    alert('Erro ao salvar dados. Verifique o console para mais detalhes.');
-  }
+ try {
+ const points1 = document.querySelectorAll('#gridMap1 .point-E');
+ const points2 = document.querySelectorAll('#gridMap2 .point-E');
+ const data1 = Array.from(points1).map(p => p.dataset.state);
+ const data2 = Array.from(points2).map(p => p.dataset.state);
+ localStorage.setItem('gridDataMap77x45_map1', JSON.stringify(data1));
+ localStorage.setItem('gridDataMap77x45_map2', JSON.stringify(data2));
+ localStorage.setItem('gridLabels1', JSON.stringify(currentLabels1));
+ localStorage.setItem('gridLabels2', JSON.stringify(currentLabels2));
+ localStorage.setItem('checkboxStates1', JSON.stringify(checkboxStates1));
+ localStorage.setItem('checkboxStates2', JSON.stringify(checkboxStates2));
+ console.log('Dados salvos no localStorage:');
+ console.log('Map 1 Data:', data1.length, 'points');
+ console.log('Map 2 Data:', data2.length, 'points');
+ console.log('Labels 1:', currentLabels1);
+ console.log('Labels 2:', currentLabels2);
+ console.log('Checkbox States 1:', checkboxStates1);
+ console.log('Checkbox States 2:', checkboxStates2);
+ alert('Dados salvos com sucesso!');
+ } catch (err) {
+ console.error('Erro ao salvar dados:', err);
+ alert('Erro ao salvar dados. Verifique o console para mais detalhes.');
+ }
 }
 function loadData() {
-  try {
-    const data1 = JSON.parse(localStorage.getItem('gridDataMap77x45_map1'));
-    const data2 = JSON.parse(localStorage.getItem('gridDataMap77x45_map2'));
-    const savedLabels1 = JSON.parse(localStorage.getItem('gridLabels1'));
-    const savedLabels2 = JSON.parse(localStorage.getItem('gridLabels2'));
-    const savedCheckboxStates1 = JSON.parse(localStorage.getItem('checkboxStates1'));
-    const savedCheckboxStates2 = JSON.parse(localStorage.getItem('checkboxStates2'));
-   
-    if (savedLabels1) currentLabels1 = { ...defaultLabels, ...savedLabels1 };
-    if (savedLabels2) currentLabels2 = { ...defaultLabels, ...savedLabels2 };
-    if (savedCheckboxStates1) {
-      checkboxStates1 = { ...checkboxStates1, ...savedCheckboxStates1 };
-      checkboxStates1[''] = savedCheckboxStates1 && savedCheckboxStates1[''] === true ? true : false;
-      checkboxStates1['X'] = savedCheckboxStates1 && savedCheckboxStates1['X'] === true ? true : false;
-    }
-    if (savedCheckboxStates2) {
-      checkboxStates2 = { ...checkboxStates2, ...savedCheckboxStates2 };
-      checkboxStates2[''] = savedCheckboxStates2 && savedCheckboxStates2[''] === true ? true : false;
-      checkboxStates2['X'] = savedCheckboxStates2 && savedCheckboxStates2['X'] === true ? true : false;
-    }
-    console.log(`LoadData: checkboxStates1:`, JSON.stringify(checkboxStates1));
-    console.log(`LoadData: checkboxStates2:`, JSON.stringify(checkboxStates2));
-    const points1 = document.querySelectorAll('#gridMap1 .point-E');
-    const points2 = document.querySelectorAll('#gridMap2 .point-E');
-    if (data1 && points1.length === data1.length) {
-      points1.forEach((p, i) => { p.dataset.state = data1[i] || ''; });
-      console.log('Loaded Map 1 Data:', data1.length, 'points');
-    } else {
-      points1.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
-      console.log('Reset Map 1 to initial states');
-    }
-    if (data2 && points2.length === data2.length) {
-      points2.forEach((p, i) => { p.dataset.state = data2[i] || ''; });
-      console.log('Loaded Map 2 Data:', data2.length, 'points');
-    } else {
-      points2.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
-      console.log('Reset Map 2 to initial states');
-    }
-    updateTotals('1');
-    updateTotals('2');
-  } catch (err) {
-    console.error('Erro ao carregar dados:', err);
-    alert('Erro ao carregar dados. Verifique o console para mais detalhes.');
-  }
+ try {
+ const data1 = JSON.parse(localStorage.getItem('gridDataMap77x45_map1'));
+ const data2 = JSON.parse(localStorage.getItem('gridDataMap77x45_map2'));
+ const savedLabels1 = JSON.parse(localStorage.getItem('gridLabels1'));
+ const savedLabels2 = JSON.parse(localStorage.getItem('gridLabels2'));
+ const savedCheckboxStates1 = JSON.parse(localStorage.getItem('checkboxStates1'));
+ const savedCheckboxStates2 = JSON.parse(localStorage.getItem('checkboxStates2'));
+ if (savedLabels1) currentLabels1 = { ...defaultLabels, ...savedLabels1 };
+ if (savedLabels2) currentLabels2 = { ...defaultLabels, ...savedLabels2 };
+ if (savedCheckboxStates1) {
+ checkboxStates1 = { ...checkboxStates1, ...savedCheckboxStates1 };
+ checkboxStates1[''] = savedCheckboxStates1 && savedCheckboxStates1[''] === true ? true : false;
+ checkboxStates1['X'] = savedCheckboxStates1 && savedCheckboxStates1['X'] === true ? true : false;
+ }
+ if (savedCheckboxStates2) {
+ checkboxStates2 = { ...checkboxStates2, ...savedCheckboxStates2 };
+ checkboxStates2[''] = savedCheckboxStates2 && savedCheckboxStates2[''] === true ? true : false;
+ checkboxStates2['X'] = savedCheckboxStates2 && savedCheckboxStates2['X'] === true ? true : false;
+ }
+ console.log(`LoadData: checkboxStates1:`, JSON.stringify(checkboxStates1));
+ console.log(`LoadData: checkboxStates2:`, JSON.stringify(checkboxStates2));
+ const points1 = document.querySelectorAll('#gridMap1 .point-E');
+ const points2 = document.querySelectorAll('#gridMap2 .point-E');
+ if (data1 && points1.length === data1.length) {
+ points1.forEach((p, i) => { p.dataset.state = data1[i] || ''; });
+ console.log('Loaded Map 1 Data:', data1.length, 'points');
+ } else {
+ points1.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
+ console.log('Reset Map 1 to initial states');
+ }
+ if (data2 && points2.length === data2.length) {
+ points2.forEach((p, i) => { p.dataset.state = data2[i] || ''; });
+ console.log('Loaded Map 2 Data:', data2.length, 'points');
+ } else {
+ points2.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
+ console.log('Reset Map 2 to initial states');
+ }
+ updateTotals('1');
+ updateTotals('2');
+ } catch (err) {
+ console.error('Erro ao carregar dados:', err);
+ alert('Erro ao carregar dados. Verifique o console para mais detalhes.');
+ }
 }
 function clearData() {
-  if (confirm('Tem certeza que deseja limpar todos os dados?')) {
-    localStorage.removeItem('gridDataMap77x45_map1');
-    localStorage.removeItem('gridDataMap77x45_map2');
-    localStorage.removeItem('gridLabels1');
-    localStorage.removeItem('gridLabels2');
-    localStorage.removeItem('checkboxStates1');
-    localStorage.removeItem('checkboxStates2');
-    currentLabels1 = { ...defaultLabels };
-    currentLabels2 = { ...defaultLabels };
-    checkboxStates1 = { '': false, 'T': true, 'U': true, 'M': true, 'X': false };
-    checkboxStates2 = { '': false, 'T': true, 'U': true, 'M': true, 'X': false };
-    const points1 = document.querySelectorAll('#gridMap1 .point-E');
-    const points2 = document.querySelectorAll('#gridMap2 .point-E');
-    points1.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
-    points2.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
-    updateTotals('1');
-    updateTotals('2');
-    console.log('Dados limpos');
-    alert('Dados limpos com sucesso!');
-  }
+ if (confirm('Tem certeza que deseja limpar todos os dados?')) {
+ localStorage.removeItem('gridDataMap77x45_map1');
+ localStorage.removeItem('gridDataMap77x45_map2');
+ localStorage.removeItem('gridLabels1');
+ localStorage.removeItem('gridLabels2');
+ localStorage.removeItem('checkboxStates1');
+ localStorage.removeItem('checkboxStates2');
+ currentLabels1 = { ...defaultLabels };
+ currentLabels2 = { ...defaultLabels };
+ checkboxStates1 = { '': false, 'T': true, 'U': true, 'M': true, 'X': false };
+ checkboxStates2 = { '': false, 'T': true, 'U': true, 'M': true, 'X': false };
+ const points1 = document.querySelectorAll('#gridMap1 .point-E');
+ const points2 = document.querySelectorAll('#gridMap2 .point-E');
+ points1.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
+ points2.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
+ updateTotals('1');
+ updateTotals('2');
+ console.log('Dados limpos');
+ alert('Dados limpos com sucesso!');
+ }
 }
 function copyData() {
-  saveData();
-  const data = {
-    gridDataMap77x45_map1: localStorage.getItem('gridDataMap77x45_map1'),
-    gridDataMap77x45_map2: localStorage.getItem('gridDataMap77x45_map2'),
-    gridLabels1: localStorage.getItem('gridLabels1'),
-    gridLabels2: localStorage.getItem('gridLabels2'),
-    checkboxStates1: localStorage.getItem('checkboxStates1'),
-    checkboxStates2: localStorage.getItem('checkboxStates2')
-  };
-  navigator.clipboard.writeText(JSON.stringify(data)).then(() => {
-    console.log('Dados copiados para a área de transferência');
-    alert('Dados salvos e copiados para a área de transferência!');
-  }).catch(err => {
-    console.error('Erro ao copiar dados:', err);
-    alert('Erro ao copiar dados. Verifique o console para mais detalhes.');
-  });
+ saveData();
+ const data = {
+ gridDataMap77x45_map1: localStorage.getItem('gridDataMap77x45_map1'),
+ gridDataMap77x45_map2: localStorage.getItem('gridDataMap77x45_map2'),
+ gridLabels1: localStorage.getItem('gridLabels1'),
+ gridLabels2: localStorage.getItem('gridLabels2'),
+ checkboxStates1: localStorage.getItem('checkboxStates1'),
+ checkboxStates2: localStorage.getItem('checkboxStates2')
+ };
+ navigator.clipboard.writeText(JSON.stringify(data)).then(() => {
+ console.log('Dados copiados para a área de transferência');
+ alert('Dados salvos e copiados para a área de transferência!');
+ }).catch(err => {
+ console.error('Erro ao copiar dados:', err);
+ alert('Erro ao copiar dados. Verifique o console para mais detalhes.');
+ });
 }
 function pasteData() {
-  navigator.clipboard.readText().then(text => {
-    try {
-      const data = JSON.parse(text);
-      if (data.gridDataMap77x45_map1) localStorage.setItem('gridDataMap77x45_map1', data.gridDataMap77x45_map1);
-      if (data.gridDataMap77x45_map2) localStorage.setItem('gridDataMap77x45_map2', data.gridDataMap77x45_map2);
-      if (data.gridLabels1) localStorage.setItem('gridLabels1', data.gridLabels1);
-      if (data.gridLabels2) localStorage.setItem('gridLabels2', data.gridLabels2);
-      if (data.checkboxStates1) localStorage.setItem('checkboxStates1', data.checkboxStates1);
-      if (data.checkboxStates2) localStorage.setItem('checkboxStates2', data.checkboxStates2);
-      loadData();
-      console.log('Dados colados com sucesso');
-      alert('Dados colados com sucesso!');
-    } catch (err) {
-      console.error('Erro ao colar dados:', err);
-      alert('Erro ao colar dados. Certifique-se de que os dados copiados são válidos.');
-    }
-  }).catch(err => {
-    console.error('Erro ao acessar a área de transferência:', err);
-    alert('Erro ao acessar a área de transferência.');
-  });
+ navigator.clipboard.readText().then(text => {
+ try {
+ const data = JSON.parse(text);
+ if (data.gridDataMap77x45_map1) localStorage.setItem('gridDataMap77x45_map1', data.gridDataMap77x45_map1);
+ if (data.gridDataMap77x45_map2) localStorage.setItem('gridDataMap77x45_map2', data.gridDataMap77x45_map2);
+ if (data.gridLabels1) localStorage.setItem('gridLabels1', data.gridLabels1);
+ if (data.gridLabels2) localStorage.setItem('gridLabels2', data.gridLabels2);
+ if (data.checkboxStates1) localStorage.setItem('checkboxStates1', data.checkboxStates1);
+ if (data.checkboxStates2) localStorage.setItem('checkboxStates2', data.checkboxStates2);
+ loadData();
+ console.log('Dados colados com sucesso');
+ alert('Dados colados com sucesso!');
+ } catch (err) {
+ console.error('Erro ao colar dados:', err);
+ alert('Erro ao colar dados. Certifique-se de que os dados copiados são válidos.');
+ }
+ }).catch(err => {
+ console.error('Erro ao acessar a área de transferência:', err);
+ alert('Erro ao acessar a área de transferência.');
+ });
 }
+// Função para gerar PDF
+document.getElementById('generatePdf').addEventListener('click', () => {
+ window.print();
+});
 // Inicialização
 setupRowCounts('1');
 setupRowCounts('2');
@@ -781,10 +829,10 @@ document.getElementById('clearAll').addEventListener('click', clearData);
 document.getElementById('copyData').addEventListener('click', copyData);
 document.getElementById('pasteData').addEventListener('click', pasteData);
 document.addEventListener('keydown', (e) => {
-  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-    e.preventDefault();
-    saveData();
-  }
+ if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+ e.preventDefault();
+ saveData();
+ }
 });
 </script>
 </body>
