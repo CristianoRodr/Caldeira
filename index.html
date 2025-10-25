@@ -7,9 +7,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
- --point-size: 12px;
- --grid-gap: 0.5px;
- --grid-padding: 8px;
+ --point-size: 14px; /* Increased for larger grid */
+ --grid-gap: 0.5px; /* Space between dots */
+ --grid-padding: 8px; /* 8px margin between dots and grid border */
  --muted: #4b5563;
  --accent: #06b6d4;
  --color-E-empty: #FF0000;
@@ -70,11 +70,8 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
 .section-header.hot { color: #ef4444; }
 .grid-container-area {
  position: relative;
- display: block; /* Changed to block to ensure proper overflow handling */
+ display: block; /* Block for layout control */
  width: 100%;
- overflow-x: auto;
- scrollbar-width: auto;
- -webkit-overflow-scrolling: touch;
 }
 .grid-and-numbers {
  position: relative;
@@ -86,14 +83,15 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
  position: relative;
  min-width: var(--grid-width);
  width: var(--grid-width);
- overflow-x: auto;
+ overflow-x: auto; /* Scrollbar only for grid */
  scrollbar-width: auto;
+ -webkit-overflow-scrolling: touch;
 }
 .grid {
  display: grid;
  grid-template-columns: repeat(77, var(--point-size));
  gap: var(--grid-gap);
- padding: var(--grid-padding);
+ padding: var(--grid-padding); /* 8px margin around dots */
  background: #ffffff;
  border-radius: 12px;
  border: 1px solid rgba(0,0,0,0.12);
@@ -163,7 +161,7 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
  min-width: 250px;
  max-width: 300px;
  border: 1px solid rgba(0,0,0,0.08);
- margin: 0 auto;
+ margin: 20px auto 0; /* Adjusted margin for spacing */
 }
 .totals h3 { font-size: 16px; margin: 0 0 10px; }
 .total-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
@@ -216,9 +214,9 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 /* Media Query for Print */
 @media print {
  :root {
-  --point-size: 6px;
+  --point-size: 6px; /* Kept for print scaling */
   --grid-gap: 0.25px;
-  --grid-padding: 4px;
+  --grid-padding: 8px; /* 8px margin for print */
   --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
   --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
  }
@@ -236,18 +234,16 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   margin-bottom: 20px;
  }
  .grid-container-area {
-  overflow-x: visible !important;
   width: auto;
-  align-items: center;
  }
  .grid-and-numbers {
   min-width: auto;
   width: var(--grid-width);
  }
  .grid-wrapper {
-  overflow: visible;
   min-width: 0;
   width: var(--grid-width);
+  overflow-x: visible; /* No scrollbar in print */
  }
  .grid {
   transform: none;
@@ -286,9 +282,9 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   display: none;
  }
  .row-label-left, .row-label-right {
-  font-size: 4px; /* Small font for clarity */
-  left: -12px; /* Adjusted to prevent overlap but keep labels close */
-  right: -12px; /* Adjusted to prevent overlap but keep labels close */
+  font-size: 4px;
+  left: -12px; /* Adjusted for print */
+  right: -12px;
  }
  .point {
   -webkit-print-color-adjust: exact;
@@ -299,7 +295,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 /* Media Queries for Screen */
 @media (max-width: 768px) {
  :root {
-  --point-size: 10px;
+  --point-size: 12px; /* Adjusted for larger grid */
   --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
   --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
  }
@@ -308,11 +304,8 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   overflow-y: auto;
  }
  .grid-container-area {
-  display: block; /* Ensure block display for overflow */
+  display: block;
   width: 100%;
-  overflow-x: auto;
-  scrollbar-width: auto;
-  -webkit-overflow-scrolling: touch;
  }
  .grid-and-numbers {
   min-width: var(--grid-width);
@@ -323,7 +316,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   overflow-x: auto;
   scrollbar-width: auto;
   -webkit-overflow-scrolling: touch;
-  box-sizing: content-box; /* Prevent padding from reducing width */
+  box-sizing: content-box;
  }
  .grid {
   min-width: var(--grid-width);
@@ -340,7 +333,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 }
 @media (max-width: 480px) {
  :root {
-  --point-size: 8px;
+  --point-size: 10px; /* Adjusted for larger grid */
   --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
   --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
  }
@@ -362,9 +355,6 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
  .grid-container-area {
   display: block;
   width: 100%;
-  overflow-x: auto;
-  scrollbar-width: auto;
-  -webkit-overflow-scrolling: touch;
  }
  .grid-wrapper {
   min-width: var(--grid-width);
