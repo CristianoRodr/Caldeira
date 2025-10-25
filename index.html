@@ -70,12 +70,11 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
 .section-header.hot { color: #ef4444; }
 .grid-container-area {
  position: relative;
- display: flex;
- flex-direction: column;
- gap: 15px;
- align-items: center;
+ display: block; /* Changed to block to ensure proper overflow handling */
  width: 100%;
  overflow-x: auto;
+ scrollbar-width: auto;
+ -webkit-overflow-scrolling: touch;
 }
 .grid-and-numbers {
  position: relative;
@@ -86,7 +85,9 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
 .grid-wrapper {
  position: relative;
  min-width: var(--grid-width);
+ width: var(--grid-width);
  overflow-x: auto;
+ scrollbar-width: auto;
 }
 .grid {
  display: grid;
@@ -285,9 +286,9 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   display: none;
  }
  .row-label-left, .row-label-right {
-  font-size: 6px;
-  left: -10px;
-  right: -10px;
+  font-size: 4px; /* Small font for clarity */
+  left: -12px; /* Adjusted to prevent overlap but keep labels close */
+  right: -12px; /* Adjusted to prevent overlap but keep labels close */
  }
  .point {
   -webkit-print-color-adjust: exact;
@@ -307,8 +308,9 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   overflow-y: auto;
  }
  .grid-container-area {
-  overflow-x: auto;
+  display: block; /* Ensure block display for overflow */
   width: 100%;
+  overflow-x: auto;
   scrollbar-width: auto;
   -webkit-overflow-scrolling: touch;
  }
@@ -317,8 +319,11 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
  }
  .grid-wrapper {
   min-width: var(--grid-width);
+  width: var(--grid-width);
   overflow-x: auto;
   scrollbar-width: auto;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: content-box; /* Prevent padding from reducing width */
  }
  .grid {
   min-width: var(--grid-width);
@@ -355,12 +360,19 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   align-items: center;
  }
  .grid-container-area {
+  display: block;
+  width: 100%;
   overflow-x: auto;
   scrollbar-width: auto;
+  -webkit-overflow-scrolling: touch;
  }
  .grid-wrapper {
+  min-width: var(--grid-width);
+  width: var(--grid-width);
   overflow-x: auto;
   scrollbar-width: auto;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: content-box;
  }
  .row-label-left, .row-label-right {
   font-size: 6px;
@@ -386,7 +398,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
  <button id="pasteData" class="ghost">Colar Dados</button>
  <button id="generatePdf" class="ghost">Gerar PDF</button>
  </div>
- </ taakje </header>
+ </header>
  <div class="section">
  <div class="section-header cold">Lado Frio</div>
  <div class="grid-container-area">
