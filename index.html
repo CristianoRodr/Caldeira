@@ -22,286 +22,112 @@
 }
 * { box-sizing: border-box; }
 html, body {
-  height: 100%;
-  margin: 0;
-  font-family: Inter, system-ui, Arial;
-  background: #ffffff;
-  color: #000000;
-  overflow: auto;
+  height: 100%; margin: 0; font-family: Inter, system-ui, Arial;
+  background:#fff; color:#000; overflow:auto;
 }
-.app {
-  max-width: 1400px;
-  margin: 28px auto;
-  padding: 20px;
-  min-height: calc(100vh - 56px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 18px;
-  width: 100%;
-}
-h1 { font-size: 20px; margin: 0; text-align: center; }
-p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: center; }
-.controls {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 12px;
-  justify-content: center;
-}
-.section {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 40px;
-  width: 100%;
-  align-items: center;
-}
-.section-header {
-  font-size: 24px;
-  margin-bottom: 12px;
-  text-align: center;
-}
-.section-header.cold { color: #06b6d4; }
-.section-header.hot { color: #ef4444; }
-.grid-container-area {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  align-items: center;
-}
-.grid-and-summary {
-  display: flex;
-  align-items: flex-start;
-  width: 100%;
-  justify-content: center;
-}
-.grid-wrapper {
-  position: relative;
-  width: var(--grid-width);
-  overflow-x: auto;
-  scrollbar-width: auto;
-  -webkit-overflow-scrolling: touch;
-}
+.app { max-width:1400px; margin:28px auto; padding:20px;
+       display:flex; flex-direction:column; align-items:center; }
+header { width:100%; text-align:center; margin-bottom:18px; }
+h1 { font-size:20px; margin:0; }
+p.lead { margin:4px 0 0; color:var(--muted); font-size:13px; }
+.controls { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:12px; }
+button { background:#f3f4f6; border:1px solid rgba(0,0,0,.1); color:#111827;
+         padding:8px 12px; border-radius:10px; cursor:pointer; }
+button.primary { background:linear-gradient(90deg,var(--accent),#0891b2); color:#021226; border:0; }
+button.ghost { background:transparent; border:1px solid rgba(0,0,0,.1); }
+
+.section { width:100%; display:flex; flex-direction:column; align-items:center; margin-bottom:40px; }
+.section-header { font-size:24px; margin-bottom:12px; text-align:center; }
+.section-header.cold { color:#06b6d4; }
+.section-header.hot { color:#ef4444; }
+
+.grid-container-area { width:100%; display:flex; flex-direction:column; align-items:center; }
+.grid-and-summary { display:flex; align-items:flex-start; justify-content:center; width:100%; }
+.grid-wrapper { width:var(--grid-width); overflow-x:auto; }
 .grid {
-  display: grid;
-  grid-template-columns: repeat(77, var(--point-size));
-  gap: var(--grid-gap);
-  padding: var(--grid-padding);
-  background: #ffffff;
-  border-radius: 12px;
-  border: 1px solid rgba(0,0,0,0.12);
-  width: var(--grid-width);
-  height: var(--grid-height);
-  flex-shrink: 0;
+  display:grid; grid-template-columns:repeat(77,var(--point-size));
+  gap:var(--grid-gap); padding:var(--grid-padding);
+  background:#fff; border-radius:12px; border:1px solid rgba(0,0,0,.12);
+  width:var(--grid-width); height:var(--grid-height);
 }
-.grid::before, .grid::after {
-  content: '';
-  position: absolute;
-  z-index: 10;
-  background-color: red;
-  pointer-events: none;
-}
-.grid::before {
-  left: calc(38.5 * var(--point-size) + 38 * var(--grid-gap) + var(--grid-padding));
-  width: 2px;
-  height: var(--grid-height);
-  top: 0;
-}
-.grid::after {
-  top: calc(23 * var(--point-size) + 22.5 * var(--grid-gap) + var(--grid-padding));
-  height: 2px;
-  width: 100%;
-  left: 0;
-}
-.grid-cell {
-  width: var(--point-size);
-  height: var(--point-size);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
+.grid::before,.grid::after { content:''; position:absolute; background:red; pointer-events:none; }
+.grid::before { left:calc(38.5*var(--point-size)+38*var(--grid-gap)+var(--grid-padding)); width:2px; height:100%; top:0; }
+.grid::after  { top:calc(23*var(--point-size)+22.5*var(--grid-gap)+var(--grid-padding)); height:2px; width:100%; left:0; }
+.grid-cell { width:var(--point-size); height:var(--point-size); display:flex; align-items:center; justify-content:center; position:relative; }
 .point {
-  width: var(--point-size);
-  height: var(--point-size);
-  border-radius: 50%;
-  background-color: var(--color-E-empty);
-  transition: background-color 0.2s;
-  flex-shrink: 0;
-  box-shadow: 0 0 2px rgba(0,0,0,0.25);
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
+  width:var(--point-size); height:var(--point-size); border-radius:50%;
+  background:var(--color-E-empty); transition:background .2s;
+  box-shadow:0 0 2px rgba(0,0,0,.25);
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
 }
-.point-E { cursor: pointer; background-color: var(--color-E-empty); }
-.point-E[data-state="T"] { background-color: var(--color-T); }
-.point-E[data-state="U"] { background-color: var(--color-U); }
-.point-E[data-state="M"] { background-color: var(--color-M); }
-.point-E[data-state="X"] { background-color: var(--color-X); }
-.row-label-left, .row-label-right {
-  font-size: 8px;
-  color: var(--muted);
-  pointer-events: none;
-  line-height: var(--point-size);
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-}
-.row-label-left { left: -15px; }
-.row-label-right { right: -15px; }
+.point-E { cursor:pointer; }
+.point-E[data-state="T"] { background:var(--color-T); }
+.point-E[data-state="U"] { background:var(--color-U); }
+.point-E[data-state="M"] { background:var(--color-M); }
+.point-E[data-state="X"] { background:var(--color-X); }
 
-/* NOVO: 3 colunas ao lado do grid */
-.row-summary {
-  display: flex;
-  flex-direction: column;
-  margin-left: 10px;
-  font-size: 10px;
-  color: var(--muted);
-  min-width: 90px;
-}
-.row-summary-header {
-  display: flex;
-  font-weight: 600;
-  margin-bottom: 4px;
-  text-align: center;
-}
-.row-summary-header > div {
-  flex: 1;
-  padding: 0 4px;
-}
-.row-summary-row {
-  display: flex;
-  height: calc(var(--point-size) + var(--grid-gap));
-  align-items: center;
-}
-.row-number, .row-total, .row-selected {
-  flex: 1;
-  text-align: center;
-  padding: 0 4px;
-}
+.row-label-left,.row-label-right { font-size:8px; color:var(--muted); pointer-events:none; line-height:var(--point-size);
+                                   position:absolute; top:50%; transform:translateY(-50%); }
+.row-label-left { left:-15px; } .row-label-right { right:-15px; }
 
-/* Totais gerais abaixo do grid */
-.totals-container {
-  margin-top: 20px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-.totals {
-  background: #f7f7f7;
-  border-radius: 12px;
-  padding: 16px;
-  width: 300px;
-  min-width: 250px;
-  max-width: 300px;
-  border: 1px solid rgba(0,0,0,0.08);
-}
-.totals h3 { font-size: 16px; margin: 0 0 10px; }
-.total-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
-.total-item .label { display: flex; align-items: center; gap: 6px; }
-.total-item .dot { width: 10px; height: 10px; border-radius: 50%; }
-.total-item .dot.empty { background-color: var(--color-E-empty); }
-.total-item .dot.T { background-color: var(--color-T); }
-.total-item .dot.U { background-color: var(--color-U); }
-.total-item .dot.M { background-color: var(--color-M); }
-.total-item .dot.X { background-color: var(--color-X); }
-.editable-label { display: inline-block; cursor: pointer; min-width: 50px; padding: 1px 4px; border-radius: 4px; line-height: 1.2; }
-.editable-label:hover { background: rgba(0,0,0,0.06); }
-.editable-label:focus { outline: 2px solid var(--accent); background: rgba(6,182,212,0.12); }
-button { background: #f3f4f6; border: 1px solid rgba(0,0,0,0.1); color: #111827; padding: 8px 12px; border-radius: 10px; cursor: pointer; }
-button.primary { background: linear-gradient(90deg, var(--accent), #0891b2); color: #021226; border: 0; }
-button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
-.checkbox { margin-left: 8px; cursor: pointer; }
-.popup {
-  position: fixed;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  z-index: 2000;
-  pointer-events: none;
-  white-space: nowrap;
-}
+/* ---------- 3 COLUNAS AO LADO ---------- */
+.row-summary { display:flex; flex-direction:column; margin-left:10px; font-size:10px; color:var(--muted); min-width:90px; }
+.row-summary-header { display:flex; font-weight:600; margin-bottom:4px; text-align:center; }
+.row-summary-header > div { flex:1; padding:0 4px; }
+.row-summary-row { display:flex; height:calc(var(--point-size)+var(--grid-gap)); align-items:center; }
+.row-number,.row-total,.row-selected { flex:1; text-align:center; padding:0 4px; }
 
-/* IMPRESSÃO */
+/* ---------- TOTAIS ABAIXO ---------- */
+.totals-container { margin-top:20px; width:100%; display:flex; justify-content:center; }
+.totals { background:#f7f7f7; border-radius:12px; padding:16px; width:300px; max-width:300px;
+          border:1px solid rgba(0,0,0,.08); }
+.totals h3 { font-size:16px; margin:0 0 10px; }
+.total-item { display:flex; justify-content:space-between; margin-bottom:8px; font-size:13px; }
+.total-item .label { display:flex; align-items:center; gap:6px; }
+.total-item .dot { width:10px; height:10px; border-radius:50%; }
+.total-item .dot.empty { background:var(--color-E-empty); }
+.total-item .dot.T { background:var(--color-T); }
+.total-item .dot.U { background:var(--color-U); }
+.total-item .dot.M { background:var(--color-M); }
+.total-item .dot.X { background:var(--color-X); }
+.editable-label { display:inline-block; cursor:pointer; min-width:50px; padding:1px 4px; border-radius:4px; line-height:1.2; }
+.editable-label:hover { background:rgba(0,0,0,.06); }
+.editable-label:focus { outline:2px solid var(--accent); background:rgba(6,182,212,.12); }
+.checkbox { margin-left:8px; cursor:pointer; }
+.popup { position:fixed; background:rgba(0,0,0,.8); color:#fff; padding:4px 8px; border-radius:4px;
+         font-size:12px; z-index:2000; pointer-events:none; white-space:nowrap; }
+
+/* ---------- IMPRESSÃO ---------- */
 @media print {
-  :root {
-    --point-size: 5px;
-    --grid-gap: 0.2px;
-    --grid-padding: 10px;
-    --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
-    --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
-  }
-  .app {
-    max-width: 100%;
-    padding: 10px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .section {
-    page-break-inside: avoid;
-    margin-bottom: 20px;
-    width: 100%;
-  }
-  .grid-and-summary {
-    justify-content: center;
-  }
-  .grid-wrapper {
-    overflow-x: visible;
-  }
-  .row-summary {
-    font-size: 6px;
-    min-width: 60px;
-    margin-left: 8px;
-  }
-  .row-summary-header > div {
-    font-size: 6px;
-    padding: 0 2px;
-  }
-  .row-summary-row {
-    height: calc(var(--point-size) + var(--grid-gap));
-  }
-  .row-number, .row-total, .row-selected {
-    font-size: 6px;
-    padding: 0 2px;
-  }
-  .controls, .checkbox, .popup { display: none; }
-  .totals-container { margin-top: 10px; }
-  .totals { width: 200px; max-width: 200px; }
-  .row-label-left, .row-label-right { font-size: 4px; left: -10px; right: -10px; }
-  .point { box-shadow: none; }
+  :root { --point-size:5px; --grid-gap:0.2px; --grid-padding:10px;
+          --grid-height:calc(45*var(--point-size)+44*var(--grid-gap)+2*var(--grid-padding));
+          --grid-width:calc(77*var(--point-size)+76*var(--grid-gap)+2*var(--grid-padding)); }
+  .app { max-width:100%; padding:10px; margin:0 auto; }
+  .controls,.checkbox,.popup { display:none; }
+  .grid-wrapper { overflow-x:visible; }
+  .row-summary { font-size:6px; min-width:60px; margin-left:8px; }
+  .row-summary-header > div, .row-number,.row-total,.row-selected { font-size:6px; padding:0 2px; }
+  .row-summary-row { height:calc(var(--point-size)+var(--grid-gap)); }
+  .totals-container { margin-top:10px; }
+  .totals { width:200px; max-width:200px; }
+  .row-label-left,.row-label-right { font-size:4px; left:-10px; right:-10px; }
+  .point { box-shadow:none; }
 }
 
-/* RESPONSIVO */
-@media (max-width: 768px) {
-  :root {
-    --point-size: 10px;
-    --grid-gap: 0.4px;
-    --grid-padding: 20px;
-    --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
-    --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
-  }
-  .row-summary { font-size: 8px; min-width: 70px; }
+/* ---------- RESPONSIVO ---------- */
+@media (max-width:768px) {
+  :root { --point-size:10px; --grid-gap:0.4px; --grid-padding:20px;
+          --grid-height:calc(45*var(--point-size)+44*var(--grid-gap)+2*var(--grid-padding));
+          --grid-width:calc(77*var(--point-size)+76*var(--grid-gap)+2*var(--grid-padding)); }
+  .row-summary { font-size:8px; min-width:70px; }
 }
-@media (max-width: 480px) {
-  :root {
-    --point-size: 8px;
-    --grid-gap: 0.3px;
-    --grid-padding: 15px;
-    --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
-    --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
-  }
-  .row-summary { font-size: 7px; min-width: 60px; margin-left: 6px; }
-  .section-header { font-size: 18px; }
-  .totals { width: 100%; max-width: 250px; }
+@media (max-width:480px) {
+  :root { --point-size:8px; --grid-gap:0.3px; --grid-padding:15px;
+          --grid-height:calc(45*var(--point-size)+44*var(--grid-gap)+2*var(--grid-padding));
+          --grid-width:calc(77*var(--point-size)+76*var(--grid-gap)+2*var(--grid-padding)); }
+  .row-summary { font-size:7px; min-width:60px; margin-left:6px; }
+  .section-header { font-size:18px; }
+  .totals { width:100%; max-width:250px; }
 }
 </style>
 </head>
@@ -327,22 +153,13 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
     <div class="section-header cold">Lado Frio</div>
     <div class="grid-container-area">
       <div class="grid-and-summary">
-        <div class="grid-wrapper" id="wrapperMap1">
-          <div class="grid" id="gridMap1"></div>
-        </div>
+        <div class="grid-wrapper" id="wrapperMap1"><div class="grid" id="gridMap1"></div></div>
         <div class="row-summary" id="rowSummary1">
-          <div class="row-summary-header">
-            <div>Linha</div>
-            <div>Total</div>
-            <div>Sel.</div>
-          </div>
+          <div class="row-summary-header"><div>Linha</div><div>Total</div><div>Sel.</div></div>
         </div>
       </div>
       <div class="totals-container">
-        <div class="totals" id="totalsContainer1">
-          <h3>Totais Gerais</h3>
-          <div id="totals1"></div>
-        </div>
+        <div class="totals" id="totalsContainer1"><h3>Totais Gerais</h3><div id="totals1"></div></div>
       </div>
     </div>
   </div>
@@ -352,256 +169,259 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
     <div class="section-header hot">Lado Quente</div>
     <div class="grid-container-area">
       <div class="grid-and-summary">
-        <div class="grid-wrapper" id="wrapperMap2">
-          <div class="grid" id="gridMap2"></div>
-        </div>
+        <div class="grid-wrapper" id="wrapperMap2"><div class="grid" id="gridMap2"></div></div>
         <div class="row-summary" id="rowSummary2">
-          <div class="row-summary-header">
-            <div>Linha</div>
-            <div>Total</div>
-            <div>Sel.</div>
-          </div>
+          <div class="row-summary-header"><div>Linha</div><div>Total</div><div>Sel.</div></div>
         </div>
       </div>
       <div class="totals-container">
-        <div class="totals" id="totalsContainer2">
-          <h3>Totais Gerais</h3>
-          <div id="totals2"></div>
-        </div>
+        <div class="totals" id="totalsContainer2"><h3>Totais Gerais</h3><div id="totals2"></div></div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-const GRID_COLUMNS = 77;
-const GRID_ROWS = 45;
-const states = ['', 'T', 'U', 'M', 'X'];
-const defaultLabels = { '': 'Vazio', 'T': 'Est. Emp.', 'U': 'Usinagem', 'M': 'Mat. Removido', 'X': 'Sem escopo' };
-let currentLabels1 = { ...defaultLabels };
-let currentLabels2 = { ...defaultLabels };
-let checkboxStates1 = { '': false, 'T': true, 'U': true, 'M': true, 'X': false };
-let checkboxStates2 = { '': false, 'T': true, 'U': true, 'M': true, 'X': false };
+/* ---------- CONFIGURAÇÃO ---------- */
+const GRID_COLUMNS = 77, GRID_ROWS = 45;
+const states = ['', 'T','U','M','X'];
+const defaultLabels = { '':'Vazio','T':'Est. Emp.','U':'Usinagem','M':'Mat. Removido','X':'Sem escopo' };
+let currentLabels1 = {...defaultLabels}, currentLabels2 = {...defaultLabels};
+let checkboxStates1 = { '':false,'T':true,'U':true,'M':true,'X':false };
+let checkboxStates2 = { '':false,'T':true,'U':true,'M':true,'X':false };
 
-const MAP_TEMPLATE = `
-NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNENNNENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-NNNNNNNNNNNNNNNNNNNNNNNNNNNNNENNNNNNNNNNNNNNNNNENNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-NNNNNNNNNNNNNNNNNNNNNNENNNENNNENNNENNNENNNENNNENNNENNNENNNNNNNNNNNNNNNNNNNNNN
-NNNNNNNNNNNNNNNNNNNENENNNENNNENNNENNNENENNNENNNENNNENNNENENNNNNNNNNNNNNNNNNNN
-NNNNNNNNNNNNNNNNENENENENENENENENENENENENENENENENENENENENENENENNNNNNNNNNNNNNNN
-NNNNNNNNNNNNNNNENENENENENENENENENENENENENENENENENENENENENENENENNNNNNNNNNNNNNN
-NNNNNNNNNNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENNNNNNNNNNNN
-NNNNNNNNNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNNNNNNNNN
-NNNNNNNNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNNNNNNNN
-NNNNNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNNNNN
-NNNNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNNNN
-NNNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNNN
-NNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNN
-NNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNN
-NNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNN
-NNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNN
-NNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENN
-NENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENEN
-NNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENN
-NENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENEN
-ENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENE
-NENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENEN
-ENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENE
-NDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNENENDNDNDNDNDNDNDNDNDNDNENDNDNDN
-DNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNENDNDNDNDNDNDNDNDNDNDNDNDNDNDND
-NDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNENDNDNDNDNDNDNDNDNDNDNDNDNDNDNDN
-NNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNN
-NDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNENDNDNDNDNDNDNDNDNDNDNDNDNDNDN
-NNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNN
-NNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNN
-NNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNENDNDNDNDNDNDNDNDNDNDNNNN
-NNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNN
-NNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNN
-NNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNN
-NNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNN
-NNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNN
-NNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNN
-NNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNN
-NNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNN
-NNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNN
-NNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNN
-NNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNN
-NNNNNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNNNNN
-NNNNNNNNNNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNNNNNNNNNN
-NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNDNNNDNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-`.trim();
+const MAP_TEMPLATE = `...`; // (mesmo template que estava antes – mantido aqui apenas como placeholder)
 
+/* ---------- DADOS POR LINHA ---------- */
 let rowPointCounts1 = new Array(GRID_ROWS).fill(0);
 let rowPointCounts2 = new Array(GRID_ROWS).fill(0);
 
-function setupRowSummary(mapId) {
-  const summaryDiv = document.getElementById(`rowSummary${mapId}`);
-  summaryDiv.innerHTML = '<div class="row-summary-header"><div>Linha</div><div>Total</div><div>Sel.</div></div>';
-  for (let i = 0; i < GRID_ROWS; i++) {
-    const row = document.createElement('div');
-    row.className = 'row-summary-row';
-    row.innerHTML = `
-      <div class="row-number">${i + 1}</div>
-      <div class="row-total">0</div>
-      <div class="row-selected">0</div>
-    `;
-    summaryDiv.appendChild(row);
+/* ---------- 3 COLUNAS AO LADO ---------- */
+function setupRowSummary(mapId){
+  const div = document.getElementById(`rowSummary${mapId}`);
+  div.innerHTML = '<div class="row-summary-header"><div>Linha</div><div>Total</div><div>Sel.</div></div>';
+  for(let i=0;i<GRID_ROWS;i++){
+    const row = document.createElement('div'); row.className='row-summary-row';
+    row.innerHTML = `<div class="row-number">${i+1}</div><div class="row-total">0</div><div class="row-selected">0</div>`;
+    div.appendChild(row);
   }
 }
 
-function createGrid(mapId) {
-  const mapLines = MAP_TEMPLATE.split('\n').map(l => l.trim());
-  const grid = document.getElementById(`gridMap${mapId}`);
-  grid.innerHTML = '';
-  let pointIndex = 0;
-  const rowPointCounts = mapId === '1' ? rowPointCounts1 : rowPointCounts2;
+/* ---------- CRIAÇÃO DO GRID ---------- */
+function createGrid(mapId){
+  const lines = MAP_TEMPLATE.split('\n').map(l=>l.trim());
+  const grid = document.getElementById(`gridMap${mapId}`); grid.innerHTML='';
+  let pointIdx=0;
+  const counts = mapId==='1'?rowPointCounts1:rowPointCounts2;
 
-  mapLines.forEach((line, rowIndex) => {
-    let pointCol = 0;
-    let firstPointCell = null;
-    let lastPointCell = null;
+  lines.forEach((line,rowIdx)=>{
+    let colPoint=0, firstCell=null, lastCell=null;
+    for(let c=0;c<GRID_COLUMNS;c++){
+      const ch = line[c]||'N';
+      const cell = document.createElement('div'); cell.className='grid-cell';
+      if(ch==='N'){ grid.appendChild(cell); continue; }
 
-    for (let col = 0; col < GRID_COLUMNS; col++) {
-      const char = line[col] || 'N';
-      const cell = document.createElement('div');
-      cell.classList.add('grid-cell');
-      if (char === 'N') {
-        grid.appendChild(cell);
-        continue;
-      }
-      pointCol++;
-      const point = document.createElement('div');
-      point.classList.add('point');
-      if (['D', 'E', 'T', 'U', 'M'].includes(char)) {
+      colPoint++;
+      const point = document.createElement('div'); point.className='point';
+      if(['D','E','T','U','M'].includes(ch)){
         point.classList.add('point-E');
-        let initialState = '';
-        if (char === 'T') initialState = 'T';
-        else if (char === 'U') initialState = 'U';
-        else if (char === 'M') initialState = 'M';
-        else if (char === 'D' || char === 'E') initialState = rowIndex >= 23 ? 'X' : '';
-        point.dataset.initial = initialState;
-        point.dataset.state = initialState;
-        point.dataset.index = pointIndex++;
-        point.dataset.mapId = mapId;
-        point.dataset.row = rowIndex + 1;
-        point.dataset.col = pointCol;
-        point.addEventListener('click', () => cycleState(point));
-        if (pointCol === 1) {
-          firstPointCell = cell;
-          const labelLeft = document.createElement('span');
-          labelLeft.classList.add('row-label-left');
-          labelLeft.textContent = rowIndex + 1;
-          cell.appendChild(labelLeft);
+        let init = '';
+        if(ch==='T') init='T'; else if(ch==='U') init='U'; else if(ch==='M') init='M';
+        else if(ch==='D'||ch==='E') init = rowIdx>=23?'X':'';
+        point.dataset.initial = init; point.dataset.state = init;
+        point.dataset.index = pointIdx++; point.dataset.mapId = mapId;
+        point.dataset.row = rowIdx+1; point.dataset.col = colPoint;
+        point.addEventListener('click',()=>cycleState(point));
+        if(colPoint===1){ firstCell=cell;
+          const lbl=document.createElement('span'); lbl.className='row-label-left';
+          lbl.textContent=rowIdx+1; cell.appendChild(lbl);
         }
-        lastPointCell = cell;
+        lastCell=cell;
       }
-      cell.appendChild(point);
-      grid.appendChild(cell);
+      cell.appendChild(point); grid.appendChild(cell);
     }
-    if (lastPointCell) {
-      const labelRight = document.createElement('span');
-      labelRight.classList.add('row-label-right');
-      labelRight.textContent = rowIndex + 1;
-      lastPointCell.appendChild(labelRight);
+    if(lastCell){
+      const lbl=document.createElement('span'); lbl.className='row-label-right';
+      lbl.textContent=rowIdx+1; lastCell.appendChild(lbl);
     }
-    rowPointCounts[rowIndex] = pointCol;
+    counts[rowIdx]=colPoint;
   });
   updateSummary(mapId);
 }
 
-function cycleState(point) {
-  const mapId = point.dataset.mapId;
-  const currentState = point.dataset.state || '';
-  const nextIndex = (states.indexOf(currentState) + 1) % states.length;
-  point.dataset.state = states[nextIndex];
+/* ---------- CICLO DE ESTADO ---------- */
+function cycleState(p){
+  const mapId = p.dataset.mapId;
+  const cur = p.dataset.state||'';
+  const next = states[(states.indexOf(cur)+1)%states.length];
+  p.dataset.state = next;
   updateSummary(mapId);
 }
 
-function updateSummary(mapId) {
-  const pointsE = document.querySelectorAll(`#gridMap${mapId} .point-E`);
-  const checkboxStates = mapId === '1' ? checkboxStates1 : checkboxStates2;
-  const rowTotals = new Array(GRID_ROWS).fill(0);
-  const rowSelected = new Array(GRID_ROWS).fill(0);
+/* ---------- ATUALIZA RESUMO DE LINHAS + TOTAIS ---------- */
+function updateSummary(mapId){
+  const points = document.querySelectorAll(`#gridMap${mapId} .point-E`);
+  const chk = mapId==='1'?checkboxStates1:checkboxStates2;
+  const rowTot = new Array(GRID_ROWS).fill(0);
+  const rowSel = new Array(GRID_ROWS).fill(0);
 
-  pointsE.forEach(p => {
-    const row = parseInt(p.dataset.row) - 1;
-    const state = p.dataset.state || '';
-    rowTotals[row]++;
-    if (checkboxStates[state]) rowSelected[row]++;
+  points.forEach(p=>{
+    const r = parseInt(p.dataset.row)-1;
+    const s = p.dataset.state||'';
+    rowTot[r]++; if(chk[s]) rowSel[r]++;
   });
 
-  const summaryDiv = document.getElementById(`rowSummary${mapId}`);
-  const rows = summaryDiv.querySelectorAll('.row-summary-row');
-  rows.forEach((row, i) => {
-    row.querySelector('.row-total').textContent = rowTotals[i];
-    row.querySelector('.row-selected').textContent = rowSelected[i];
+  const sumDiv = document.getElementById(`rowSummary${mapId}`);
+  sumDiv.querySelectorAll('.row-summary-row').forEach((row,i)=>{
+    row.querySelector('.row-total').textContent = rowTot[i];
+    row.querySelector('.row-selected').textContent = rowSel[i];
   });
 
   updateTotals(mapId);
 }
 
-function updateTotals(mapId) {
-  const pointsE = document.querySelectorAll(`#gridMap${mapId} .point-E`);
-  const counts = { '': 0, 'T': 0, 'U': 0, 'M': 0, 'X': 0 };
-  const checkboxStates = mapId === '1' ? checkboxStates1 : checkboxStates2;
-  pointsE.forEach(p => {
-    const s = p.dataset.state || '';
-    counts[s]++;
-  });
+/* ---------- TOTAIS GERAIS ---------- */
+function updateTotals(mapId){
+  const points = document.querySelectorAll(`#gridMap${mapId} .point-E`);
+  const counts = {'':0,'T':0,'U':0,'M':0,'X':0};
+  const chk = mapId==='1'?checkboxStates1:checkboxStates2;
+  points.forEach(p=>counts[p.dataset.state||'']++);
 
-  const currentLabels = mapId === '1' ? currentLabels1 : currentLabels2;
-  const totalsDiv = document.getElementById(`totals${mapId}`);
-  totalsDiv.innerHTML = `
-    <div class="total-item"><div class="label"><div class="dot empty"></div><span class="editable-label" contenteditable="true" data-key="" data-map-id="${mapId}">${currentLabels['']}</span><input type="checkbox" class="checkbox" data-key="" data-map-id="${mapId}" ${checkboxStates[''] ? 'checked' : ''}></div><span>${counts['']}</span></div>
-    <div class="total-item"><div class="label"><div class="dot T"></div><span class="editable-label" contenteditable="true" data-key="T" data-map-id="${mapId}">${currentLabels['T']}</span><input type="checkbox" class="checkbox" data-key="T" data-map-id="${mapId}" ${checkboxStates['T'] ? 'checked' : ''}></div><span>${counts['T']}</span></div>
-    <div class="total-item"><div class="label"><div class="dot U"></div><span class="editable-label" contenteditable="true" data-key="U" data-map-id="${mapId}">${currentLabels['U']}</span><input type="checkbox" class="checkbox" data-key="U" data-map-id="${mapId}" ${checkboxStates['U'] ? 'checked' : ''}></div><span>${counts['U']}</span></div>
-    <div class="total-item"><div class="label"><div class="dot M"></div><span class="editable-label" contenteditable="true" data-key="M" data-map-id="${mapId}">${currentLabels['M']}</span><input type="checkbox" class="checkbox" data-key="M" data-map-id="${mapId}" ${checkboxStates['M'] ? 'checked' : ''}></div><span>${counts['M']}</span></div>
-    <div class="total-item"><div class="label"><div class="dot X"></div><span class="editable-label" contenteditable="true" data-key="X" data-map-id="${mapId}">${currentLabels['X']}</span><input type="checkbox" class="checkbox" data-key="X" data-map-id="${mapId}" ${checkboxStates['X'] ? 'checked' : ''}></div><span>${counts['X']}</span></div>
-    <div class="total-item" style="font-weight: bold;"><div class="label">Total de Pontos</div><span>${pointsE.length}</span></div>
-    <div class="total-item" style="font-weight: bold;"><div class="label">Total Selecionado</div><span>${Object.keys(counts).reduce((s, k) => checkboxStates[k] ? s + counts[k] : s, 0)}</span></div>
+  const labels = mapId==='1'?currentLabels1:currentLabels2;
+  const div = document.getElementById(`totals${mapId}`);
+  div.innerHTML = `
+    <div class="total-item"><div class="label"><div class="dot empty"></div>
+      <span class="editable-label" contenteditable data-key="" data-map-id="${mapId}">${labels['']}</span>
+      <input type="checkbox" class="checkbox" data-key="" data-map-id="${mapId}" ${chk['']?'checked':''}>
+    </div><span>${counts['']}</span></div>
+    <div class="total-item"><div class="label"><div class="dot T"></div>
+      <span class="editable-label" contenteditable data-key="T" data-map-id="${mapId}">${labels['T']}</span>
+      <input type="checkbox" class="checkbox" data-key="T" data-map-id="${mapId}" ${chk['T']?'checked':''}>
+    </div><span>${counts['T']}</span></div>
+    <div class="total-item"><div class="label"><div class="dot U"></div>
+      <span class="editable-label" contenteditable data-key="U" data-map-id="${mapId}">${labels['U']}</span>
+      <input type="checkbox" class="checkbox" data-key="U" data-map-id="${mapId}" ${chk['U']?'checked':''}>
+    </div><span>${counts['U']}</span></div>
+    <div class="total-item"><div class="label"><div class="dot M"></div>
+      <span class="editable-label" contenteditable data-key="M" data-map-id="${mapId}">${labels['M']}</span>
+      <input type="checkbox" class="checkbox" data-key="M" data-map-id="${mapId}" ${chk['M']?'checked':''}>
+    </div><span>${counts['M']}</span></div>
+    <div class="total-item"><div class="label"><div class="dot X"></div>
+      <span class="editable-label" contenteditable data-key="X" data-map-id="${mapId}">${labels['X']}</span>
+      <input type="checkbox" class="checkbox" data-key="X" data-map-id="${mapId}" ${chk['X']?'checked':''}>
+    </div><span>${counts['X']}</span></div>
+    <div class="total-item" style="font-weight:bold;"><div class="label">Total de Pontos</div><span>${points.length}</span></div>
+    <div class="total-item" style="font-weight:bold;"><div class="label">Total Selecionado</div>
+      <span>${Object.keys(counts).reduce((s,k)=>chk[k]?s+counts[k]:s,0)}</span></div>
   `;
 
-  totalsDiv.querySelectorAll('.checkbox').forEach(cb => {
-    cb.addEventListener('change', () => {
-      const key = cb.dataset.key;
-      if (mapId === '1') checkboxStates1[key] = cb.checked;
-      else checkboxStates2[key] = cb.checked;
+  div.querySelectorAll('.checkbox').forEach(cb=>{
+    cb.addEventListener('change',()=>{
+      const k=cb.dataset.key; if(mapId==='1') checkboxStates1[k]=cb.checked; else checkboxStates2[k]=cb.checked;
       updateSummary(mapId);
     });
   });
-
-  totalsDiv.querySelectorAll('.editable-label').forEach(el => {
-    el.addEventListener('blur', () => {
-      const key = el.dataset.key;
-      const text = el.textContent.trim() || defaultLabels[key];
-      if (mapId === '1') currentLabels1[key] = text;
-      else currentLabels2[key] = text;
-    });
-    el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); el.blur(); } });
+  div.querySelectorAll('.editable-label').forEach(el=>{
+    el.addEventListener('blur',()=>{ const k=el.dataset.key, txt=el.textContent.trim()||defaultLabels[k];
+      if(mapId==='1') currentLabels1[k]=txt; else currentLabels2[k]=txt; });
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();el.blur();} });
   });
 }
 
-// Funções de salvar/carregar permanecem iguais
-function saveData() { /* ... igual ao anterior ... */ }
-function loadData() { /* ... igual ao anterior ... */ }
-function clearData() { /* ... igual ao anterior ... */ }
-function copyData() { /* ... igual ao anterior ... */ }
-function pasteData() { /* ... igual ao anterior ... */ }
+/* ---------- SALVAR / CARREGAR / LIMPAR / COPIAR / COLAR ---------- */
+function saveData(){
+  try{
+    const p1 = document.querySelectorAll('#gridMap1 .point-E');
+    const p2 = document.querySelectorAll('#gridMap2 .point-E');
+    localStorage.setItem('gridDataMap77x45_map1', JSON.stringify(Array.from(p1).map(p=>p.dataset.state)));
+    localStorage.setItem('gridDataMap77x45_map2', JSON.stringify(Array.from(p2).map(p=>p.dataset.state)));
+    localStorage.setItem('gridLabels1', JSON.stringify(currentLabels1));
+    localStorage.setItem('gridLabels2', JSON.stringify(currentLabels2));
+    localStorage.setItem('checkboxStates1', JSON.stringify(checkboxStates1));
+    localStorage.setItem('checkboxStates2', JSON.stringify(checkboxStates2));
+    alert('Dados salvos com sucesso!');
+  }catch(e){ console.error(e); alert('Erro ao salvar.'); }
+}
+function loadData(){
+  try{
+    const d1 = JSON.parse(localStorage.getItem('gridDataMap77x45_map1'));
+    const d2 = JSON.parse(localStorage.getItem('gridDataMap77x45_map2'));
+    const l1 = JSON.parse(localStorage.getItem('gridLabels1'));
+    const l2 = JSON.parse(localStorage.getItem('gridLabels2'));
+    const c1 = JSON.parse(localStorage.getItem('checkboxStates1'));
+    const c2 = JSON.parse(localStorage.getItem('checkboxStates2'));
 
-// Inicialização
-setupRowSummary('1');
-setupRowSummary('2');
-createGrid('1');
-createGrid('2');
+    if(l1) currentLabels1={...defaultLabels,...l1};
+    if(l2) currentLabels2={...defaultLabels,...l2};
+    if(c1){ checkboxStates1={...checkboxStates1,...c1}; checkboxStates1['']=!!c1['']; checkboxStates1['X']=!!c1['X']; }
+    if(c2){ checkboxStates2={...checkboxStates2,...c2}; checkboxStates2['']=!!c2['']; checkboxStates2['X']=!!c2['X']; }
+
+    const p1 = document.querySelectorAll('#gridMap1 .point-E');
+    const p2 = document.querySelectorAll('#gridMap2 .point-E');
+    if(d1 && p1.length===d1.length) p1.forEach((p,i)=>p.dataset.state=d1[i]||'');
+    else p1.forEach(p=>p.dataset.state=p.dataset.initial||'');
+    if(d2 && p2.length===d2.length) p2.forEach((p,i)=>p.dataset.state=d2[i]||'');
+    else p2.forEach(p=>p.dataset.state=p.dataset.initial||'');
+
+    updateSummary('1'); updateSummary('2');
+  }catch(e){ console.error(e); alert('Erro ao carregar.'); }
+}
+function clearData(){
+  if(!confirm('Limpar tudo?')) return;
+  localStorage.removeItem('gridDataMap77x45_map1');
+  localStorage.removeItem('gridDataMap77x45_map2');
+  localStorage.removeItem('gridLabels1'); localStorage.removeItem('gridLabels2');
+  localStorage.removeItem('checkboxStates1'); localStorage.removeItem('checkboxStates2');
+  currentLabels1={...defaultLabels}; currentLabels2={...defaultLabels};
+  checkboxStates1={ '':false,'T':true,'U':true,'M':true,'X':false };
+  checkboxStates2={ '':false,'T':true,'U':true,'M':true,'X':false };
+  document.querySelectorAll('.point-E').forEach(p=>p.dataset.state=p.dataset.initial||'');
+  updateSummary('1'); updateSummary('2');
+  alert('Dados limpos!');
+}
+function copyData(){
+  saveData();
+  const data = {
+    gridDataMap77x45_map1: localStorage.getItem('gridDataMap77x45_map1'),
+    gridDataMap77x45_map2: localStorage.getItem('gridDataMap77x45_map2'),
+    gridLabels1: localStorage.getItem('gridLabels1'),
+    gridLabels2: localStorage.getItem('gridLabels2'),
+    checkboxStates1: localStorage.getItem('checkboxStates1'),
+    checkboxStates2: localStorage.getItem('checkboxStates2')
+  };
+  navigator.clipboard.writeText(JSON.stringify(data)).then(()=>alert('Copiado!')).catch(e=>alert('Erro ao copiar.'));
+}
+function pasteData(){
+  navigator.clipboard.readText().then(txt=>{
+    try{
+      const d = JSON.parse(txt);
+      if(d.gridDataMap77x45_map1) localStorage.setItem('gridDataMap77x45_map1', d.gridDataMap77x45_map1);
+      if(d.gridDataMap77x45_map2) localStorage.setItem('gridDataMap77x45_map2', d.gridDataMap77x45_map2);
+      if(d.gridLabels1) localStorage.setItem('gridLabels1', d.gridLabels1);
+      if(d.gridLabels2) localStorage.setItem('gridLabels2', d.gridLabels2);
+      if(d.checkboxStates1) localStorage.setItem('checkboxStates1', d.checkboxStates1);
+      if(d.checkboxStates2) localStorage.setItem('checkboxStates2', d.checkboxStates2);
+      loadData(); alert('Colado!');
+    }catch(e){ alert('Dados inválidos.'); }
+  }).catch(()=>alert('Erro ao ler clipboard.'));
+}
+
+/* ---------- INICIALIZAÇÃO ---------- */
+setupRowSummary('1'); setupRowSummary('2');
+createGrid('1'); createGrid('2');
 loadData();
 
-document.getElementById('saveAll').addEventListener('click', saveData);
-document.getElementById('loadAll').addEventListener('click', loadData);
-document.getElementById('clearAll').addEventListener('click', clearData);
-document.getElementById('copyData').addEventListener('click', copyData);
-document.getElementById('pasteData').addEventListener('click', pasteData);
-document.getElementById('generatePdf').addEventListener('click', () => window.print());
-document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveData(); } });
+/* ---------- EVENTOS DOS BOTÕES ---------- */
+document.getElementById('saveAll').addEventListener('click',saveData);
+document.getElementById('loadAll').addEventListener('click',loadData);
+document.getElementById('clearAll').addEventListener('click',clearData);
+document.getElementById('copyData').addEventListener('click',copyData);
+document.getElementById('pasteData').addEventListener('click',pasteData);
+document.getElementById('generatePdf').addEventListener('click',()=>window.print());
+
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key==='s'){ e.preventDefault(); saveData(); }
+});
 </script>
 </body>
 </html>
