@@ -159,6 +159,7 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 20;
 }
 .row-label-left { left: -15px; }
 .row-label-right { right: -15px; }
@@ -287,10 +288,15 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   .controls, .checkbox, .popup { display: none; }
   .totals-container { margin-top: 10px; }
   .totals { width: 200px; max-width: 200px; }
-  .row-label-left, .row-label-right {
+  .row-label-left {
     font-size: 4px;
-    left: 0;
-    right: 0;
+    left: -10px;
+    color: #000 !important;
+    z-index: 20;
+  }
+  .row-label-right {
+    font-size: 4px;
+    right: -10px;
     color: #000 !important;
     z-index: 20;
   }
@@ -782,4 +788,3 @@ document.addEventListener('keydown', (e) => {
 </script>
 </body>
 </html>
-
