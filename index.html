@@ -10,7 +10,7 @@
   --point-size: 14px;
   --grid-gap: 0.5px;
   --grid-padding: 50px;
-  --muted: #4b5563;
+  --muted: #000000;
   --accent: #06b6d4;
   --color-E-empty: #FF0000;
   --color-T: #00FF00;
@@ -19,6 +19,8 @@
   --color-X: #000000;
   --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
   --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
+  --row-even-bg: #e9e8e8; /* Cinza claro */
+  --row-odd-bg: #ffffff; /* Branco */
 }
 * { box-sizing: border-box; }
 html, body {
@@ -127,6 +129,12 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
   justify-content: center;
   position: relative;
 }
+.grid-cell.row-even {
+  background-color: var(--row-even-bg);
+}
+.grid-cell.row-odd {
+  background-color: var(--row-odd-bg);
+}
 .point {
   width: var(--point-size);
   height: var(--point-size);
@@ -159,7 +167,8 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
 .row-summary {
   display: flex;
   flex-direction: column;
-  margin-left: 10px;
+  margin-top: 33px;
+  margin-left: 2px;
   font-size: 10px;
   color: var(--muted);
   min-width: 90px;
@@ -237,6 +246,8 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
     --grid-padding: 10px;
     --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
     --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
+    --row-even-bg: #f9f9f9;
+    --row-odd-bg: #ffffff;
   }
   .app {
     max-width: 100%;
@@ -276,8 +287,20 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   .controls, .checkbox, .popup { display: none; }
   .totals-container { margin-top: 10px; }
   .totals { width: 200px; max-width: 200px; }
-  .row-label-left, .row-label-right { font-size: 4px; left: -10px; right: -10px; }
+  .row-label-left, .row-label-right {
+    font-size: 4px;
+    left: 0;
+    right: 0;
+    color: #000 !important;
+    z-index: 20;
+  }
   .point { box-shadow: none; }
+  .grid-cell.row-even {
+    background-color: var(--row-even-bg);
+  }
+  .grid-cell.row-odd {
+    background-color: var(--row-odd-bg);
+  }
 }
 
 /* RESPONSIVO */
@@ -460,11 +483,12 @@ function createGrid(mapId) {
     let pointCol = 0;
     let firstPointCell = null;
     let lastPointCell = null;
+    const rowClass = (rowIndex % 2 === 0) ? 'row-even' : 'row-odd';
 
     for (let col = 0; col < GRID_COLUMNS; col++) {
       const char = line[col] || 'N';
       const cell = document.createElement('div');
-      cell.classList.add('grid-cell');
+      cell.classList.add('grid-cell', rowClass);
       if (char === 'N') {
         grid.appendChild(cell);
         continue;
@@ -758,3 +782,4 @@ document.addEventListener('keydown', (e) => {
 </script>
 </body>
 </html>
+
