@@ -468,6 +468,8 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 .navbar a:hover {
   background: #e5e7eb;
 }
+.edit-label { flex: 1; padding: 4px; border: 1px solid #ddd; border-radius: 4px; }
+.edit-color { width: 40px; height: 24px; padding: 0; border: none; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -513,6 +515,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
           <div id="totals2"></div>
           <div class="category-controls">
             <button id="addCategory2" class="ghost">Adicionar Categoria</button>
+            <button id="editCategory2" class="ghost">Editar Categorias</button>
             <button id="removeCategory2" class="ghost">Remover Categoria</button>
           </div>
         </div>
@@ -565,6 +568,20 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
     <div class="modal-actions">
       <button id="confirmRemove" class="primary">Remover Marcadas</button>
       <button id="cancelRemove" class="ghost">Cancelar</button>
+    </div>
+  </div>
+</div>
+<!-- Modal de Editar Categorias -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Editar Categorias</h3>
+      <span class="close">x</span>
+    </div>
+    <div class="category-list" id="editCategoryList"></div>
+    <div class="modal-actions">
+      <button id="confirmEdit" class="primary">Salvar Alterações</button>
+      <button id="cancelEdit" class="ghost">Cancelar</button>
     </div>
   </div>
 </div>
@@ -963,6 +980,48 @@ function confirmRemove() {
   closeModal('removeModal');
   alert('Categorias removidas com sucesso!');
 }
+function openEditModal(mapId) {
+  const modal = document.getElementById('editModal');
+  const list = document.getElementById('editCategoryList');
+  list.innerHTML = '';
+  states.forEach(code => {
+    const classCode = code === '' ? 'empty' : code;
+    const label = currentLabels2[code] || defaultLabels[code] || code;
+    const color = colors[code];
+    const item = document.createElement('div');
+    item.className = 'category-item';
+    item.innerHTML = `
+      <div class="dot ${classCode}"></div>
+      <div class="code">${code}</div>
+      <input type="text" class="edit-label" value="${label}">
+      <input type="color" class="edit-color" value="${color}">
+    `;
+    list.appendChild(item);
+  });
+  modal.style.display = 'flex';
+  modal.dataset.targetMapId = mapId;
+}
+function confirmEdit() {
+  const mapId = document.getElementById('editModal').dataset.targetMapId;
+  const items = document.querySelectorAll('#editCategoryList .category-item');
+  items.forEach((item, i) => {
+    const code = states[i];
+    const newLabel = item.querySelector('.edit-label').value.trim();
+    const newColor = item.querySelector('.edit-color').value;
+    if (newLabel) {
+      currentLabels2[code] = newLabel;
+    }
+    if (newColor !== colors[code]) {
+      colors[code] = newColor;
+      const varName = code === '' ? '--color-E-empty' : `--color-${code}`;
+      document.documentElement.style.setProperty(varName, newColor);
+    }
+  });
+  updateDynamicStyles();
+  updateTotals(mapId);
+  closeModal('editModal');
+  alert('Categorias editadas com sucesso!');
+}
 function closeModal(modalId) {
   document.getElementById(modalId).style.display = 'none';
 }
@@ -984,11 +1043,17 @@ document.querySelectorAll('#removeModal .close, #cancelRemove').forEach(el => {
   el.addEventListener('click', () => closeModal('removeModal'));
 });
 document.getElementById('confirmRemove').addEventListener('click', confirmRemove);
+document.querySelectorAll('#editModal .close, #cancelEdit').forEach(el => {
+  el.addEventListener('click', () => closeModal('editModal'));
+});
+document.getElementById('confirmEdit').addEventListener('click', confirmEdit);
 window.addEventListener('click', (e) => {
   const addModal = document.getElementById('addCategoryModal');
   const removeModal = document.getElementById('removeModal');
+  const editModal = document.getElementById('editModal');
   if (e.target === addModal) closeModal('addCategoryModal');
   if (e.target === removeModal) closeModal('removeModal');
+  if (e.target === editModal) closeModal('editModal');
 });
 function saveData() {
   try {
@@ -1091,6 +1156,7 @@ document.getElementById('clearAll').addEventListener('click', clearData);
 document.getElementById('copyData').addEventListener('click', copyData);
 document.getElementById('pasteData').addEventListener('click', pasteData);
 document.getElementById('addCategory2').addEventListener('click', openAddModal);
+document.getElementById('editCategory2').addEventListener('click', () => openEditModal('2'));
 document.getElementById('removeCategory2').addEventListener('click', () => openRemoveModal('2'));
 document.getElementById('generatePdf').addEventListener('click', () => window.print());
 document.addEventListener('keydown', (e) => {
