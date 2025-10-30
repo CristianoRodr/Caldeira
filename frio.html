@@ -65,7 +65,7 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
   align-items: center;
 }
 .section-header {
-  font-size: 50px;
+  font-size: 24px;
   margin-bottom: 12px;
   text-align: center;
 }
@@ -414,7 +414,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
     color: #000 !important;
     z-index: 20;
   }
-  .point { box-shadow: none; }
+  .point { box-shadow: none; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   .grid-cell.row-even {
     background-color: var(--row-even-bg);
   }
@@ -426,6 +426,11 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   }
   .selected-list h3 {
     font-size: 12px;
+  }
+  .grid::before, .grid::after {
+    background-color: red !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }
 /* RESPONSIVO */
@@ -1168,4 +1173,3 @@ document.addEventListener('keydown', (e) => {
 </script>
 </body>
 </html>
-
