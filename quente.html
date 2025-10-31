@@ -1,10 +1,10 @@
-<!-- index.html -->
+<!-- quente.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mapa do Espelho – Caldeira U-130</title>
+<title>Mapa do Espelho – Caldeira U-130 (Lado Quente)</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -57,6 +57,426 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
   margin-top: 12px;
   justify-content: center;
 }
+.section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 40px;
+  width: 100%;
+  align-items: center;
+}
+.section-header {
+  font-size: 24px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+.section-header.cold { color: #06b6d4; }
+.section-header.hot { color: #ef4444; }
+.grid-container-area {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+.grid-and-summary {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  justify-content: center;
+}
+.grid-wrapper {
+  position: relative;
+  width: var(--grid-width);
+  overflow-x: auto;
+  scrollbar-width: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(77, var(--point-size));
+  gap: var(--grid-gap);
+  padding: var(--grid-padding);
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.12);
+  width: var(--grid-width);
+  height: var(--grid-height);
+  flex-shrink: 0;
+}
+.grid::before, .grid::after {
+  content: '';
+  position: absolute;
+  z-index: 10;
+  background-color: red;
+  pointer-events: none;
+}
+.grid::before {
+  left: calc(38.5 * var(--point-size) + 38 * var(--grid-gap) + var(--grid-padding));
+  width: 2px;
+  height: var(--grid-height);
+  top: 0;
+}
+.grid::after {
+  top: calc(23 * var(--point-size) + 22.5 * var(--grid-gap) + var(--grid-padding));
+  height: 2px;
+  width: 100%;
+  left: 0;
+}
+.grid-cell {
+  width: var(--point-size);
+  height: var(--point-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.grid-cell.row-even {
+  background-color: var(--row-even-bg);
+}
+.grid-cell.row-odd {
+  background-color: var(--row-odd-bg);
+}
+.point {
+  width: var(--point-size);
+  height: var(--point-size);
+  border-radius: 50%;
+  background-color: var(--color-E-empty);
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+  box-shadow: 0 0 2px rgba(0,0,0,0.25);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.point-E { cursor: pointer; background-color: var(--color-E-empty); }
+.point-E[data-state="T"] { background-color: var(--color-T); }
+.point-E[data-state="U"] { background-color: var(--color-U); }
+.point-E[data-state="M"] { background-color: var(--color-M); }
+.point-E[data-state="X"] { background-color: var(--color-X); }
+.row-label-left, .row-label-right {
+  font-size: 8px;
+  color: var(--muted);
+  pointer-events: none;
+  line-height: var(--point-size);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+}
+.row-label-left { left: -15px; }
+.row-label-right { right: -15px; }
+/* NOVO: 3 colunas ao lado do grid */
+.row-summary {
+  display: flex;
+  flex-direction: column;
+  margin-top: 33px;
+  margin-left: 2px;
+  font-size: 10px;
+  color: var(--muted);
+  min-width: 90px;
+}
+.row-summary-header {
+  display: flex;
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-align: center;
+}
+.row-summary-header > div {
+  flex: 1;
+  padding: 0 4px;
+}
+.row-summary-row {
+  display: flex;
+  height: calc(var(--point-size) + var(--grid-gap));
+  align-items: center;
+}
+.row-number, .row-total, .row-selected {
+  flex: 1;
+  text-align: center;
+  padding: 0 4px;
+}
+/* Totais gerais abaixo do grid - AUMENTADO */
+.totals-container {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.totals {
+  background: #f7f7f7;
+  border-radius: 12px;
+  padding: 16px;
+  width: 500px; /* AUMENTADO de 300px para 380px */
+  min-width: 320px;
+  max-width: 800px;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+.totals h3 { font-size: 16px; margin: 0 0 10px; }
+.total-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
+.total-item .label { display: flex; align-items: center; gap: 6px; }
+.total-item .dot { width: 10px; height: 10px; border-radius: 50%; }
+.total-item .dot.empty { background-color: var(--color-E-empty); }
+.total-item .dot.T { background-color: var(--color-T); }
+.total-item .dot.U { background-color: var(--color-U); }
+.total-item .dot.M { background-color: var(--color-M); }
+.total-item .dot.X { background-color: var(--color-X); }
+.editable-label { display: inline-block; cursor: pointer; min-width: 50px; padding: 1px 4px; border-radius: 4px; line-height: 1.2; }
+.editable-label:hover { background: rgba(0,0,0,0.06); }
+.editable-label:focus { outline: 2px solid var(--accent); background: rgba(6,182,212,0.12); }
+button { background: #f3f4f6; border: 1px solid rgba(0,0,0,0.1); color: #111827; padding: 8px 12px; border-radius: 10px; cursor: pointer; }
+button.primary { background: linear-gradient(90deg, var(--accent), #0891b2); color: #021226; border: 0; }
+button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
+.checkbox { margin-left: 8px; cursor: pointer; }
+.popup {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  z-index: 3000;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.selected-list {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 800px;
+  text-align: left;
+  font-size: 13px;
+  color: #000;
+}
+.selected-list h3 {
+  font-size: 16px;
+  margin: 0 0 10px;
+}
+.selected-list p {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.category-controls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 10px;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 4000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+.close {
+  font-size: 24px;
+  cursor: pointer;
+  color: #aaa;
+}
+.close:hover {
+  color: #000;
+}
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+.category-item .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.category-item .code {
+  font-weight: bold;
+  min-width: 30px;
+}
+.category-item .label {
+  flex: 1;
+}
+.category-item input[type="checkbox"] {
+  margin-left: auto;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+.color-preview {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  display: inline-block;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+/* IMPRESSÃO */
+@media print {
+  @page {
+    @top-center {
+      content: "Mapa do Espelho – Caldeira U-130";
+    }
+  }
+  :root {
+    --point-size: 4px; /* Reduzido para caber melhor na folha */
+    --grid-gap: 0.2px;
+    --grid-padding: 5px; /* Reduzido para economia de espaço */
+    --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
+    --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
+    --row-even-bg: #f9f9f9;
+    --row-odd-bg: #ffffff;
+  }
+  .app {
+    max-width: 100%;
+    padding: 10px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .section {
+    page-break-inside: avoid;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  .section:nth-child(3) {
+    page-break-before: always;
+  }
+  .grid-and-summary {
+    justify-content: center;
+  }
+  .grid-wrapper {
+    overflow-x: visible;
+    width: fit-content; /* Ajusta para caber na página */
+    max-width: 100%; /* Garante que não transborde */
+  }
+  .grid {
+    width: var(--grid-width);
+    height: var(--grid-height);
+    max-width: 100vw; /* Limita ao tamanho da viewport da impressão */
+    transform: scale(0.9); /* Escala ligeiramente para caber se necessário */
+    transform-origin: top left;
+  }
+  .row-summary {
+    font-size: 6px;
+    min-width: 60px;
+    margin-left: 8px;
+    margin-top: 0 !important;
+  }
+  .row-summary-header > div {
+    font-size: 6px;
+    padding: 0 2px;
+  }
+  .row-summary-row {
+    height: calc(var(--point-size) + var(--grid-gap));
+  }
+  .row-number, .row-total, .row-selected {
+    font-size: 6px;
+    padding: 0 2px;
+  }
+  header > div:first-child {
+    display: none;
+  }
+  .controls, .checkbox, .popup, .category-controls, .modal { display: none; }
+  .totals-container { margin-top: 10px; }
+  .totals { width: calc(var(--grid-width) * 0.6); max-width: 100%; } /* Proporcional ao grid das bolinhas (60% para equilíbrio) */
+  .row-label-left {
+    font-size: 4px;
+    left: -10px;
+    color: #000 !important;
+    z-index: 20;
+  }
+  .row-label-right {
+    font-size: 4px;
+    right: -10px;
+    color: #000 !important;
+    z-index: 20;
+  }
+  .point { box-shadow: none; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .grid-cell.row-even {
+    background-color: var(--row-even-bg);
+  }
+  .grid-cell.row-odd {
+    background-color: var(--row-odd-bg);
+  }
+  .selected-list {
+    font-size: 8px;
+    max-width: var(--grid-width); /* Limitado ao grid das bolinhas */
+  }
+  .selected-list h3 {
+    font-size: 12px;
+  }
+  .grid::before, .grid::after {
+    background-color: red !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .total-item .dot {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .total-item .dot.empty { background-color: var(--color-E-empty) !important; }
+  .total-item .dot.T { background-color: var(--color-T) !important; }
+  .total-item .dot.U { background-color: var(--color-U) !important; }
+  .total-item .dot.M { background-color: var(--color-M) !important; }
+  .total-item .dot.X { background-color: var(--color-X) !important; }
+  .navbar { display: none; }
+}
+/* RESPONSIVO */
+@media (max-width: 768px) {
+  :root {
+    --point-size: 10px;
+    --grid-gap: 0.4px;
+    --grid-padding: 20px;
+    --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
+    --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
+  }
+  .row-summary { font-size: 8px; min-width: 70px; }
+  .totals { width: 100%; max-width: 350px; }
+}
+@media (max-width: 480px) {
+  :root {
+    --point-size: 8px;
+    --grid-gap: 0.3px;
+    --grid-padding: 15px;
+    --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
+    --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
+  }
+  .row-summary { font-size: 7px; min-width: 60px; margin-left: 6px; }
+  .section-header { font-size: 18px; }
+  .totals { width: 100%; max-width: 300px; }
+}
 .navbar {
   display: flex;
   gap: 16px;
@@ -73,40 +493,702 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
 .navbar a:hover {
   background: #e5e7eb;
 }
-.menu {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-.menu button {
-  background: linear-gradient(90deg, var(--accent), #0891b2);
-  color: #021226;
-  border: 0;
-  padding: 12px 24px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  width: 300px;
-  text-align: center;
-}
-.menu button:hover {
-  opacity: 0.9;
-}
+.edit-label { flex: 1; padding: 4px; border: 1px solid #ddd; border-radius: 4px; }
+.edit-color { width: 40px; height: 24px; padding: 0; border: none; cursor: pointer; }
+.checkbox { margin: 0 4px 0 auto; } /* Ajuste para checkboxes próximos aos números */
 </style>
 </head>
 <body>
 <div class="app">
   <header>
     <div>
-      <h1>Mapa do Espelho – Caldeira U-130</h1>
-      <p class="lead">Selecione o lado da caldeira.</p>
+      <h1>Mapa do Espelho – Caldeira U-130 (Lado Quente)</h1>
+      <p class="lead">Todas as bolinhas são editáveis (clicáveis).</p>
+    </div>
+    <div class="navbar">
+      <a href="index.html">Home</a>
+      <a href="frio.html">Lado Frio</a>
+      <a href="quente.html">Lado Quente</a>
+    </div>
+    <div class="controls">
+      <button id="saveAll" class="primary">Salvar</button>
+      <button id="loadAll" class="ghost">Carregar</button>
+      <button id="clearAll" class="ghost">Limpar</button>
+      <button id="copyData" class="ghost">Copiar Dados</button>
+      <button id="pasteData" class="ghost">Colar Dados</button>
+      <button id="generatePdf" class="ghost">Gerar PDF</button>
     </div>
   </header>
-  <div class="menu">
-    <a href="frio.html"><button>Lado Frio</button></a>
-    <a href="quente.html"><button>Lado Quente</button></a>
+  <!-- LADO QUENTE -->
+  <div class="section">
+    <div class="section-header hot">Lado Quente</div>
+    <div class="grid-container-area">
+      <div class="grid-and-summary">
+        <div class="grid-wrapper" id="wrapperMap2">
+          <div class="grid" id="gridMap2"></div>
+        </div>
+        <div class="row-summary" id="rowSummary2">
+          <div class="row-summary-header">
+            <div>Linha</div>
+            <div>Total</div>
+            <div>Sel.</div>
+          </div>
+        </div>
+      </div>
+      <div class="totals-container">
+        <div class="totals" id="totalsContainer2">
+          <h3>Totais Gerais</h3>
+          <div id="totals2"></div>
+          <div class="category-controls">
+            <button id="addCategory2" class="ghost">Adicionar Categoria</button>
+            <button id="editCategory2" class="ghost">Editar Categorias</button>
+            <button id="removeCategory2" class="ghost">Remover Categoria</button>
+          </div>
+        </div>
+      </div>
+      <div class="selected-list" id="selectedList2">
+        <h3>Lista de Selecionados</h3>
+        <p id="list2"></p>
+      </div>
+    </div>
   </div>
 </div>
+<!-- Modal de Adicionar Categoria -->
+<div id="addCategoryModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Adicionar Nova Categoria</h3>
+      <span class="close">x</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div>
+        <label><strong>Código (letra/símbolo):</strong></label>
+        <input type="text" id="newCode" maxlength="3" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px;">
+      </div>
+      <div>
+        <label><strong>Cor (hex):</strong></label>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <input type="text" id="newColor" value="" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 6px;">
+          <div id="colorPreview" class="color-preview"></div>
+        </div>
+      </div>
+      <div>
+        <label><strong>Nome da categoria:</strong></label>
+        <input type="text" id="newLabel" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px;">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button id="confirmAdd" class="primary">Adicionar</button>
+      <button id="cancelAdd" class="ghost">Cancelar</button>
+    </div>
+  </div>
+</div>
+<!-- Modal de Remoção -->
+<div id="removeModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Remover Categorias</h3>
+      <span class="close">x</span>
+    </div>
+    <div class="category-list" id="categoryList"></div>
+    <div class="modal-actions">
+      <button id="confirmRemove" class="primary">Remover Marcadas</button>
+      <button id="cancelRemove" class="ghost">Cancelar</button>
+    </div>
+  </div>
+</div>
+<!-- Modal de Editar Categorias -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Editar Categorias</h3>
+      <span class="close">x</span>
+    </div>
+    <div class="category-list" id="editCategoryList"></div>
+    <div class="modal-actions">
+      <button id="confirmEdit" class="primary">Salvar Alterações</button>
+      <button id="cancelEdit" class="ghost">Cancelar</button>
+    </div>
+  </div>
+</div>
+<script>
+const GRID_COLUMNS = 77;
+const GRID_ROWS = 45;
+let states = ['', 'T', 'U', 'M', 'X'];
+let colors = {
+  '': '#faf7f7',
+  'T': '#00FF00',
+  'U': '#0000FF',
+  'M': '#FFFF00',
+  'X': '#000000'
+};
+const defaultLabels = { '': 'Vazio', 'T': 'Est. Emp.', 'U': 'Usinagem', 'M': 'Mat. Removido', 'X': 'Sem escopo' };
+let currentLabels2 = { ...defaultLabels };
+let checkboxStates2 = { '': false, 'T': true, 'U': true, 'M': true, 'X': false };
+let rowPointCounts2 = new Array(GRID_ROWS).fill(0);
+let hoverPopup = null;
+let dynamicStyle = document.createElement('style');
+document.head.appendChild(dynamicStyle);
+// Lista de cores sugeridas
+const suggestedColors = ['#8b5cf6', '#ec4899', '#f97316', '#10b981', '#06b6d4', '#6366f1', '#a855f7', '#f59e0b', '#14b8a6', '#0ea5e9'];
+let colorIndex = 0;
+function getNextUniqueColor() {
+  const used = Object.values(colors);
+  let color;
+  do {
+    color = suggestedColors[colorIndex % suggestedColors.length];
+    colorIndex++;
+  } while (used.includes(color));
+  return color;
+}
+function updateDynamicStyles() {
+  dynamicStyle.innerHTML = '';
+  states.forEach(code => {
+    const classCode = code === '' ? 'empty' : code;
+    const varName = code === '' ? 'E-empty' : code;
+    dynamicStyle.innerHTML += `
+      .point-E[data-state="${code}"] { background-color: var(--color-${varName}); }
+      .total-item .dot.${classCode} { background-color: var(--color-${varName}); }
+      .category-item .dot.${classCode} { background-color: var(--color-${varName}); }
+    `;
+  });
+}
+function setupRowSummary(mapId) {
+  const summaryDiv = document.getElementById(`rowSummary${mapId}`);
+  summaryDiv.innerHTML = '<div class="row-summary-header"><div>Linha</div><div>Total</div><div>Sel.</div></div>';
+  for (let i = 0; i < GRID_ROWS; i++) {
+    const row = document.createElement('div');
+    row.className = 'row-summary-row';
+    row.innerHTML = `
+      <div class="row-number">${i + 1}</div>
+      <div class="row-total">0</div>
+      <div class="row-selected">0</div>
+    `;
+    summaryDiv.appendChild(row);
+  }
+}
+const MAP_TEMPLATE = `
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNENNNENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNENNNNNNNNNNNNNNNNNENNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNENNNENNNENNNENNNENNNENNNENNNENNNENNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNENENNNENNNENNNENNNENENNNENNNENNNENNNENENNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNENENENENENENENENENENENENENENENENENENENENENENENNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNENENENENENENENENENENENENENENENENENENENENENENENENNNNNNNNNNNNNNN
+NNNNNNNNNNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENNNNNNNNNNNN
+NNNNNNNNNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNNNNNNNNN
+NNNNNNNNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNNNNNNNN
+NNNNNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNNNNN
+NNNNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNNNN
+NNNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNNN
+NNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNN
+NNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNN
+NNNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNNN
+NNNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENNN
+NNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENN
+NENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENEN
+NNENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENN
+NENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENEN
+ENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENE
+NENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENEN
+ENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENENE
+NDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNENENDNDNDNDNDNDNDNDNDNDNENDNDNDN
+DNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNENDNDNDNDNDNDNDNDNDNDNDNDNDNDND
+NDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNENDNDNDNDNDNDNDNDNDNDNDNDNDNDNDN
+NNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNN
+NDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNENDNDNDNDNDNDNDNDNDNDNDNDNDNDN
+NNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNN
+NNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNN
+NNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNENDNDNDNDNDNDNDNDNDNDNNNN
+NNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNN
+NNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNN
+NNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNN
+NNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNN
+NNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNN
+NNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNN
+NNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNN
+NNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNN
+NNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNDNNNDNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+`.trim();
+function createGrid(mapId) {
+  const mapLines = MAP_TEMPLATE.split('\n').map(l => l.trim());
+  const grid = document.getElementById(`gridMap${mapId}`);
+  grid.innerHTML = '';
+  let pointIndex = 0;
+  const rowPointCounts = rowPointCounts2;
+  mapLines.forEach((line, rowIndex) => {
+    let pointCol = 0;
+    let firstPointCell = null;
+    let lastPointCell = null;
+    const rowClass = (rowIndex % 2 === 0) ? 'row-even' : 'row-odd';
+    for (let col = 0; col < GRID_COLUMNS; col++) {
+      const char = line[col] || 'N';
+      const cell = document.createElement('div');
+      cell.classList.add('grid-cell', rowClass);
+      if (char === 'N') {
+        grid.appendChild(cell);
+        continue;
+      }
+      pointCol++;
+      const point = document.createElement('div');
+      point.classList.add('point');
+      if (['D', 'E', 'T', 'U', 'M'].includes(char)) {
+        point.classList.add('point-E');
+        let initialState = '';
+        if (char === 'T') initialState = 'T';
+        else if (char === 'U') initialState = 'U';
+        else if (char === 'M') initialState = 'M';
+        else if (char === 'D' || char === 'E') initialState = rowIndex >= 23 ? 'X' : '';
+        point.dataset.initial = initialState;
+        point.dataset.state = initialState;
+        point.dataset.index = pointIndex++;
+        point.dataset.mapId = mapId;
+        point.dataset.row = rowIndex + 1;
+        point.dataset.col = pointCol;
+        point.addEventListener('click', (e) => cycleState(e, point));
+        point.addEventListener('mouseenter', (e) => showHoverPopup(e, point));
+        point.addEventListener('mouseleave', hideHoverPopup);
+        if (pointCol === 1) {
+          firstPointCell = cell;
+          const labelLeft = document.createElement('span');
+          labelLeft.classList.add('row-label-left');
+          labelLeft.textContent = rowIndex + 1;
+          cell.appendChild(labelLeft);
+        }
+        lastPointCell = cell;
+      }
+      cell.appendChild(point);
+      grid.appendChild(cell);
+    }
+    if (lastPointCell) {
+      const labelRight = document.createElement('span');
+      labelRight.classList.add('row-label-right');
+      labelRight.textContent = rowIndex + 1;
+      lastPointCell.appendChild(labelRight);
+    }
+    rowPointCounts[rowIndex] = pointCol;
+  });
+  updateSummary(mapId);
+}
+function showHoverPopup(event, point) {
+  const mapId = point.dataset.mapId;
+  const row = point.dataset.row;
+  const internalCol = parseInt(point.dataset.col);
+  const rowPointCounts = rowPointCounts2;
+  const totalInRow = rowPointCounts[parseInt(row) - 1];
+  const displayCol = internalCol;
+  const popupText = `L${row.padStart(2, '0')} - C${displayCol.toString().padStart(2, '0')}`;
+  hoverPopup = document.createElement('div');
+  hoverPopup.classList.add('popup');
+  hoverPopup.textContent = popupText;
+  document.body.appendChild(hoverPopup);
+  hoverPopup.style.left = `${event.clientX + 10}px`;
+  hoverPopup.style.top = `${event.clientY + 10}px`;
+}
+function hideHoverPopup() {
+  if (hoverPopup) {
+    hoverPopup.remove();
+    hoverPopup = null;
+  }
+}
+function cycleState(event, point) {
+  const mapId = point.dataset.mapId;
+  const currentState = point.dataset.state || '';
+  let currentIndex = states.indexOf(currentState);
+  if (currentIndex === -1) currentIndex = 0;
+  const nextIndex = (currentIndex + 1) % states.length;
+  point.dataset.state = states[nextIndex];
+  const row = point.dataset.row;
+  const internalCol = parseInt(point.dataset.col);
+  const rowPointCounts = rowPointCounts2;
+  const totalInRow = rowPointCounts[parseInt(row) - 1];
+  const displayCol = internalCol;
+  const labels = currentLabels2;
+  const legend = labels[point.dataset.state] || defaultLabels[point.dataset.state] || 'Desconhecido';
+  const popupText = `L${row.padStart(2, '0')} - C${displayCol.toString().padStart(2, '0')} ${legend}`;
+  const popup = document.createElement('div');
+  popup.classList.add('popup');
+  popup.textContent = popupText;
+  document.body.appendChild(popup);
+  popup.style.left = `${event.clientX + 10}px`;
+  popup.style.top = `${event.clientY + 10}px`;
+  setTimeout(() => popup.remove(), 2000);
+  updateSummary(mapId);
+}
+function updateSummary(mapId) {
+  const pointsE = document.querySelectorAll(`#gridMap${mapId} .point-E`);
+  const checkboxStates = checkboxStates2;
+  const rowTotals = new Array(GRID_ROWS).fill(0);
+  const rowSelected = new Array(GRID_ROWS).fill(0);
+  pointsE.forEach(p => {
+    const row = parseInt(p.dataset.row) - 1;
+    const state = p.dataset.state || '';
+    rowTotals[row]++;
+    if (checkboxStates[state]) rowSelected[row]++;
+  });
+  const summaryDiv = document.getElementById(`rowSummary${mapId}`);
+  const rows = summaryDiv.querySelectorAll('.row-summary-row');
+  rows.forEach((row, i) => {
+    row.querySelector('.row-total').textContent = rowTotals[i];
+    row.querySelector('.row-selected').textContent = rowSelected[i];
+  });
+  updateTotals(mapId);
+}
+function updateTotals(mapId) {
+  const pointsE = document.querySelectorAll(`#gridMap${mapId} .point-E`);
+  const counts = {};
+  states.forEach(s => counts[s] = 0);
+  const checkboxStates = checkboxStates2;
+  const labels = currentLabels2;
+  const rowPointCounts = rowPointCounts2;
+  const grouped = {};
+  pointsE.forEach(p => {
+    const s = p.dataset.state || '';
+    counts[s]++;
+    if (checkboxStates[s]) {
+      const row = parseInt(p.dataset.row);
+      const internalCol = parseInt(p.dataset.col);
+      const totalInRow = rowPointCounts[row - 1];
+      const displayCol = internalCol;
+      const legend = labels[s] || defaultLabels[s] || s;
+      if (!grouped[legend]) grouped[legend] = [];
+      grouped[legend].push({ row, col: displayCol });
+    }
+  });
+  for (const legend in grouped) {
+    grouped[legend].sort((a, b) => a.row - b.row || a.col - b.col);
+  }
+  const listTexts = [];
+  for (const legend in grouped) {
+    const positions = grouped[legend].map(item => `L${item.row.toString().padStart(2, '0')} - C${item.col.toString().padStart(2, '0')}`);
+    listTexts.push(`<strong>${legend}</strong> ${positions.join(', ')}`);
+  }
+  document.getElementById(`list${mapId}`).innerHTML = listTexts.join('<br>') || 'Nenhum selecionado';
+  const totalsDiv = document.getElementById(`totals${mapId}`);
+  let html = '';
+  // Primeiro: todas as categorias exceto 'X'
+  states.filter(s => s !== 'X').forEach(s => {
+    const key = s;
+    const labelText = labels[key] || defaultLabels[key] || key;
+    html += `
+      <div class="total-item">
+        <div class="label">
+          <div class="dot" style="background-color: ${colors[key]};"></div>
+          <span class="editable-label" contenteditable="true" data-key="${key}" data-map-id="${mapId}">${labelText}</span>
+        </div>
+        <input type="checkbox" class="checkbox" data-key="${key}" data-map-id="${mapId}" ${checkboxStates[key] ? 'checked' : ''}>
+        <span>${counts[key]}</span>
+      </div>
+    `;
+  });
+  // Depois: 'X' (Sem escopo) sempre no final
+  const xKey = 'X';
+  const xLabelText = labels[xKey] || defaultLabels[xKey] || xKey;
+  html += `
+    <div class="total-item">
+      <div class="label">
+        <div class="dot" style="background-color: ${colors[xKey]};"></div>
+        <span class="editable-label" contenteditable="true" data-key="${xKey}" data-map-id="${mapId}">${xLabelText}</span>
+      </div>
+      <input type="checkbox" class="checkbox" data-key="${xKey}" data-map-id="${mapId}" ${checkboxStates[xKey] ? 'checked' : ''}>
+      <span>${counts[xKey]}</span>
+    </div>
+  `;
+  // Totais gerais
+  html += `
+    <div class="total-item" style="font-weight: bold; margin-top: 12px;"><div class="label">Total de Pontos</div><span>${pointsE.length}</span></div>
+    <div class="total-item" style="font-weight: bold;"><div class="label">Total Selecionado</div><span>${states.reduce((sum, k) => checkboxStates[k] ? sum + counts[k] : sum, 0)}</span></div>
+  `;
+  totalsDiv.innerHTML = html;
+  totalsDiv.querySelectorAll('.checkbox').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const key = cb.dataset.key;
+      checkboxStates2[key] = cb.checked;
+      updateSummary(mapId);
+    });
+  });
+  totalsDiv.querySelectorAll('.editable-label').forEach(el => {
+    el.addEventListener('blur', () => {
+      const key = el.dataset.key;
+      const text = el.textContent.trim() || defaultLabels[key] || key;
+      currentLabels2[key] = text;
+      updateSummary(mapId);
+    });
+    el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); el.blur(); } });
+  });
+}
+function openAddModal() {
+  const modal = document.getElementById('addCategoryModal');
+  const color = getNextUniqueColor();
+  document.getElementById('newCode').value = '';
+  document.getElementById('newColor').value = color;
+  document.getElementById('newLabel').value = '';
+  document.getElementById('colorPreview').style.backgroundColor = color;
+  modal.style.display = 'flex';
+}
+function confirmAdd() {
+  const code = document.getElementById('newCode').value.trim().toUpperCase();
+  const color = document.getElementById('newColor').value.trim();
+  const label = document.getElementById('newLabel').value.trim() || code;
+  if (!code || states.includes(code)) {
+    alert('Código inválido ou já existente.');
+    return;
+  }
+  if (!/^#[0-9A-Fa-f]{6}$/.test(color)) {
+    alert('Cor inválida. Use formato #RRGGBB.');
+    return;
+  }
+  states.push(code);
+  colors[code] = color;
+  const varName = `--color-${code}`;
+  document.documentElement.style.setProperty(varName, color);
+  currentLabels2[code] = label;
+  checkboxStates2[code] = true;
+  updateDynamicStyles();
+  updateTotals('2');
+  closeModal('addCategoryModal');
+  alert('Nova categoria adicionada com sucesso!');
+}
+function openRemoveModal(mapId) {
+  const modal = document.getElementById('removeModal');
+  const list = document.getElementById('categoryList');
+  list.innerHTML = '';
+  const protected = ['', 'T', 'U', 'M', 'X'];
+  states.filter(s => !protected.includes(s)).forEach(code => {
+    const dotClass = code === '' ? 'empty' : code;
+    const label = currentLabels2[code] || code;
+    const item = document.createElement('div');
+    item.className = 'category-item';
+    item.innerHTML = `
+      <div class="dot ${dotClass}"></div>
+      <div class="code">${code}</div>
+      <div class="label">${label}</div>
+      <input type="checkbox" data-code="${code}">
+    `;
+    list.appendChild(item);
+  });
+  if (list.children.length === 0) {
+    list.innerHTML = '<p>Nenhuma categoria personalizada para remover.</p>';
+    document.getElementById('confirmRemove').disabled = true;
+  } else {
+    document.getElementById('confirmRemove').disabled = false;
+  }
+  modal.style.display = 'flex';
+  modal.dataset.targetMapId = mapId;
+}
+function confirmRemove() {
+  const modal = document.getElementById('removeModal');
+  const checkboxes = document.querySelectorAll('#categoryList input[type="checkbox"]:checked');
+  if (checkboxes.length === 0) {
+    alert('Selecione pelo menos uma categoria para remover.');
+    return;
+  }
+  const codesToRemove = Array.from(checkboxes).map(cb => cb.dataset.code);
+  states = states.filter(s => !codesToRemove.includes(s));
+  codesToRemove.forEach(code => {
+    delete colors[code];
+    delete currentLabels2[code];
+    delete checkboxStates2[code];
+  });
+  document.querySelectorAll(`#gridMap2 .point-E[data-state]`).forEach(p => {
+    if (codesToRemove.includes(p.dataset.state)) {
+      p.dataset.state = '';
+    }
+  });
+  updateSummary('2');
+  updateDynamicStyles();
+  closeModal('removeModal');
+  alert('Categorias removidas com sucesso!');
+}
+function openEditModal(mapId) {
+  const modal = document.getElementById('editModal');
+  const list = document.getElementById('editCategoryList');
+  list.innerHTML = '';
+  states.forEach(code => {
+    const classCode = code === '' ? 'empty' : code;
+    const label = currentLabels2[code] || defaultLabels[code] || code;
+    const color = colors[code];
+    const item = document.createElement('div');
+    item.className = 'category-item';
+    item.innerHTML = `
+      <div class="dot ${classCode}"></div>
+      <div class="code">${code}</div>
+      <input type="text" class="edit-label" value="${label}">
+      <input type="color" class="edit-color" value="${color}">
+    `;
+    list.appendChild(item);
+  });
+  modal.style.display = 'flex';
+  modal.dataset.targetMapId = mapId;
+}
+function confirmEdit() {
+  const mapId = document.getElementById('editModal').dataset.targetMapId;
+  const items = document.querySelectorAll('#editCategoryList .category-item');
+  items.forEach((item, i) => {
+    const code = states[i];
+    const newLabel = item.querySelector('.edit-label').value.trim();
+    const newColor = item.querySelector('.edit-color').value;
+    if (newLabel) {
+      currentLabels2[code] = newLabel;
+    }
+    if (newColor !== colors[code]) {
+      colors[code] = newColor;
+      const varName = code === '' ? '--color-E-empty' : `--color-${code}`;
+      document.documentElement.style.setProperty(varName, newColor);
+    }
+  });
+  updateDynamicStyles();
+  updateTotals(mapId);
+  closeModal('editModal');
+  alert('Categorias editadas com sucesso!');
+}
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+}
+// Atualiza preview de cor
+document.getElementById('newColor').addEventListener('input', function() {
+  const color = this.value;
+  if (/^#[0-9A-Fa-f]{6}$/.test(color)) {
+    document.getElementById('colorPreview').style.backgroundColor = color;
+  } else {
+    document.getElementById('colorPreview').style.backgroundColor = '#cccccc';
+  }
+});
+// Eventos modais
+document.querySelectorAll('#addCategoryModal .close, #cancelAdd').forEach(el => {
+  el.addEventListener('click', () => closeModal('addCategoryModal'));
+});
+document.getElementById('confirmAdd').addEventListener('click', confirmAdd);
+document.querySelectorAll('#removeModal .close, #cancelRemove').forEach(el => {
+  el.addEventListener('click', () => closeModal('removeModal'));
+});
+document.getElementById('confirmRemove').addEventListener('click', confirmRemove);
+document.querySelectorAll('#editModal .close, #cancelEdit').forEach(el => {
+  el.addEventListener('click', () => closeModal('editModal'));
+});
+document.getElementById('confirmEdit').addEventListener('click', confirmEdit);
+window.addEventListener('click', (e) => {
+  const addModal = document.getElementById('addCategoryModal');
+  const removeModal = document.getElementById('removeModal');
+  const editModal = document.getElementById('editModal');
+  if (e.target === addModal) closeModal('addCategoryModal');
+  if (e.target === removeModal) closeModal('removeModal');
+  if (e.target === editModal) closeModal('editModal');
+});
+function saveData() {
+  try {
+    const points2 = document.querySelectorAll('#gridMap2 .point-E');
+    const data2 = Array.from(points2).map(p => p.dataset.state);
+    localStorage.setItem('gridDataMap77x45_map2', JSON.stringify(data2));
+    localStorage.setItem('gridLabels2', JSON.stringify(currentLabels2));
+    localStorage.setItem('checkboxStates2', JSON.stringify(checkboxStates2));
+    localStorage.setItem('states', JSON.stringify(states));
+    localStorage.setItem('colors', JSON.stringify(colors));
+    alert('Dados salvos com sucesso!');
+  } catch (err) {
+    console.error('Erro ao salvar dados:', err);
+    alert('Erro ao salvar dados. Verifique o console para mais detalhes.');
+  }
+}
+function loadData() {
+  try {
+    states = JSON.parse(localStorage.getItem('states')) || ['', 'T', 'U', 'M', 'X'];
+    colors = JSON.parse(localStorage.getItem('colors')) || {
+      '': '#faf7f7',
+      'T': '#00FF00',
+      'U': '#0000FF',
+      'M': '#FFFF00',
+      'X': '#000000'
+    };
+    states.forEach(code => {
+      const varName = code === '' ? '--color-E-empty' : `--color-${code}`;
+      document.documentElement.style.setProperty(varName, colors[code]);
+    });
+    updateDynamicStyles();
+    const data2 = JSON.parse(localStorage.getItem('gridDataMap77x45_map2'));
+    const savedLabels2 = JSON.parse(localStorage.getItem('gridLabels2'));
+    const savedCheckboxStates2 = JSON.parse(localStorage.getItem('checkboxStates2'));
+    if (savedLabels2) currentLabels2 = { ...defaultLabels, ...savedLabels2 };
+    states.forEach(s => {
+      if (!currentLabels2[s]) currentLabels2[s] = defaultLabels[s] || s;
+    });
+    if (savedCheckboxStates2) checkboxStates2 = { ...checkboxStates2, ...savedCheckboxStates2 };
+    states.forEach(s => {
+      if (checkboxStates2[s] === undefined) checkboxStates2[s] = (s !== '' && s !== 'X');
+    });
+    const points2 = document.querySelectorAll('#gridMap2 .point-E');
+    if (data2 && points2.length === data2.length) {
+      points2.forEach((p, i) => { p.dataset.state = data2[i] || ''; });
+    } else {
+      points2.forEach(p => { p.dataset.state = p.dataset.initial || ''; });
+    }
+    updateSummary('2');
+  } catch (err) {
+    console.error('Erro ao carregar dados:', err);
+    alert('Erro ao carregar dados. Verifique o console para mais detalhes.');
+  }
+}
+function clearData() {
+  if (confirm('Tem certeza que deseja limpar todos os dados deste lado?')) {
+    localStorage.removeItem('gridDataMap77x45_map2');
+    localStorage.removeItem('gridLabels2');
+    localStorage.removeItem('checkboxStates2');
+    location.reload();
+  }
+}
+function copyData() {
+  saveData();
+  const data = {
+    gridDataMap77x45_map2: localStorage.getItem('gridDataMap77x45_map2'),
+    gridLabels2: localStorage.getItem('gridLabels2'),
+    checkboxStates2: localStorage.getItem('checkboxStates2'),
+    states: localStorage.getItem('states'),
+    colors: localStorage.getItem('colors')
+  };
+  navigator.clipboard.writeText(JSON.stringify(data)).then(() => {
+    alert('Dados salvos e copiados para a área de transferência!');
+  });
+}
+function pasteData() {
+  navigator.clipboard.readText().then(text => {
+    try {
+      const data = JSON.parse(text);
+      if (data.gridDataMap77x45_map2) localStorage.setItem('gridDataMap77x45_map2', data.gridDataMap77x45_map2);
+      if (data.gridLabels2) localStorage.setItem('gridLabels2', data.gridLabels2);
+      if (data.checkboxStates2) localStorage.setItem('checkboxStates2', data.checkboxStates2);
+      if (data.states) localStorage.setItem('states', data.states);
+      if (data.colors) localStorage.setItem('colors', data.colors);
+      loadData();
+      alert('Dados colados com sucesso!');
+    } catch (err) {
+      alert('Erro ao colar dados. Certifique-se de que os dados copiados são válidos.');
+    }
+  });
+}
+// Inicialização
+setupRowSummary('2');
+createGrid('2');
+loadData();
+// Eventos
+document.getElementById('saveAll').addEventListener('click', saveData);
+document.getElementById('loadAll').addEventListener('click', loadData);
+document.getElementById('clearAll').addEventListener('click', clearData);
+document.getElementById('copyData').addEventListener('click', copyData);
+document.getElementById('pasteData').addEventListener('click', pasteData);
+document.getElementById('addCategory2').addEventListener('click', openAddModal);
+document.getElementById('editCategory2').addEventListener('click', () => openEditModal('2'));
+document.getElementById('removeCategory2').addEventListener('click', () => openRemoveModal('2'));
+document.getElementById('generatePdf').addEventListener('click', () => window.print());
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    saveData();
+  }
+});
+</script>
 </body>
 </html>
