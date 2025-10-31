@@ -354,6 +354,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
     --grid-padding: 5px; /* Reduzido para economia de espaço */
     --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
     --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
+    --conjunto-width: calc(var(--grid-width) + 90px + 10px); /* Grid + row-summary min-width + margins aproximadas */
     --row-even-bg: #f9f9f9;
     --row-odd-bg: #ffffff;
   }
@@ -375,6 +376,8 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   }
   .grid-and-summary {
     justify-content: center;
+    width: fit-content;
+    max-width: 100vw;
   }
   .grid-wrapper {
     overflow-x: visible;
@@ -410,7 +413,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   }
   .controls, .checkbox, .popup, .category-controls, .modal { display: none; }
   .totals-container { margin-top: 10px; }
-  .totals { width: calc(var(--grid-width) * 0.6); max-width: 100%; } /* Proporcional ao grid das bolinhas (60% para equilíbrio) */
+  .totals { width: calc(var(--conjunto-width) * 0.3); max-width: 100%; } /* 30% do conjunto */
   .row-label-left {
     font-size: 4px;
     left: -10px;
