@@ -349,7 +349,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
     }
   }
   :root {
-    --point-size: 5px;
+    --point-size: 7px;
     --grid-gap: 0.2px;
     --grid-padding: 10px;
     --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
@@ -432,6 +432,16 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
+  .total-item .dot {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .total-item .dot.empty { background-color: var(--color-E-empty) !important; }
+  .total-item .dot.T { background-color: var(--color-T) !important; }
+  .total-item .dot.U { background-color: var(--color-U) !important; }
+  .total-item .dot.M { background-color: var(--color-M) !important; }
+  .total-item .dot.X { background-color: var(--color-X) !important; }
+  .navbar { display: none; }
 }
 /* RESPONSIVO */
 @media (max-width: 768px) {
@@ -475,6 +485,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 }
 .edit-label { flex: 1; padding: 4px; border: 1px solid #ddd; border-radius: 4px; }
 .edit-color { width: 40px; height: 24px; padding: 0; border: none; cursor: pointer; }
+.checkbox { margin: 0 4px 0 auto; } /* Ajuste para checkboxes próximos aos números */
 </style>
 </head>
 <body>
@@ -852,30 +863,28 @@ function updateTotals(mapId) {
   // Primeiro: todas as categorias exceto 'X'
   states.filter(s => s !== 'X').forEach(s => {
     const key = s;
-    const dotClass = s === '' ? 'empty' : s;
     const labelText = labels[key] || defaultLabels[key] || key;
     html += `
       <div class="total-item">
         <div class="label">
-          <div class="dot ${dotClass}"></div>
+          <div class="dot" style="background-color: ${colors[key]};"></div>
           <span class="editable-label" contenteditable="true" data-key="${key}" data-map-id="${mapId}">${labelText}</span>
-          <input type="checkbox" class="checkbox" data-key="${key}" data-map-id="${mapId}" ${checkboxStates[key] ? 'checked' : ''}>
         </div>
+        <input type="checkbox" class="checkbox" data-key="${key}" data-map-id="${mapId}" ${checkboxStates[key] ? 'checked' : ''}>
         <span>${counts[key]}</span>
       </div>
     `;
   });
   // Depois: 'X' (Sem escopo) sempre no final
   const xKey = 'X';
-  const xDotClass = 'X';
   const xLabelText = labels[xKey] || defaultLabels[xKey] || xKey;
   html += `
     <div class="total-item">
       <div class="label">
-        <div class="dot ${xDotClass}"></div>
+        <div class="dot" style="background-color: ${colors[xKey]};"></div>
         <span class="editable-label" contenteditable="true" data-key="${xKey}" data-map-id="${mapId}">${xLabelText}</span>
-        <input type="checkbox" class="checkbox" data-key="${xKey}" data-map-id="${mapId}" ${checkboxStates[xKey] ? 'checked' : ''}>
       </div>
+      <input type="checkbox" class="checkbox" data-key="${xKey}" data-map-id="${mapId}" ${checkboxStates[xKey] ? 'checked' : ''}>
       <span>${counts[xKey]}</span>
     </div>
   `;
