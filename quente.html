@@ -868,7 +868,7 @@ function openRemoveModal(mapId) {
   const modal = document.getElementById('removeModal');
   const list = document.getElementById('categoryList');
   list.innerHTML = '';
-  const protected = ['', 'T', 'U', 'M', 'X'];
+  const protected = ['', 'T', 'U'];
   states.filter(s => !protected.includes(s)).forEach(code => {
     const dotClass = code === '' ? 'empty' : code;
     const label = currentLabels2[code] || code;
