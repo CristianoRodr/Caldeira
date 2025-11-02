@@ -1,4 +1,4 @@
-<!-- quente.html -->
+<!-- quente.html adjusted -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -348,98 +348,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
       content: "Mapa do Espelho – Caldeira U-130";
     }
   }
-  :root {
-    --point-size: 4px; /* Reduzido para caber melhor na folha */
-    --grid-gap: 0.2px;
-    --grid-padding: 5px; /* Reduzido para economia de espaço */
-    --grid-height: calc(45 * var(--point-size) + 44 * var(--grid-gap) + 2 * var(--grid-padding));
-    --grid-width: calc(77 * var(--point-size) + 76 * var(--grid-gap) + 2 * var(--grid-padding));
-    --conjunto-width: calc(var(--grid-width) + 90px + 10px); /* Grid + row-summary min-width + margins aproximadas */
-    --row-even-bg: #f9f9f9;
-    --row-odd-bg: #ffffff;
-  }
-  .app {
-    max-width: 100%;
-    padding: 10px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .section {
-    page-break-inside: avoid;
-    margin-bottom: 20px;
-    width: 100%;
-  }
-  .section:nth-child(3) {
-    page-break-before: always;
-  }
-  .grid-and-summary {
-    justify-content: center;
-    width: fit-content;
-    max-width: 100vw;
-  }
-  .grid-wrapper {
-    overflow-x: visible;
-    width: fit-content; /* Ajusta para caber na página */
-    max-width: 100%; /* Garante que não transborde */
-  }
-  .grid {
-    width: var(--grid-width);
-    height: var(--grid-height);
-    max-width: 100vw; /* Limita ao tamanho da viewport da impressão */
-    transform: scale(0.9); /* Escala ligeiramente para caber se necessário */
-    transform-origin: top left;
-  }
-  .row-summary {
-    font-size: 6px;
-    min-width: 60px;
-    margin-left: 8px;
-    margin-top: 0 !important;
-  }
-  .row-summary-header > div {
-    font-size: 6px;
-    padding: 0 2px;
-  }
-  .row-summary-row {
-    height: calc(var(--point-size) + var(--grid-gap));
-  }
-  .row-number, .row-total, .row-selected {
-    font-size: 6px;
-    padding: 0 2px;
-  }
-  header > div:first-child {
-    display: none;
-  }
-  .controls, .checkbox, .popup, .category-controls, .modal { display: none; }
-  .totals-container { margin-top: 10px; }
-  .totals { width: calc(var(--conjunto-width) * 0.3); max-width: 100%; } /* 30% do conjunto */
-  .row-label-left {
-    font-size: 4px;
-    left: -10px;
-    color: #000 !important;
-    z-index: 20;
-  }
-  .row-label-right {
-    font-size: 4px;
-    right: -10px;
-    color: #000 !important;
-    z-index: 20;
-  }
-  .point { box-shadow: none; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-  .grid-cell.row-even {
-    background-color: var(--row-even-bg);
-  }
-  .grid-cell.row-odd {
-    background-color: var(--row-odd-bg);
-  }
-  .selected-list {
-    font-size: 8px;
-    max-width: var(--grid-width); /* Limitado ao grid das bolinhas */
-  }
-  .selected-list h3 {
-    font-size: 12px;
-  }
+  .lead, .navbar, .controls, .category-controls, .checkbox, .popup, .modal { display: none; }
   .grid::before, .grid::after {
     background-color: red !important;
     -webkit-print-color-adjust: exact !important;
@@ -454,7 +363,6 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
   .total-item .dot.U { background-color: var(--color-U) !important; }
   .total-item .dot.M { background-color: var(--color-M) !important; }
   .total-item .dot.X { background-color: var(--color-X) !important; }
-  .navbar { display: none; }
 }
 /* RESPONSIVO */
 @media (max-width: 768px) {
@@ -1195,4 +1103,3 @@ document.addEventListener('keydown', (e) => {
 </script>
 </body>
 </html>
-
