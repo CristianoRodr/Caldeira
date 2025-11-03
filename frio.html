@@ -787,7 +787,7 @@ function updateTotals(mapId) {
           colString = colString.substring(0, lastCommaIndex) + ' e' + colString.substring(lastCommaIndex + 1);
         }
       }
-      return `Fileira ${row.toString().padStart(2, '0')}, tubo ${colString}`;
+     return `<strong>Fileira ${row.toString().padStart(2, '0')}</strong>, tubo ${colString}`;
     });
     listTexts.push(`<strong>${legend}</strong> ${rowStrings.join(' - ')}`);
   }
@@ -1116,4 +1116,5 @@ document.addEventListener('keydown', (e) => {
 </script>
 </body>
 </html>
+
 
