@@ -112,40 +112,40 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
 }
 .grid::before {
  left: calc(38.5 * var(--point-size) + 38 * var(--grid-gap) + var(--grid-padding));
- width: 2px;
- height: var(--grid-height);
- top: 0;
+  width: 2px;
+  height: var(--grid-height);
+  top: 0;
 }
 .grid::after {
- top: calc(23 * var(--point-size) + 22.5 * var(--grid-gap) + var(--grid-padding));
- height: 2px;
- width: 100%;
- left: 0;
+  top: calc(23 * var(--point-size) + 22.5 * var(--grid-gap) + var(--grid-padding));
+  height: 2px;
+  width: 100%;
+  left: 0;
 }
 .grid-cell {
- width: var(--point-size);
- height: var(--point-size);
- display: flex;
- align-items: center;
- justify-content: center;
- position: relative;
+  width: var(--point-size);
+  height: var(--point-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 .grid-cell.row-even {
- background-color: var(--row-even-bg);
+  background-color: var(--row-even-bg);
 }
 .grid-cell.row-odd {
- background-color: var(--row-odd-bg);
+  background-color: var(--row-odd-bg);
 }
 .point {
- width: var(--point-size);
- height: var(--point-size);
- border-radius: 50%;
- background-color: var(--color-E-empty);
- transition: background-color 0.2s;
- flex-shrink: 0;
- box-shadow: 0 0 2px rgba(0,0,0,0.25);
- -webkit-print-color-adjust: exact;
- print-color-adjust: exact;
+  width: var(--point-size);
+  height: var(--point-size);
+  border-radius: 50%;
+  background-color: var(--color-E-empty);
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+  box-shadow: 0 0 2px rgba(0,0,0,0.25);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 .point-E { cursor: pointer; background-color: var(--color-E-empty); }
 .point-E[data-state="T"] { background-color: var(--color-T); }
@@ -153,62 +153,62 @@ p.lead { margin: 4px 0 0; color: var(--muted); font-size: 13px; text-align: cent
 .point-E[data-state="M"] { background-color: var(--color-M); }
 .point-E[data-state="X"] { background-color: var(--color-X); }
 .row-label-left, .row-label-right {
- font-size: 8px;
- color: var(--muted);
- pointer-events: none;
- line-height: var(--point-size);
- position: absolute;
- top: 50%;
- transform: translateY(-50%);
- z-index: 20;
+  font-size: 8px;
+  color: var(--muted);
+  pointer-events: none;
+  line-height: var(--point-size);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
 }
 .row-label-left { left: -15px; }
 .row-label-right { right: -15px; }
 /* NOVO: 3 colunas ao lado do grid */
 .row-summary {
- display: flex;
- flex-direction: column;
- margin-top: 33px;
- margin-left: 2px;
- font-size: 10px;
- color: var(--muted);
- min-width: 90px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 33px;
+  margin-left: 2px;
+  font-size: 10px;
+  color: var(--muted);
+  min-width: 90px;
 }
 .row-summary-header {
- display: flex;
- font-weight: 600;
- margin-bottom: 4px;
- text-align: center;
+  display: flex;
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-align: center;
 }
 .row-summary-header > div {
- flex: 1;
- padding: 0 4px;
+  flex: 1;
+  padding: 0 4px;
 }
 .row-summary-row {
- display: flex;
- height: calc(var(--point-size) + var(--grid-gap));
- align-items: center;
+  display: flex;
+  height: calc(var(--point-size) + var(--grid-gap));
+  align-items: center;
 }
 .row-number, .row-total, .row-selected {
- flex: 1;
- text-align: center;
- padding: 0 4px;
+  flex: 1;
+  text-align: center;
+  padding: 0 4px;
 }
 /* Totais gerais abaixo do grid - AUMENTADO */
 .totals-container {
- margin-top: 20px;
- width: 100%;
- display: flex;
- justify-content: center;
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 .totals {
- background: #f7f7f7;
- border-radius: 12px;
- padding: 16px;
- width: 500px; /* AUMENTADO de 300px para 380px */
- min-width: 320px;
- max-width: 800px;
- border: 1px solid rgba(0,0,0,0.08);
+  background: #f7f7f7;
+  border-radius: 12px;
+  padding: 16px;
+  width: 500px; /* AUMENTADO de 300px para 380px */
+  min-width: 320px;
+  max-width: 800px;
+  border: 1px solid rgba(0,0,0,0.08);
 }
 .totals h3 { font-size: 16px; margin: 0 0 10px; }
 .total-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
@@ -240,7 +240,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 .selected-list {
   margin-top: 20px;
   width: 100%;
-  max-width: 1200px;
+  max-width: 800px;
   text-align: left;
   font-size: 13px;
   color: #000;
@@ -348,7 +348,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
       content: "Mapa do Espelho – Caldeira U-130";
     }
   }
-  .lead, .navbar, .controls, .category-controls, .checkbox, .popup, .modal { display: none; }
+  .lead, .navbar, .controls, .category-controls, .popup, .modal { display: none; }
   .grid::before, .grid::after {
     background-color: red !important;
     -webkit-print-color-adjust: exact !important;
@@ -411,116 +411,116 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
 </head>
 <body>
 <div class="app">
- <header>
- <div>
- <h1>Mapa do Espelho – Caldeira U-130 (Lado Frio)</h1>
- <p class="lead">Todas as bolinhas são editáveis (clicáveis).</p>
- </div>
- <div class="navbar">
- <a href="index.html">Home</a>
- <a href="frio.html">Lado Frio</a>
- <a href="quente.html">Lado Quente</a>
- </div>
- <div class="controls">
- <button id="saveAll" class="primary">Salvar</button>
- <button id="loadAll" class="ghost">Carregar</button>
- <button id="clearAll" class="ghost">Limpar</button>
- <button id="copyData" class="ghost">Copiar Dados</button>
- <button id="pasteData" class="ghost">Colar Dados</button>
- <button id="generatePdf" class="ghost">Gerar PDF</button>
- </div>
- </header>
- <!-- LADO FRIO -->
- <div class="section">
- <div class="section-header cold">Lado Frio</div>
- <div class="grid-container-area">
- <div class="grid-and-summary">
- <div class="grid-wrapper" id="wrapperMap1">
- <div class="grid" id="gridMap1"></div>
- </div>
- <div class="row-summary" id="rowSummary1">
- <div class="row-summary-header">
- <div>Linha</div>
- <div>Total</div>
- <div>Sel.</div>
- </div>
- </div>
- </div>
- <div class="totals-container">
- <div class="totals" id="totalsContainer1">
- <h3>Totais Gerais</h3>
- <div id="totals1"></div>
- <div class="category-controls">
- <button id="addCategory1" class="ghost">Adicionar Categoria</button>
- <button id="editCategory1" class="ghost">Editar Categorias</button>
- <button id="removeCategory1" class="ghost">Remover Categoria</button>
- </div>
- </div>
- </div>
- <div class="selected-list" id="selectedList1">
- <h3>Lista de Selecionados</h3>
- <p id="list1"></p>
- </div>
- </div>
- </div>
+  <header>
+    <div>
+      <h1>Mapa do Espelho – Caldeira U-130 (Lado Frio)</h1>
+      <p class="lead">Todas as bolinhas são editáveis (clicáveis).</p>
+    </div>
+    <div class="navbar">
+      <a href="index.html">Home</a>
+      <a href="frio.html">Lado Frio</a>
+      <a href="quente.html">Lado Quente</a>
+    </div>
+    <div class="controls">
+      <button id="saveAll" class="primary">Salvar</button>
+      <button id="loadAll" class="ghost">Carregar</button>
+      <button id="clearAll" class="ghost">Limpar</button>
+      <button id="copyData" class="ghost">Copiar Dados</button>
+      <button id="pasteData" class="ghost">Colar Dados</button>
+      <button id="generatePdf" class="ghost">Gerar PDF</button>
+    </div>
+  </header>
+  <!-- LADO FRIO -->
+  <div class="section">
+    <div class="section-header cold">Lado Frio</div>
+    <div class="grid-container-area">
+      <div class="grid-and-summary">
+        <div class="grid-wrapper" id="wrapperMap1">
+          <div class="grid" id="gridMap1"></div>
+        </div>
+        <div class="row-summary" id="rowSummary1">
+          <div class="row-summary-header">
+            <div>Linha</div>
+            <div>Total</div>
+            <div>Sel.</div>
+          </div>
+        </div>
+      </div>
+      <div class="totals-container">
+        <div class="totals" id="totalsContainer1">
+          <h3>Totais Gerais</h3>
+          <div id="totals1"></div>
+          <div class="category-controls">
+            <button id="addCategory1" class="ghost">Adicionar Categoria</button>
+            <button id="editCategory1" class="ghost">Editar Categorias</button>
+            <button id="removeCategory1" class="ghost">Remover Categoria</button>
+          </div>
+        </div>
+      </div>
+      <div class="selected-list" id="selectedList1">
+        <h3>Lista de Selecionados</h3>
+        <p id="list1"></p>
+      </div>
+    </div>
+  </div>
 </div>
 <!-- Modal de Adicionar Categoria -->
 <div id="addCategoryModal" class="modal">
- <div class="modal-content">
- <div class="modal-header">
- <h3>Adicionar Nova Categoria</h3>
- <span class="close">x</span>
- </div>
- <div style="display: flex; flex-direction: column; gap: 12px;">
- <div>
- <label><strong>Código (letra/símbolo):</strong></label>
- <input type="text" id="newCode" maxlength="3" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px;">
- </div>
- <div>
- <label><strong>Cor (hex):</strong></label>
- <div style="display: flex; align-items: center; gap: 8px;">
- <input type="text" id="newColor" value="" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 6px;">
- <div id="colorPreview" class="color-preview"></div>
- </div>
- </div>
- <div>
- <label><strong>Nome da categoria:</strong></label>
- <input type="text" id="newLabel" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px;">
- </div>
- </div>
- <div class="modal-actions">
- <button id="confirmAdd" class="primary">Adicionar</button>
- <button id="cancelAdd" class="ghost">Cancelar</button>
- </div>
- </div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Adicionar Nova Categoria</h3>
+      <span class="close">x</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div>
+        <label><strong>Código (letra/símbolo):</strong></label>
+        <input type="text" id="newCode" maxlength="3" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px;">
+      </div>
+      <div>
+        <label><strong>Cor (hex):</strong></label>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <input type="text" id="newColor" value="" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 6px;">
+          <div id="colorPreview" class="color-preview"></div>
+        </div>
+      </div>
+      <div>
+        <label><strong>Nome da categoria:</strong></label>
+        <input type="text" id="newLabel" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px;">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button id="confirmAdd" class="primary">Adicionar</button>
+      <button id="cancelAdd" class="ghost">Cancelar</button>
+    </div>
+  </div>
 </div>
 <!-- Modal de Remoção -->
 <div id="removeModal" class="modal">
- <div class="modal-content">
- <div class="modal-header">
- <h3>Remover Categorias</h3>
- <span class="close">x</span>
- </div>
- <div class="category-list" id="categoryList"></div>
- <div class="modal-actions">
- <button id="confirmRemove" class="primary">Remover Marcadas</button>
- <button id="cancelRemove" class="ghost">Cancelar</button>
- </div>
- </div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Remover Categorias</h3>
+      <span class="close">x</span>
+    </div>
+    <div class="category-list" id="categoryList"></div>
+    <div class="modal-actions">
+      <button id="confirmRemove" class="primary">Remover Marcadas</button>
+      <button id="cancelRemove" class="ghost">Cancelar</button>
+    </div>
+  </div>
 </div>
 <!-- Modal de Editar Categorias -->
 <div id="editModal" class="modal">
- <div class="modal-content">
- <div class="modal-header">
- <h3>Editar Categorias</h3>
- <span class="close">x</span>
- </div>
- <div class="category-list" id="editCategoryList"></div>
- <div class="modal-actions">
- <button id="confirmEdit" class="primary">Salvar Alterações</button>
- <button id="cancelEdit" class="ghost">Cancelar</button>
- </div>
- </div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Editar Categorias</h3>
+      <span class="close">x</span>
+    </div>
+    <div class="category-list" id="editCategoryList"></div>
+    <div class="modal-actions">
+      <button id="confirmEdit" class="primary">Salvar Alterações</button>
+      <button id="cancelEdit" class="ghost">Cancelar</button>
+    </div>
+  </div>
 </div>
 <script>
 const GRID_COLUMNS = 77;
@@ -626,369 +626,382 @@ NNNNNNNNNNNNNNNNNNNNNNNNNNNDNDNDNDNDNDNDNDNDNDNDNDNNNNNNNNNNNNNNNNNNNNNNNNNNN
 NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNDNNNDNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 `.trim();
 function createGrid(mapId) {
- const mapLines = MAP_TEMPLATE.split('\n').map(l => l.trim());
- const grid = document.getElementById(`gridMap${mapId}`);
- grid.innerHTML = '';
- let pointIndex = 0;
- const rowPointCounts = rowPointCounts1;
- mapLines.forEach((line, rowIndex) => {
- let pointCol = 0;
- let firstPointCell = null;
- let lastPointCell = null;
- const rowClass = (rowIndex % 2 === 0) ? 'row-even' : 'row-odd';
- for (let col = 0; col < GRID_COLUMNS; col++) {
- const char = line[col] || 'N';
- const cell = document.createElement('div');
- cell.classList.add('grid-cell', rowClass);
- if (char === 'N') {
- grid.appendChild(cell);
- continue;
- }
- pointCol++;
- const point = document.createElement('div');
- point.classList.add('point');
- if (['D', 'E', 'T', 'U', 'M'].includes(char)) {
- point.classList.add('point-E');
- let initialState = '';
- if (char === 'T') initialState = 'T';
- else if (char === 'U') initialState = 'U';
- else if (char === 'M') initialState = 'M';
- else if (char === 'D' || char === 'E') initialState = rowIndex >= 23 ? 'X' : '';
- point.dataset.initial = initialState;
- point.dataset.state = initialState;
- point.dataset.index = pointIndex++;
- point.dataset.mapId = mapId;
- point.dataset.row = rowIndex + 1;
- point.dataset.col = pointCol;
- point.addEventListener('click', (e) => cycleState(e, point));
- point.addEventListener('mouseenter', (e) => showHoverPopup(e, point));
- point.addEventListener('mouseleave', hideHoverPopup);
- if (pointCol === 1) {
- firstPointCell = cell;
- const labelLeft = document.createElement('span');
- labelLeft.classList.add('row-label-left');
- labelLeft.textContent = rowIndex + 1;
- cell.appendChild(labelLeft);
- }
- lastPointCell = cell;
- }
- cell.appendChild(point);
- grid.appendChild(cell);
- }
- if (lastPointCell) {
- const labelRight = document.createElement('span');
- labelRight.classList.add('row-label-right');
- labelRight.textContent = rowIndex + 1;
- lastPointCell.appendChild(labelRight);
- }
- rowPointCounts[rowIndex] = pointCol;
- });
- updateSummary(mapId);
+  const mapLines = MAP_TEMPLATE.split('\n').map(l => l.trim());
+  const grid = document.getElementById(`gridMap${mapId}`);
+  grid.innerHTML = '';
+  let pointIndex = 0;
+  const rowPointCounts = rowPointCounts1;
+  mapLines.forEach((line, rowIndex) => {
+    let pointCol = 0;
+    let firstPointCell = null;
+    let lastPointCell = null;
+    const rowClass = (rowIndex % 2 === 0) ? 'row-even' : 'row-odd';
+    for (let col = 0; col < GRID_COLUMNS; col++) {
+      const char = line[col] || 'N';
+      const cell = document.createElement('div');
+      cell.classList.add('grid-cell', rowClass);
+      if (char === 'N') {
+        grid.appendChild(cell);
+        continue;
+      }
+      pointCol++;
+      const point = document.createElement('div');
+      point.classList.add('point');
+      if (['D', 'E', 'T', 'U', 'M'].includes(char)) {
+        point.classList.add('point-E');
+        let initialState = '';
+        if (char === 'T') initialState = 'T';
+        else if (char === 'U') initialState = 'U';
+        else if (char === 'M') initialState = 'M';
+        else if (char === 'D' || char === 'E') initialState = rowIndex >= 23 ? 'X' : '';
+        point.dataset.initial = initialState;
+        point.dataset.state = initialState;
+        point.dataset.index = pointIndex++;
+        point.dataset.mapId = mapId;
+        point.dataset.row = rowIndex + 1;
+        point.dataset.col = pointCol;
+        point.addEventListener('click', (e) => cycleState(e, point));
+        point.addEventListener('mouseenter', (e) => showHoverPopup(e, point));
+        point.addEventListener('mouseleave', hideHoverPopup);
+        if (pointCol === 1) {
+          firstPointCell = cell;
+          const labelLeft = document.createElement('span');
+          labelLeft.classList.add('row-label-left');
+          labelLeft.textContent = rowIndex + 1;
+          cell.appendChild(labelLeft);
+        }
+        lastPointCell = cell;
+      }
+      cell.appendChild(point);
+      grid.appendChild(cell);
+    }
+    if (lastPointCell) {
+      const labelRight = document.createElement('span');
+      labelRight.classList.add('row-label-right');
+      labelRight.textContent = rowIndex + 1;
+      lastPointCell.appendChild(labelRight);
+    }
+    rowPointCounts[rowIndex] = pointCol;
+  });
+  updateSummary(mapId);
 }
 function showHoverPopup(event, point) {
- const mapId = point.dataset.mapId;
- const row = point.dataset.row;
- const internalCol = parseInt(point.dataset.col);
- const rowPointCounts = rowPointCounts1;
- const totalInRow = rowPointCounts[parseInt(row) - 1];
- const displayCol = (totalInRow - internalCol + 1);
- const popupText = `L${row.padStart(2, '0')} - C${displayCol.toString().padStart(2, '0')}`;
- hoverPopup = document.createElement('div');
- hoverPopup.classList.add('popup');
- hoverPopup.textContent = popupText;
- document.body.appendChild(hoverPopup);
- hoverPopup.style.left = `${event.clientX + 10}px`;
- hoverPopup.style.top = `${event.clientY + 10}px`;
+  const mapId = point.dataset.mapId;
+  const row = point.dataset.row;
+  const internalCol = parseInt(point.dataset.col);
+  const rowPointCounts = rowPointCounts1;
+  const totalInRow = rowPointCounts[parseInt(row) - 1];
+  const displayCol = (totalInRow - internalCol + 1);
+  const popupText = `L${row.padStart(2, '0')} - C${displayCol.toString().padStart(2, '0')}`;
+  hoverPopup = document.createElement('div');
+  hoverPopup.classList.add('popup');
+  hoverPopup.textContent = popupText;
+  document.body.appendChild(hoverPopup);
+  hoverPopup.style.left = `${event.clientX + 10}px`;
+  hoverPopup.style.top = `${event.clientY + 10}px`;
 }
 function hideHoverPopup() {
- if (hoverPopup) {
- hoverPopup.remove();
- hoverPopup = null;
- }
+  if (hoverPopup) {
+    hoverPopup.remove();
+    hoverPopup = null;
+  }
 }
 function cycleState(event, point) {
- const mapId = point.dataset.mapId;
- const currentState = point.dataset.state || '';
- let currentIndex = states.indexOf(currentState);
- if (currentIndex === -1) currentIndex = 0;
- const nextIndex = (currentIndex + 1) % states.length;
- point.dataset.state = states[nextIndex];
- const row = point.dataset.row;
- const internalCol = parseInt(point.dataset.col);
- const rowPointCounts = rowPointCounts1;
- const totalInRow = rowPointCounts[parseInt(row) - 1];
- const displayCol = (totalInRow - internalCol + 1);
- const labels = currentLabels1;
- const legend = labels[point.dataset.state] || defaultLabels[point.dataset.state] || 'Desconhecido';
- const popupText = `L${row.padStart(2, '0')} - C${displayCol.toString().padStart(2, '0')} ${legend}`;
- const popup = document.createElement('div');
- popup.classList.add('popup');
- popup.textContent = popupText;
- document.body.appendChild(popup);
- popup.style.left = `${event.clientX + 10}px`;
- popup.style.top = `${event.clientY + 10}px`;
- setTimeout(() => popup.remove(), 2000);
- updateSummary(mapId);
+  const mapId = point.dataset.mapId;
+  const currentState = point.dataset.state || '';
+  let currentIndex = states.indexOf(currentState);
+  if (currentIndex === -1) currentIndex = 0;
+  const nextIndex = (currentIndex + 1) % states.length;
+  point.dataset.state = states[nextIndex];
+  const row = point.dataset.row;
+  const internalCol = parseInt(point.dataset.col);
+  const rowPointCounts = rowPointCounts1;
+  const totalInRow = rowPointCounts[parseInt(row) - 1];
+  const displayCol = (totalInRow - internalCol + 1);
+  const labels = currentLabels1;
+  const legend = labels[point.dataset.state] || defaultLabels[point.dataset.state] || 'Desconhecido';
+  const popupText = `L${row.padStart(2, '0')} - C${displayCol.toString().padStart(2, '0')} ${legend}`;
+  const popup = document.createElement('div');
+  popup.classList.add('popup');
+  popup.textContent = popupText;
+  document.body.appendChild(popup);
+  popup.style.left = `${event.clientX + 10}px`;
+  popup.style.top = `${event.clientY + 10}px`;
+  setTimeout(() => popup.remove(), 2000);
+  updateSummary(mapId);
 }
 function updateSummary(mapId) {
- const pointsE = document.querySelectorAll(`#gridMap${mapId} .point-E`);
- const checkboxStates = checkboxStates1;
- const rowTotals = new Array(GRID_ROWS).fill(0);
- const rowSelected = new Array(GRID_ROWS).fill(0);
- pointsE.forEach(p => {
- const row = parseInt(p.dataset.row) - 1;
- const state = p.dataset.state || '';
- rowTotals[row]++;
- if (checkboxStates[state]) rowSelected[row]++;
- });
- const summaryDiv = document.getElementById(`rowSummary${mapId}`);
- const rows = summaryDiv.querySelectorAll('.row-summary-row');
- rows.forEach((row, i) => {
- row.querySelector('.row-total').textContent = rowTotals[i];
- row.querySelector('.row-selected').textContent = rowSelected[i];
- });
- updateTotals(mapId);
+  const pointsE = document.querySelectorAll(`#gridMap${mapId} .point-E`);
+  const checkboxStates = checkboxStates1;
+  const rowTotals = new Array(GRID_ROWS).fill(0);
+  const rowSelected = new Array(GRID_ROWS).fill(0);
+  pointsE.forEach(p => {
+    const row = parseInt(p.dataset.row) - 1;
+    const state = p.dataset.state || '';
+    rowTotals[row]++;
+    if (checkboxStates[state]) rowSelected[row]++;
+  });
+  const summaryDiv = document.getElementById(`rowSummary${mapId}`);
+  const rows = summaryDiv.querySelectorAll('.row-summary-row');
+  rows.forEach((row, i) => {
+    row.querySelector('.row-total').textContent = rowTotals[i];
+    row.querySelector('.row-selected').textContent = rowSelected[i];
+  });
+  updateTotals(mapId);
 }
 function updateTotals(mapId) {
- const pointsE = document.querySelectorAll(`#gridMap${mapId} .point-E`);
- const counts = {};
- states.forEach(s => counts[s] = 0);
- const checkboxStates = checkboxStates1;
- const labels = currentLabels1;
- const rowPointCounts = rowPointCounts1;
- const grouped = {};
- pointsE.forEach(p => {
- const s = p.dataset.state || '';
- counts[s]++;
- if (checkboxStates[s]) {
- const row = parseInt(p.dataset.row);
- const internalCol = parseInt(p.dataset.col);
- const totalInRow = rowPointCounts[row - 1];
- const displayCol = (totalInRow - internalCol + 1);
- const legend = labels[s] || defaultLabels[s] || s;
- if (!grouped[legend]) grouped[legend] = [];
- grouped[legend].push({ row, col: displayCol });
- }
- });
- for (const legend in grouped) {
- grouped[legend].sort((a, b) => a.row - b.row || a.col - b.col);
- }
- const listTexts = [];
- for (const legend in grouped) {
- const positions = grouped[legend].map(item => `L${item.row.toString().padStart(2, '0')} - C${item.col.toString().padStart(2, '0')}`);
- listTexts.push(`<strong>${legend}</strong> ${positions.join(', ')}`);
- }
- document.getElementById(`list${mapId}`).innerHTML = listTexts.join('<br>') || 'Nenhum selecionado';
- const totalsDiv = document.getElementById(`totals${mapId}`);
- let html = '';
- // Primeiro: todas as categorias exceto 'X'
- states.filter(s => s !== 'X').forEach(s => {
- const key = s;
- const labelText = labels[key] || defaultLabels[key] || key;
- html += `
- <div class="total-item">
- <div class="label">
- <div class="dot" style="background-color: ${colors[key]};"></div>
- <span class="editable-label" contenteditable="true" data-key="${key}" data-map-id="${mapId}">${labelText}</span>
- </div>
- <input type="checkbox" class="checkbox" data-key="${key}" data-map-id="${mapId}" ${checkboxStates[key] ? 'checked' : ''}>
- <span>${counts[key]}</span>
- </div>
- `;
- });
- // Depois: 'X' (Sem escopo) sempre no final
- const xKey = 'X';
- const xLabelText = labels[xKey] || defaultLabels[xKey] || xKey;
- html += `
- <div class="total-item">
- <div class="label">
- <div class="dot" style="background-color: ${colors[xKey]};"></div>
- <span class="editable-label" contenteditable="true" data-key="${xKey}" data-map-id="${mapId}">${xLabelText}</span>
- </div>
- <input type="checkbox" class="checkbox" data-key="${xKey}" data-map-id="${mapId}" ${checkboxStates[xKey] ? 'checked' : ''}>
- <span>${counts[xKey]}</span>
- </div>
- `;
- // Totais gerais
- html += `
- <div class="total-item" style="font-weight: bold; margin-top: 12px;"><div class="label">Total de Pontos</div><span>${pointsE.length}</span></div>
- <div class="total-item" style="font-weight: bold;"><div class="label">Total Selecionado</div><span>${states.reduce((sum, k) => checkboxStates[k] ? sum + counts[k] : sum, 0)}</span></div>
- `;
- totalsDiv.innerHTML = html;
- totalsDiv.querySelectorAll('.checkbox').forEach(cb => {
- cb.addEventListener('change', () => {
- const key = cb.dataset.key;
- checkboxStates1[key] = cb.checked;
- updateSummary(mapId);
- });
- });
- totalsDiv.querySelectorAll('.editable-label').forEach(el => {
- el.addEventListener('blur', () => {
- const key = el.dataset.key;
- const text = el.textContent.trim() || defaultLabels[key] || key;
- currentLabels1[key] = text;
- updateSummary(mapId);
- });
- el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); el.blur(); } });
- });
+  const pointsE = document.querySelectorAll(`#gridMap${mapId} .point-E`);
+  const counts = {};
+  states.forEach(s => counts[s] = 0);
+  const checkboxStates = checkboxStates1;
+  const labels = currentLabels1;
+  const rowPointCounts = rowPointCounts1;
+  const grouped = {};
+  pointsE.forEach(p => {
+    const s = p.dataset.state || '';
+    counts[s]++;
+    if (checkboxStates[s]) {
+      const row = parseInt(p.dataset.row);
+      const internalCol = parseInt(p.dataset.col);
+      const totalInRow = rowPointCounts[row - 1];
+      const displayCol = (totalInRow - internalCol + 1);
+      const legend = labels[s] || defaultLabels[s] || s;
+      if (!grouped[legend]) grouped[legend] = [];
+      grouped[legend].push({ row, col: displayCol });
+    }
+  });
+  const listTexts = [];
+  for (const legend in grouped) {
+    const positionsByRow = {};
+    grouped[legend].forEach(item => {
+      if (!positionsByRow[item.row]) positionsByRow[item.row] = [];
+      positionsByRow[item.row].push(item.col);
+    });
+    const sortedRows = Object.keys(positionsByRow).sort((a, b) => a - b);
+    const rowStrings = sortedRows.map(row => {
+      const sortedCols = positionsByRow[row].sort((a, b) => a - b);
+      let colString = sortedCols.map(col => col.toString().padStart(2, '0')).join(', ');
+      if (sortedCols.length > 1) {
+        const lastCommaIndex = colString.lastIndexOf(', ');
+        if (lastCommaIndex !== -1) {
+          colString = colString.substring(0, lastCommaIndex) + ' e' + colString.substring(lastCommaIndex + 1);
+        }
+      }
+      return `Fileira ${row.toString().padStart(2, '0')}, tubo ${colString}`;
+    });
+    listTexts.push(`<strong>${legend}</strong> ${rowStrings.join(' - ')}`);
+  }
+  document.getElementById(`list${mapId}`).innerHTML = listTexts.join('<br>') || 'Nenhum selecionado';
+  const totalsDiv = document.getElementById(`totals${mapId}`);
+  let html = '';
+  // Primeiro: todas as categorias exceto 'X'
+  states.filter(s => s !== 'X').forEach(s => {
+    const key = s;
+    const labelText = labels[key] || defaultLabels[key] || key;
+    html += `
+      <div class="total-item">
+        <div class="label">
+          <div class="dot" style="background-color: ${colors[key]};"></div>
+          <span class="editable-label" contenteditable="true" data-key="${key}" data-map-id="${mapId}">${labelText}</span>
+        </div>
+        <input type="checkbox" class="checkbox" data-key="${key}" data-map-id="${mapId}" ${checkboxStates[key] ? 'checked' : ''}>
+        <span>${counts[key]}</span>
+      </div>
+    `;
+  });
+  // Depois: 'X' (Sem escopo) sempre no final
+  const xKey = 'X';
+  const xLabelText = labels[xKey] || defaultLabels[xKey] || xKey;
+  html += `
+    <div class="total-item">
+      <div class="label">
+        <div class="dot" style="background-color: ${colors[xKey]};"></div>
+        <span class="editable-label" contenteditable="true" data-key="${xKey}" data-map-id="${mapId}">${xLabelText}</span>
+      </div>
+      <input type="checkbox" class="checkbox" data-key="${xKey}" data-map-id="${mapId}" ${checkboxStates[xKey] ? 'checked' : ''}>
+      <span>${counts[xKey]}</span>
+    </div>
+  `;
+  // Totais gerais
+  html += `
+    <div class="total-item" style="font-weight: bold; margin-top: 12px;"><div class="label">Total de Pontos</div><span>${pointsE.length}</span></div>
+    <div class="total-item" style="font-weight: bold;"><div class="label">Total Selecionado</div><span>${states.reduce((sum, k) => checkboxStates[k] ? sum + counts[k] : sum, 0)}</span></div>
+  `;
+  totalsDiv.innerHTML = html;
+  totalsDiv.querySelectorAll('.checkbox').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const key = cb.dataset.key;
+      checkboxStates1[key] = cb.checked;
+      updateSummary(mapId);
+    });
+  });
+  totalsDiv.querySelectorAll('.editable-label').forEach(el => {
+    el.addEventListener('blur', () => {
+      const key = el.dataset.key;
+      const text = el.textContent.trim() || defaultLabels[key] || key;
+      currentLabels1[key] = text;
+      updateSummary(mapId);
+    });
+    el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); el.blur(); } });
+  });
 }
 function openAddModal() {
- const modal = document.getElementById('addCategoryModal');
- const color = getNextUniqueColor();
- document.getElementById('newCode').value = '';
- document.getElementById('newColor').value = color;
- document.getElementById('newLabel').value = '';
- document.getElementById('colorPreview').style.backgroundColor = color;
- modal.style.display = 'flex';
+  const modal = document.getElementById('addCategoryModal');
+  const color = getNextUniqueColor();
+  document.getElementById('newCode').value = '';
+  document.getElementById('newColor').value = color;
+  document.getElementById('newLabel').value = '';
+  document.getElementById('colorPreview').style.backgroundColor = color;
+  modal.style.display = 'flex';
 }
 function confirmAdd() {
- const code = document.getElementById('newCode').value.trim().toUpperCase();
- const color = document.getElementById('newColor').value.trim();
- const label = document.getElementById('newLabel').value.trim() || code;
- if (!code || states.includes(code)) {
- alert('Código inválido ou já existente.');
- return;
- }
- if (!/^#[0-9A-Fa-f]{6}$/.test(color)) {
- alert('Cor inválida. Use formato #RRGGBB.');
- return;
- }
- states.push(code);
- colors[code] = color;
- const varName = `--color-${code}`;
- document.documentElement.style.setProperty(varName, color);
- currentLabels1[code] = label;
- checkboxStates1[code] = true;
- updateDynamicStyles();
- updateTotals('1');
- closeModal('addCategoryModal');
- alert('Nova categoria adicionada com sucesso!');
+  const code = document.getElementById('newCode').value.trim().toUpperCase();
+  const color = document.getElementById('newColor').value.trim();
+  const label = document.getElementById('newLabel').value.trim() || code;
+  if (!code || states.includes(code)) {
+    alert('Código inválido ou já existente.');
+    return;
+  }
+  if (!/^#[0-9A-Fa-f]{6}$/.test(color)) {
+    alert('Cor inválida. Use formato #RRGGBB.');
+    return;
+  }
+  states.push(code);
+  colors[code] = color;
+  const varName = `--color-${code}`;
+  document.documentElement.style.setProperty(varName, color);
+  currentLabels1[code] = label;
+  checkboxStates1[code] = true;
+  updateDynamicStyles();
+  updateTotals('1');
+  closeModal('addCategoryModal');
+  alert('Nova categoria adicionada com sucesso!');
 }
 function openRemoveModal(mapId) {
- const modal = document.getElementById('removeModal');
- const list = document.getElementById('categoryList');
- list.innerHTML = '';
- const protected = ['', 'T', 'U'];
- states.filter(s => !protected.includes(s)).forEach(code => {
- const dotClass = code === '' ? 'empty' : code;
- const label = currentLabels1[code] || code;
- const item = document.createElement('div');
- item.className = 'category-item';
- item.innerHTML = `
- <div class="dot ${dotClass}"></div>
- <div class="code">${code}</div>
- <div class="label">${label}</div>
- <input type="checkbox" data-code="${code}">
- `;
- list.appendChild(item);
- });
- if (list.children.length === 0) {
- list.innerHTML = '<p>Nenhuma categoria personalizada para remover.</p>';
- document.getElementById('confirmRemove').disabled = true;
- } else {
- document.getElementById('confirmRemove').disabled = false;
- }
- modal.style.display = 'flex';
- modal.dataset.targetMapId = mapId;
+  const modal = document.getElementById('removeModal');
+  const list = document.getElementById('categoryList');
+  list.innerHTML = '';
+  const protected = ['', 'T', 'U'];
+  states.filter(s => !protected.includes(s)).forEach(code => {
+    const dotClass = code === '' ? 'empty' : code;
+    const label = currentLabels1[code] || code;
+    const item = document.createElement('div');
+    item.className = 'category-item';
+    item.innerHTML = `
+      <div class="dot ${dotClass}"></div>
+      <div class="code">${code}</div>
+      <div class="label">${label}</div>
+      <input type="checkbox" data-code="${code}">
+    `;
+    list.appendChild(item);
+  });
+  if (list.children.length === 0) {
+    list.innerHTML = '<p>Nenhuma categoria personalizada para remover.</p>';
+    document.getElementById('confirmRemove').disabled = true;
+  } else {
+    document.getElementById('confirmRemove').disabled = false;
+  }
+  modal.style.display = 'flex';
+  modal.dataset.targetMapId = mapId;
 }
 function confirmRemove() {
- const modal = document.getElementById('removeModal');
- const checkboxes = document.querySelectorAll('#categoryList input[type="checkbox"]:checked');
- if (checkboxes.length === 0) {
- alert('Selecione pelo menos uma categoria para remover.');
- return;
- }
- const codesToRemove = Array.from(checkboxes).map(cb => cb.dataset.code);
- states = states.filter(s => !codesToRemove.includes(s));
- codesToRemove.forEach(code => {
- delete colors[code];
- delete currentLabels1[code];
- delete checkboxStates1[code];
- });
- document.querySelectorAll(`#gridMap1 .point-E[data-state]`).forEach(p => {
- if (codesToRemove.includes(p.dataset.state)) {
- p.dataset.state = '';
- }
- });
- updateSummary('1');
- updateDynamicStyles();
- closeModal('removeModal');
- alert('Categorias removidas com sucesso!');
+  const modal = document.getElementById('removeModal');
+  const checkboxes = document.querySelectorAll('#categoryList input[type="checkbox"]:checked');
+  if (checkboxes.length === 0) {
+    alert('Selecione pelo menos uma categoria para remover.');
+    return;
+  }
+  const codesToRemove = Array.from(checkboxes).map(cb => cb.dataset.code);
+  states = states.filter(s => !codesToRemove.includes(s));
+  codesToRemove.forEach(code => {
+    delete colors[code];
+    delete currentLabels1[code];
+    delete checkboxStates1[code];
+  });
+  document.querySelectorAll(`#gridMap1 .point-E[data-state]`).forEach(p => {
+    if (codesToRemove.includes(p.dataset.state)) {
+      p.dataset.state = '';
+    }
+  });
+  updateSummary('1');
+  updateDynamicStyles();
+  closeModal('removeModal');
+  alert('Categorias removidas com sucesso!');
 }
 function openEditModal(mapId) {
- const modal = document.getElementById('editModal');
- const list = document.getElementById('editCategoryList');
- list.innerHTML = '';
- states.forEach(code => {
- const classCode = code === '' ? 'empty' : code;
- const label = currentLabels1[code] || defaultLabels[code] || code;
- const color = colors[code];
- const item = document.createElement('div');
- item.className = 'category-item';
- item.innerHTML = `
- <div class="dot ${classCode}"></div>
- <div class="code">${code}</div>
- <input type="text" class="edit-label" value="${label}">
- <input type="color" class="edit-color" value="${color}">
- `;
- list.appendChild(item);
- });
- modal.style.display = 'flex';
- modal.dataset.targetMapId = mapId;
+  const modal = document.getElementById('editModal');
+  const list = document.getElementById('editCategoryList');
+  list.innerHTML = '';
+  states.forEach(code => {
+    const classCode = code === '' ? 'empty' : code;
+    const label = currentLabels1[code] || defaultLabels[code] || code;
+    const color = colors[code];
+    const item = document.createElement('div');
+    item.className = 'category-item';
+    item.innerHTML = `
+      <div class="dot ${classCode}"></div>
+      <div class="code">${code}</div>
+      <input type="text" class="edit-label" value="${label}">
+      <input type="color" class="edit-color" value="${color}">
+    `;
+    list.appendChild(item);
+  });
+  modal.style.display = 'flex';
+  modal.dataset.targetMapId = mapId;
 }
 function confirmEdit() {
- const mapId = document.getElementById('editModal').dataset.targetMapId;
- const items = document.querySelectorAll('#editCategoryList .category-item');
- items.forEach((item, i) => {
- const code = states[i];
- const newLabel = item.querySelector('.edit-label').value.trim();
- const newColor = item.querySelector('.edit-color').value;
- if (newLabel) {
- currentLabels1[code] = newLabel;
- }
- if (newColor !== colors[code]) {
- colors[code] = newColor;
- const varName = code === '' ? '--color-E-empty' : `--color-${code}`;
- document.documentElement.style.setProperty(varName, newColor);
- }
- });
- updateDynamicStyles();
- updateTotals(mapId);
- closeModal('editModal');
- alert('Categorias editadas com sucesso!');
+  const mapId = document.getElementById('editModal').dataset.targetMapId;
+  const items = document.querySelectorAll('#editCategoryList .category-item');
+  items.forEach((item, i) => {
+    const code = states[i];
+    const newLabel = item.querySelector('.edit-label').value.trim();
+    const newColor = item.querySelector('.edit-color').value;
+    if (newLabel) {
+      currentLabels1[code] = newLabel;
+    }
+    if (newColor !== colors[code]) {
+      colors[code] = newColor;
+      const varName = code === '' ? '--color-E-empty' : `--color-${code}`;
+      document.documentElement.style.setProperty(varName, newColor);
+    }
+  });
+  updateDynamicStyles();
+  updateTotals(mapId);
+  closeModal('editModal');
+  alert('Categorias editadas com sucesso!');
 }
 function closeModal(modalId) {
- document.getElementById(modalId).style.display = 'none';
+  document.getElementById(modalId).style.display = 'none';
 }
 // Atualiza preview de cor
 document.getElementById('newColor').addEventListener('input', function() {
- const color = this.value;
- if (/^#[0-9A-Fa-f]{6}$/.test(color)) {
- document.getElementById('colorPreview').style.backgroundColor = color;
- } else {
- document.getElementById('colorPreview').style.backgroundColor = '#cccccc';
- }
+  const color = this.value;
+  if (/^#[0-9A-Fa-f]{6}$/.test(color)) {
+    document.getElementById('colorPreview').style.backgroundColor = color;
+  } else {
+    document.getElementById('colorPreview').style.backgroundColor = '#cccccc';
+  }
 });
 // Eventos modais
 document.querySelectorAll('#addCategoryModal .close, #cancelAdd').forEach(el => {
- el.addEventListener('click', () => closeModal('addCategoryModal'));
+  el.addEventListener('click', () => closeModal('addCategoryModal'));
 });
 document.getElementById('confirmAdd').addEventListener('click', confirmAdd);
 document.querySelectorAll('#removeModal .close, #cancelRemove').forEach(el => {
- el.addEventListener('click', () => closeModal('removeModal'));
+  el.addEventListener('click', () => closeModal('removeModal'));
 });
 document.getElementById('confirmRemove').addEventListener('click', confirmRemove);
 document.querySelectorAll('#editModal .close, #cancelEdit').forEach(el => {
- el.addEventListener('click', () => closeModal('editModal'));
+  el.addEventListener('click', () => closeModal('editModal'));
 });
 document.getElementById('confirmEdit').addEventListener('click', confirmEdit);
 window.addEventListener('click', (e) => {
- const addModal = document.getElementById('addCategoryModal');
- const removeModal = document.getElementById('removeModal');
- const editModal = document.getElementById('editModal');
- if (e.target === addModal) closeModal('addCategoryModal');
- if (e.target === removeModal) closeModal('removeModal');
- if (e.target === editModal) closeModal('editModal');
+  const addModal = document.getElementById('addCategoryModal');
+  const removeModal = document.getElementById('removeModal');
+  const editModal = document.getElementById('editModal');
+  if (e.target === addModal) closeModal('addCategoryModal');
+  if (e.target === removeModal) closeModal('removeModal');
+  if (e.target === editModal) closeModal('editModal');
 });
 function saveData() {
   try {
@@ -1103,4 +1116,3 @@ document.addEventListener('keydown', (e) => {
 </script>
 </body>
 </html>
-
