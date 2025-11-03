@@ -348,7 +348,7 @@ button.ghost { background: transparent; border: 1px solid rgba(0,0,0,0.1); }
       content: "Mapa do Espelho – Caldeira U-130";
     }
   }
-  .lead, .navbar, .controls, .category-controls, .checkbox, .popup, .modal { display: none; }
+  .lead, .navbar, .controls, .category-controls, .popup, .modal { display: none; }
   .grid::before, .grid::after {
     background-color: red !important;
     -webkit-print-color-adjust: exact !important;
@@ -770,13 +770,26 @@ function updateTotals(mapId) {
       grouped[legend].push({ row, col: displayCol });
     }
   });
-  for (const legend in grouped) {
-    grouped[legend].sort((a, b) => a.row - b.row || a.col - b.col);
-  }
   const listTexts = [];
   for (const legend in grouped) {
-    const positions = grouped[legend].map(item => `L${item.row.toString().padStart(2, '0')} - C${item.col.toString().padStart(2, '0')}`);
-    listTexts.push(`<strong>${legend}</strong> ${positions.join(', ')}`);
+    const positionsByRow = {};
+    grouped[legend].forEach(item => {
+      if (!positionsByRow[item.row]) positionsByRow[item.row] = [];
+      positionsByRow[item.row].push(item.col);
+    });
+    const sortedRows = Object.keys(positionsByRow).sort((a, b) => a - b);
+    const rowStrings = sortedRows.map(row => {
+      const sortedCols = positionsByRow[row].sort((a, b) => a - b);
+      let colString = sortedCols.map(col => col.toString().padStart(2, '0')).join(', ');
+      if (sortedCols.length > 1) {
+        const lastCommaIndex = colString.lastIndexOf(', ');
+        if (lastCommaIndex !== -1) {
+          colString = colString.substring(0, lastCommaIndex) + ' e' + colString.substring(lastCommaIndex + 1);
+        }
+      }
+      return `Fileira ${row.toString().padStart(2, '0')}, tubo ${colString}`;
+    });
+    listTexts.push(`<strong>${legend}</strong> ${rowStrings.join(' - ')}`);
   }
   document.getElementById(`list${mapId}`).innerHTML = listTexts.join('<br>') || 'Nenhum selecionado';
   const totalsDiv = document.getElementById(`totals${mapId}`);
@@ -1103,4 +1116,3 @@ document.addEventListener('keydown', (e) => {
 </script>
 </body>
 </html>
-
